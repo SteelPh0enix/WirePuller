@@ -10,13 +10,13 @@ template <uint EndstopCountValue, uint MaxIDLengthValue>
 class EndstopManager {
 public:
     //! Number of endstops managed by object
-    static constexpr uint EndstopCount = EndstopCountValue;
+    static constexpr uint endstopCount = EndstopCountValue;
 
     //! Maximal ID length of endstop
-    static constexpr uint MaxIDLength = MaxIDLengthValue + 1;
+    static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
     //! Alias for ID data type
-    using ID = Span<char, MaxIDLength>;
+    using ID = Span<char, maxIDLength>;
 
     //! Initializes next endstop
     /*!
@@ -27,7 +27,7 @@ public:
     */
     bool initializeEndstop(ID const& id,
                          u8 endstopPin) {
-        if (m_initializedEndstops >= EndstopCount) return false;
+        if (m_initializedEndstops >= endstopCount) return false;
 
         m_endstops[m_initializedEndstops].id = id;
         m_endstops[m_initializedEndstops].endstop.initialize(endstopPin);
@@ -45,7 +45,7 @@ public:
     */
     Endstop* operator[](ID const& id) {
         for(uint i = 0; i < m_initializedEndstops; i++) {
-            if (strcmp(m_endstops[i].id, id) == 0) {
+            if (strcmp(m_endstops[i].id.data, id.data) == 0) {
                 return &(m_endstops[i].endstop);
             }
         }
@@ -62,13 +62,21 @@ public:
     */
     Endstop const* operator[](ID const& id) const {
         for(uint i = 0; i < m_initializedEndstops; i++) {
-            if (strcmp(m_endstops[i].id, id) == 0) {
+            if (strcmp(m_endstops[i].id.data, id.data) == 0) {
                 return &(m_endstops[i].endstop);
             }
         }
 
         return nullptr;
-    } 
+    }
+
+    //! get count of initialized endstops
+    /*!
+        \return number of initialized endstops
+    */
+    uint initializedEndstops() const { 
+        return m_initializedEndstops;
+    }
 
 protected:
     struct EndstopIDPair {
@@ -76,7 +84,7 @@ protected:
         ID id;
     };
 
-    EndstopIDPair m_endstops[EndstopCount];
+    EndstopIDPair m_endstops[endstopCount];
     uint m_initializedEndstops{ 0 };
 };
 

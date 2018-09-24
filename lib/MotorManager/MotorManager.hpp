@@ -10,13 +10,13 @@ template <uint MotorCountValue, uint MaxIDLengthValue>
 class MotorManager {
 public:
     //! Number of motors managed by object
-    static constexpr uint MotorCount = MotorCountValue;
+    static constexpr uint motorCount = MotorCountValue;
 
     //! Maximal ID length of motor
-    static constexpr uint MaxIDLength = MaxIDLengthValue + 1;
+    static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
     //! Alias for ID data type
-    using ID = Span<char, MaxIDLength>;
+    using ID = Span<char, maxIDLength>;
 
     //! Initializes next motor
     /*!
@@ -27,7 +27,7 @@ public:
     */
     bool initializeMotor(ID const& id,
                          PololuMC33926::Pinout const& pinout) {
-        if (m_initializedMotors >= MotorCount) return false;
+        if (m_initializedMotors >= motorCount) return false;
 
         m_motors[m_initializedMotors].id = id;
         m_motors[m_initializedMotors].motor.initialize(pinout);
@@ -45,7 +45,7 @@ public:
     */
     PololuMC33926* operator[](ID const& id) {
         for(uint i = 0; i < m_initializedMotors; i++) {
-            if (strcmp(m_motors[i].id, id) == 0) {
+            if (strcmp(m_motors[i].id.data, id.data) == 0) {
                 return &(m_motors[i].motor);
             }
         }
@@ -62,7 +62,7 @@ public:
     */
     PololuMC33926 const* operator[](ID const& id) const {
         for(uint i = 0; i < m_initializedMotors; i++) {
-            if (strcmp(m_motors[i].id, id) == 0) {
+            if (strcmp(m_motors[i].id.data, id.data) == 0) {
                 return &(m_motors[i].motor);
             }
         }
@@ -70,13 +70,21 @@ public:
         return nullptr;
     } 
 
+    //! get count of initialized motors
+    /*!
+        \return number of initialized motors
+    */
+    uint initializedMotors() const { 
+        return m_initializedMotors;
+    }
+
 protected:
     struct MotorIDPair {
         PololuMC33926 motor;
         ID id;
     };
 
-    MotorIDPair m_motors[MotorCount];
+    MotorIDPair m_motors[motorCount];
     uint m_initializedMotors{ 0 };
 };
 

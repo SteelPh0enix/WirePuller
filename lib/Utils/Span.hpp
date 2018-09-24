@@ -16,19 +16,20 @@ struct Span {
     static constexpr uint Size = Length * sizeof(Type);
 
     //! Raw data array
-    Type ptr[Length];
+    Type data[Length];
 
     //! Default constructor
     Span() = default;
 
-    //! Initializing constructor
-    Span(Type const data[Length]) {
-        memcpy(ptr, data, Size);
+
+    //! Pointer initializing constructor (might be unsafe!)
+    Span(Type const newData[Size]) {
+        memcpy(data, newData, Size);
     }
 
     //! Sets whole span memory to 0
     void clear() {
-        memset(ptr, 0, Size);
+        memset(data, 0, Size);
     }
 
     //! == operator overload
@@ -43,7 +44,7 @@ struct Span {
         // I'm not comparing sizes because it should be done by compiler
         // (you can only pass a span for comparison with same type and size as original one)
         for(uint i = 0; i < Length; i++) {
-            if (ptr[i] != other.ptr[i]) return false;
+            if (data[i] != other.data[i]) return false;
         }
 
         return true;
@@ -51,7 +52,7 @@ struct Span {
 
     //! Copy-constructor
     Span(Span<T, SizeValue> const& other) {
-        memcpy(ptr, other.ptr, Size);
+        memcpy(data, other.data, Size);
     }
 
     //! Move-constructor is deleted because data is unmovable
@@ -59,18 +60,23 @@ struct Span {
 
     //! Copy assigment operator
     Span<T, SizeValue>& operator=(Span<T, SizeValue> const& other) {
-        memcpy(ptr, other.ptr, Size);
+        memcpy(data, other.data, Size);
         return *this;
     }
 
     //! Move assigment operator is deleted, because the data is unmovable
     Span<T, SizeValue>& operator=(Span<T, SizeValue>&& other) = delete;
 
+    //! Copy-operator for raw arrays (might be unsafe!)
+    Span<T, SizeValue>& operator=(Type newData[Length]) {
+        memcpy(data, newData, Size);
+    }
+
     //! array-like access to data
-    Type& operator[](uint i) { return ptr[i]; }
+    Type& operator[](uint i) { return data[i]; }
 
     //! array-like constant access to data
-    Type const& operator[](uint i) const { return ptr[i]; }
+    Type const& operator[](uint i) const { return data[i]; }
 };
 
 #endif
