@@ -55,7 +55,7 @@ Where
 * `motor_ID` - *string* - ID of the motor
 * `speed` - *number* - speed, in range [-400, 400] (will be limited to maximum/minimum if exceeding)
 
-##### Example #1 - setting motors speed
+##### Example 1 - setting motors speed
 
 ```json
 {
@@ -95,7 +95,7 @@ Where
 * `speed` - *number* - actual speed of the motor
 * `current` - *number* - current draw of motor, in milliampers
 
-##### Example #2 - response from driver with motor data
+##### Example 2 - response from driver with motor data
 
 ```json
 {
@@ -141,7 +141,7 @@ To request for data, you have to send a JSON like that
 
 * `data_flag` - *number* - Flag informing what data do you request. It's combination of binary flags from DataFlags enum (see [`Globals.hpp`](lib/Globals/Globals.hpp))
 
-##### Example #3 - requesting for data
+##### Example 3 - requesting for data
 
 ```json
 {
@@ -191,7 +191,7 @@ Where
 * `current` - *number* - current draw of motor, in milliampers
 * `encoder_data` - *unknown yet* - data from encoder, the type and more info will be available soon
 
-##### Example #4 - data from driver
+##### Example 4 - data from driver
 
 ```json
 {
