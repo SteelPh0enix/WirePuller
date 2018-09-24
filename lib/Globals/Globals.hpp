@@ -4,10 +4,17 @@
 using u8 = unsigned char;
 using uint = unsigned;
 
-// Application global variables
+enum class DataFlags : u8 {
+    Motor   = 1,
+    Endstop = 2,
+    Encoder = 4
+};
 
-constexpr uint MaxJsonSize = 256u;
-constexpr uint SerialDataRate = 115200;
-constexpr char JsonTerminator = '\n';
+// Application global variables
+namespace Globals {
+    constexpr uint MaxJsonSize = 256u;
+    constexpr unsigned long SerialDataRate = 115200u;
+    constexpr char JsonTerminator = '\n';
+}
 
 #endif

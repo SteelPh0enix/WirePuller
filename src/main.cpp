@@ -2,19 +2,19 @@
 #include <Globals.hpp>
 #include <WirePullerApp.hpp>
 
-using WirePullerApp = WirePuller<MaxJsonSize>;
+using WirePullerApp = WirePuller<Globals::MaxJsonSize>;
 
 WirePullerApp app;
 
 void setup() {
     app.initialize();
-    Serial.begin(SerialDataRate);
+    Serial.begin(Globals::SerialDataRate);
 }
 
 void loop() {
     if (Serial.available()) {
         WirePullerApp::JsonSpan bytes;
-        Serial.readBytesUntil(JsonTerminator, bytes.data, MaxJsonSize);
+        Serial.readBytesUntil(Globals::JsonTerminator, bytes.data, Globals::MaxJsonSize);
         bytes.clear();
         Serial.println(app.execute(bytes).data);
     }
