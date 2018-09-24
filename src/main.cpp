@@ -3,7 +3,7 @@
 #include <Span.hpp>
 #include <WirePullerApp.hpp>
 
-constexpr uint maxJsonSize = 256u;
+constexpr uint maxJsonSize = 512u;
 constexpr char jsonTerminator = '\n';
 
 WirePuller<maxJsonSize> app;
