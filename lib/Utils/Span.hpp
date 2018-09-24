@@ -1,5 +1,5 @@
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#ifndef SPAN_HPP
+#define SPAN_HPP
 #include <Globals.hpp>
 #include <string.h>
 
