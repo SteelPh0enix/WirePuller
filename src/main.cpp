@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include <Globals.hpp>
-#include <Span.hpp>
 #include <WirePullerApp.hpp>
 
-constexpr uint maxJsonSize = 512u;
+constexpr uint maxJsonSize = 256u;
 constexpr char jsonTerminator = '\n';
 
-WirePuller<maxJsonSize> app;
+using WirePullerApp = WirePuller<maxJsonSize>;
+
+WirePullerApp app;
 
 void setup() {
     app.initialize();
@@ -15,8 +16,9 @@ void setup() {
 
 void loop() {
     if (Serial.available()) {
-        Span<byte, maxJsonSize> bytes;
+        WirePullerApp::JsonSpan bytes;
         Serial.readBytesUntil(jsonTerminator, bytes.data, maxJsonSize);
-        app.execute(bytes);
+        bytes.clear();
+        Serial.println(app.execute(bytes).data);
     }
 }

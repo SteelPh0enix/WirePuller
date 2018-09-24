@@ -55,8 +55,10 @@ struct Span {
         memcpy(data, other.data, Size);
     }
 
-    //! Move-constructor is deleted because data is unmovable
-    Span(Span<T, SizeValue>&& other) = delete;
+    //! Move-constructor is copying because data is unmovable
+    Span(Span<T, SizeValue>&& other) {
+        memcpy(data, other.data, Size);
+    }
 
     //! Copy assigment operator
     Span<T, SizeValue>& operator=(Span<T, SizeValue> const& other) {
@@ -64,8 +66,11 @@ struct Span {
         return *this;
     }
 
-    //! Move assigment operator is deleted, because the data is unmovable
-    Span<T, SizeValue>& operator=(Span<T, SizeValue>&& other) = delete;
+    //! Move assigment operator is copying, because the data is unmovable
+    Span<T, SizeValue>& operator=(Span<T, SizeValue>&& other) {
+        memcpy(data, other.data, Size);
+        return *this;
+    }
 
     //! Copy-operator for raw arrays (might be unsafe!)
     Span<T, SizeValue>& operator=(Type newData[Length]) {

@@ -3,6 +3,5 @@
 
 using u8 = unsigned char;
 using uint = unsigned;
-using byte = u8;
 
 #endif

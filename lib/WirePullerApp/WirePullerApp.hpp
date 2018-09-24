@@ -21,7 +21,10 @@ public:
     static constexpr uint motorCount = 3;
 
     //! Maximal endstop
-    static constexpr uint endstopCount = 4; 
+    static constexpr uint endstopCount = 4;
+
+    //! Alias for JSON raw data span
+    using JsonSpan = Span<char, bufferSize>;
 
     //! Initializes the object and I/O
     void initialize() {
@@ -40,8 +43,9 @@ public:
     /*!
         \param jsonBytes Bytes object with pointer to data and size of it
     */
-    void execute(Span<byte, bufferSize> jsonBytes) {
-        
+    JsonSpan execute(JsonSpan jsonBytes) {
+
+        return JsonSpan{"{}"};
     }
 
 protected:
