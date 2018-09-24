@@ -38,6 +38,13 @@ public:
         return true;
     } 
 
+    //! map-like access to motor by it's ID
+    /*!
+        note: this will perform linear search, this is not a map!
+
+        \param id motor id
+        \return a pointer to motor, or nullptr if no motor was found
+    */
     PololuMC33926* operator[](ID const& id) {
         for(uint i = 0; i < m_initializedMotors; i++) {
             if (strcmp(m_motors[i].id, id) == 0) {
@@ -48,6 +55,13 @@ public:
         return nullptr;
     } 
 
+    //! map-like constant access to motor by it's ID
+    /*!
+        note: this will perform linear search, this is not a map!
+
+        \param id motor id
+        \return a pointer to motor, or nullptr if no motor was found
+    */
     PololuMC33926 const* operator[](ID const& id) const {
         for(uint i = 0; i < m_initializedMotors; i++) {
             if (strcmp(m_motors[i].id, id) == 0) {

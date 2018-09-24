@@ -6,18 +6,29 @@
 //! Static data span for quality of life
 template <typename T, uint SizeValue>
 struct Span {
-    //! Size of span data
-    static constexpr uint Size = SizeValue;
-
     //! Alias for span type
     using Type = T;
 
+    //! Length of span data
+    static constexpr uint Length = SizeValue;
+
+    //! Size of span data (in bytes)
+    static constexpr uint Size = Length * sizeof(Type);
+
     //! Raw data array
-    Type ptr[Size];
+    Type ptr[Length];
+
+    //! Default constructor
+    Span() = default;
+
+    //! Initializing constructor
+    Span(Type const data[Length]) {
+        memcpy(ptr, data, Size);
+    }
 
     //! Sets whole span memory to 0
     void clear() {
-        memset(ptr, 0, Size * sizeof(Type));
+        memset(ptr, 0, Size);
     }
 
     //! == operator overload
@@ -28,14 +39,36 @@ struct Span {
 
         Workaround: use strcmp explicitly.
     */
-    bool operator==(Span<Type, Size> const& other) {
+    bool operator==(Span<Type, Length> const& other) {
         // I'm not comparing sizes because it should be done by compiler
         // (you can only pass a span for comparison with same type and size as original one)
-        for(uint i = 0; i < Size; i++) {
+        for(uint i = 0; i < Length; i++) {
             if (ptr[i] != other.ptr[i]) return false;
         }
 
         return true;
+    }
+
+    //! Copy-constructor
+    Span(Span<T, SizeValue> const& other) {
+        memcpy(ptr, other.ptr, Size);
+    }
+
+    //! Move-constructor
+    Span(Span<T, SizeValue>&& other) {
+        ptr = other.ptr;
+    }
+
+    //! Copy assigment operator
+    Span<T, SizeValue>& operator=(Span<T, SizeValue> const& other) {
+        memcpy(ptr, other.ptr, Size);
+        return *this;
+    }
+
+    //! Move assigment operator
+    Span<T, SizeValue>& operator=(Span<T, SizeValue>&& other) {
+        ptr = other.ptr;
+        return *this;
     }
 
     //! array-like access to data
