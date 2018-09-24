@@ -23,16 +23,14 @@ public:
         \param id ID of the motor
         \param pinout motor pinout
 
-        \return true if initialized, false if all motors are initialized or motor initialization has failed
+        \return true if initialized, false if all motors are initialized
     */
     bool initializeMotor(ID const& id,
                          PololuMC33926::Pinout const& pinout) {
         if (m_initializedMotors >= MotorCount) return false;
 
         m_motors[m_initializedMotors].id = id;
-        if (!m_motors[m_initializedMotors].motor.initialize(pinout)) {
-            return false;
-        }
+        m_motors[m_initializedMotors].motor.initialize(pinout);
 
         m_initializedMotors++;
         return true;
