@@ -54,10 +54,8 @@ struct Span {
         memcpy(ptr, other.ptr, Size);
     }
 
-    //! Move-constructor
-    Span(Span<T, SizeValue>&& other) {
-        ptr = other.ptr;
-    }
+    //! Move-constructor is deleted because data is unmovable
+    Span(Span<T, SizeValue>&& other) = delete;
 
     //! Copy assigment operator
     Span<T, SizeValue>& operator=(Span<T, SizeValue> const& other) {
@@ -65,11 +63,8 @@ struct Span {
         return *this;
     }
 
-    //! Move assigment operator
-    Span<T, SizeValue>& operator=(Span<T, SizeValue>&& other) {
-        ptr = other.ptr;
-        return *this;
-    }
+    //! Move assigment operator is deleted, because the data is unmovable
+    Span<T, SizeValue>& operator=(Span<T, SizeValue>&& other) = delete;
 
     //! array-like access to data
     Type& operator[](uint i) { return ptr[i]; }
