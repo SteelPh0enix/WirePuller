@@ -2,22 +2,19 @@
 #include <Globals.hpp>
 #include <WirePullerApp.hpp>
 
-constexpr uint maxJsonSize = 256u;
-constexpr char jsonTerminator = '\n';
-
-using WirePullerApp = WirePuller<maxJsonSize>;
+using WirePullerApp = WirePuller<MaxJsonSize>;
 
 WirePullerApp app;
 
 void setup() {
     app.initialize();
-    Serial.begin(115200);
+    Serial.begin(SerialDataRate);
 }
 
 void loop() {
     if (Serial.available()) {
         WirePullerApp::JsonSpan bytes;
-        Serial.readBytesUntil(jsonTerminator, bytes.data, maxJsonSize);
+        Serial.readBytesUntil(JsonTerminator, bytes.data, MaxJsonSize);
         bytes.clear();
         Serial.println(app.execute(bytes).data);
     }
