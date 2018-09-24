@@ -224,3 +224,7 @@ Where
 ## Performance metrics
 
 Dry request-response run (app skeleton, empty response) takes around 3ms, so i expect timings around 10ms which will give performance of around 100 requests and responses per second, but this is extremely optimistic number. Safe limit should be around 50 request and response cycles per second.
+
+## Naming convention
+
+To be done soon. Element ID's will be short (15 character max, excluding terminator) strings. I will probably put them in [`WirePullerApp.hpp`](lib/WirePullerApp/WirePullerApp.hpp)
