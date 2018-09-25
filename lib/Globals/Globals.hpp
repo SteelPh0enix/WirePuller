@@ -9,6 +9,7 @@ namespace Globals {
     constexpr uint MaxJsonSize = 256u;
     constexpr unsigned long SerialDataRate = 115200u;
     constexpr char JsonTerminator = '\n';
+    constexpr uint SerialTimeout = 200u;
 }
 
 #endif

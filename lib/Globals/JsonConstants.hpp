@@ -1,16 +1,23 @@
 #ifndef JSONCONSTANTS_HPP
 #define JSONCONSTANTS_HPP
 
-struct AppError {
-    const char* message;
-    unsigned code;
-};
-
 enum class DataFlags : u8 {
     Motor   = 1,
     Endstop = 2,
     Encoder = 4
 };
+
+namespace Error {
+constexpr const char* AppError[5] {
+    "Unknown error",
+    "Invalid JSON",
+    "No type key in request JSON",
+    "No data key in request JSON",
+    "Request type not found"
+};
+
+constexpr unsigned Count = sizeof(AppError) / sizeof(const char*);
+}
 
 namespace JsonKey {
     constexpr const char* Type = "type";
@@ -36,13 +43,6 @@ namespace RequestType {
 namespace ResponseType {
     constexpr const char* Error = "error";
     constexpr const char* Data = "data";
-}
-
-namespace JsonError {
-    constexpr auto UnknownError = AppError{"Unknown error happened", 0};
-    constexpr auto InvalidJson = AppError{"Invalid JSON", 1};
-    constexpr auto NoTypeKey = AppError{"No type key in request JSON", 2};
-    constexpr auto NoDataKey = AppError{"No data key in request JSON", 3};
 }
 
 #endif

@@ -66,7 +66,17 @@ public:
             const char* request_type = jsonData.get<const char*>(JsonKey::Type);
             if (request_type != nullptr) {
                 if (jsonData.containsKey(JsonKey::Data)) {
-                    jsonResponse.set("dupa", "OK");
+                    JsonObject& requestData = jsonData.get<JsonObject&>(JsonKey::Data);
+
+                    if (strcmp(request_type, RequestType::SetMotorSpeed) == 0) {
+                        jsonResponse.set(JsonKey::Type, ResponseType::Data);
+                        jsonResponse.set(JsonKey::Data, setMotorSpeed())
+                    } else if (strcmp(request_type, RequestType::GetData) == 0) {
+                        jsonResponse.set(JsonKey::Type, ResponseType::Data);
+
+                    } else {
+                        setError(4);
+                    }
                 } else {
                     setError(3);
                 }
@@ -84,35 +94,19 @@ public:
 
 protected:
     
-    JsonObject& handleRequest(const char* type, JsonObject& data) {
-
-    }
+    
 
     JsonObject& getErrorJson(uint code) {
         JsonObject& data = m_jsonBuffer.createObject();
 
-        auto setError = [&data](AppError const& error) {
-            data.set(JsonKey::ErrorCode, error.code);
-            data.set(JsonKey::ErrorMessage, error.message);
-        };
-
-        switch (code) {
-            case 1:
-                setError(JsonError::InvalidJson);
-                break;
-
-            case 2:
-                setError(JsonError::NoTypeKey);
-                break;
-
-            case 3:
-                setError(JsonError::NoDataKey);
-                break;
-
-            default: 
-                setError(JsonError::UnknownError);
-                break;
+        if (code >= Error::Count) {
+            data.set(JsonKey::ErrorCode, 0);
+            data.set(JsonKey::ErrorMessage, Error::AppError[0]);
+        } else {
+            data.set(JsonKey::ErrorCode, code);
+            data.set(JsonKey::ErrorMessage, Error::AppError[code]);
         }
+
         return data;
     }
 

@@ -9,6 +9,7 @@ WirePullerApp app;
 void setup() {
     app.initialize();
     Serial.begin(Globals::SerialDataRate);
+    Serial.setTimeout(Globals::SerialTimeout);
 }
 
 void loop() {
