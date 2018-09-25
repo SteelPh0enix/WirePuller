@@ -139,7 +139,7 @@ To request for data, you have to send a JSON like that
 }
 ```
 
-* `data_flag` - *number* - Flag informing what data do you request. It's combination of binary flags from DataFlags enum (see [`Globals.hpp`](lib/Globals/Globals.hpp))
+* `data_flag` - *number* - Flag informing what data do you request. It's combination of binary flags from DataFlags enum (see [`JsonConstants.hpp`](lib/Globals/JsonConstants.hpp))
 
 ##### Example 3 - requesting for data
 

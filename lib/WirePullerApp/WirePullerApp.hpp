@@ -5,6 +5,8 @@
 #include <Globals.hpp>
 #include <MotorManager.hpp>
 #include <EndstopManager.hpp>
+#include <JsonConstants.hpp>
+#include <DeviceNames.hpp>
 #include <string.h>
 
 //! Main application
@@ -15,41 +17,92 @@ public:
     static constexpr uint bufferSize = BufferSizeValue;
 
     //! ID string length
-    static constexpr uint IDLength = 15;
+    static constexpr uint IDLength = DeviceName::MaxLength;
 
-    //! Maximal motor count
-    static constexpr uint motorCount = 3;
+    //! Motor count
+    static constexpr uint motorCount = 2;
 
-    //! Maximal endstop
+    //! Endstop count
     static constexpr uint endstopCount = 4;
+
+    //! Encoder count
+    static constexpr uint encoderCount = 2;
+
+    //! Maximal JSON nesting level
+    static constexpr uint maxJsonNestLevel = 5;
 
     //! Initializes the object and I/O
     void initialize() {
-        // initialize motors (names are temporary)
-        m_motors.initializeMotor("MOTOR_1", {6, 29, A2, 25, 24});
-        m_motors.initializeMotor("MOTOR_2", {7, 30, A0, 23, 22});
-        m_motors.initializeMotor("MOTOR_3", {8, 31, A1, 23, 22});
+        // initialize motors
+        m_motors.initializeMotor(DeviceName::MotorXAxis, {6, 29, A2, 25, 24});
+        m_motors.initializeMotor(DeviceName::MotorWheel, {7, 30, A0, 23, 22});
 
-        m_endstops.initializeEndstop("ENDSTOP_1", 32);
-        m_endstops.initializeEndstop("ENDSTOP_2", 33);
-        m_endstops.initializeEndstop("ENDSTOP_3", 34);
-        m_endstops.initializeEndstop("ENDSTOP_4", 35);
+        // initialize endstops
+        m_endstops.initializeEndstop(DeviceName::EndstopXAxisLeft, 32);
+        m_endstops.initializeEndstop(DeviceName::EndstopXAxisRight, 33);
+        m_endstops.initializeEndstop(DeviceName::EndstopWheelXAxisLeft, 34);
+        m_endstops.initializeEndstop(DeviceName::EndstopWheelXAxisRight, 35);
+
+        // initailze encoders
+        // TODO
     }
 
     //! Excutes JSON in byte form, readed from stream
     /*!
         \param data Data with JSON to be parsed and executed
         \param response Pointer to char buffer in which response will be stored
-
-        \invariant Buffer must have enought capacity to store a response, or program will most probably crash
-
     */
     bool execute(const char* data, char* response) {
-        strcpy(response, data);
-        return true;
+        JsonObject& jsonData = m_jsonBuffer.parseObject(data, maxJsonNestLevel);
+        JsonObject& jsonResponse = m_jsonBuffer.createObject();
+
+        const char* request_type = jsonData.get<const char*>(JsonKey::Type);
+        if (request_type != nullptr) {
+            if (jsonData.containsKey(JsonKey::Data)) {
+                jsonResponse.set("dupa", "OK");
+            } else {
+                jsonResponse.set(JsonKey::Error, getErrorJson(2));
+            }
+        } else {
+            jsonResponse.set(JsonKey::Error, getErrorJson(1));
+        }
+
+        auto bytes_written = jsonResponse.printTo(response, Globals::MaxJsonSize);
+        m_jsonBuffer.clear();
+        return bytes_written != 0;
     }
 
 protected:
+    
+    JsonObject& handleRequest(const char* type, JsonObject& data) {
+
+    }
+
+    JsonObject& getErrorJson(uint code) {
+        JsonObject& errorJson = m_jsonBuffer.createObject();
+        switch (code) {
+            case 1: {
+                errorJson.set(JsonKey::ErrorCode, JsonError::NoTypeKey.code);
+                errorJson.set(JsonKey::ErrorMessage, JsonError::NoTypeKey.message);
+                break;
+            }
+
+            case 2: {
+                errorJson.set(JsonKey::ErrorCode, JsonError::NoDataKey.code);
+                errorJson.set(JsonKey::ErrorMessage, JsonError::NoDataKey.message);
+                break;
+            }
+
+            default: {
+                errorJson.set(JsonKey::ErrorCode, JsonError::UnknownError.code);
+                errorJson.set(JsonKey::ErrorMessage, JsonError::UnknownError.message);
+                break;
+            }
+        }
+
+        return errorJson;
+    }
+
     StaticJsonBuffer<bufferSize> m_jsonBuffer{};
 
     MotorManager<motorCount, IDLength> m_motors;
