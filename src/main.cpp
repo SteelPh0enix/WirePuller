@@ -13,9 +13,11 @@ void setup() {
 
 void loop() {
     if (Serial.available()) {
-        WirePullerApp::JsonSpan bytes;
-        Serial.readBytesUntil(Globals::JsonTerminator, bytes.data, Globals::MaxJsonSize);
-        bytes.clear();
-        Serial.println(app.execute(bytes).data);
+        char buffer[Globals::MaxJsonSize];
+        char response[Globals::MaxJsonSize];
+        Serial.readBytesUntil(Globals::JsonTerminator, buffer, Globals::MaxJsonSize);
+        if (app.execute(buffer, response)) {
+            Serial.println(response);
+        }
     }
 }

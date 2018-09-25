@@ -3,9 +3,9 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <Globals.hpp>
-#include <Span.hpp>
 #include <MotorManager.hpp>
 #include <EndstopManager.hpp>
+#include <string.h>
 
 //! Main application
 template <uint BufferSizeValue>
@@ -23,9 +23,6 @@ public:
     //! Maximal endstop
     static constexpr uint endstopCount = 4;
 
-    //! Alias for JSON raw data span
-    using JsonSpan = Span<char, bufferSize>;
-
     //! Initializes the object and I/O
     void initialize() {
         // initialize motors (names are temporary)
@@ -41,11 +38,15 @@ public:
 
     //! Excutes JSON in byte form, readed from stream
     /*!
-        \param jsonBytes Bytes object with pointer to data and size of it
-    */
-    JsonSpan execute(JsonSpan jsonBytes) {
+        \param data Data with JSON to be parsed and executed
+        \param response Pointer to char buffer in which response will be stored
 
-        return JsonSpan{"{}"};
+        \invariant Buffer must have enought capacity to store a response, or program will most probably crash
+
+    */
+    bool execute(const char* data, char* response) {
+        strcpy(response, data);
+        return true;
     }
 
 protected:

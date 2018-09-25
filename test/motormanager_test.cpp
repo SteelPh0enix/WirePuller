@@ -1,11 +1,7 @@
 #include <Arduino.h>
 #include <Globals.hpp>
-#include <Span.hpp>
 #include <MotorManager.hpp>
 #include <string.h>
-
-constexpr uint maxJsonSize = 256u;
-constexpr char jsonTerminator = '\n';
 
 MotorManager<2, 4> manager;
 

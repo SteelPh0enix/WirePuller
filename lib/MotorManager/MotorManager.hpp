@@ -1,7 +1,6 @@
 #ifndef MOTORMANAGER_HPP
 #define MOTORMANAGER_HPP
 #include <Globals.hpp>
-#include <Span.hpp>
 #include <PololuMC33926.hpp>
 #include <string.h>
 
@@ -15,9 +14,6 @@ public:
     //! Maximal ID length of motor
     static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
-    //! Alias for ID data type
-    using ID = Span<char, maxIDLength>;
-
     //! Initializes next motor
     /*!
         \param id ID of the motor
@@ -25,11 +21,11 @@ public:
 
         \return true if initialized, false if all motors are initialized
     */
-    bool initializeMotor(ID const& id,
+    bool initializeMotor(const char* id,
                          PololuMC33926::Pinout const& pinout) {
         if (m_initializedMotors >= motorCount) return false;
 
-        m_motors[m_initializedMotors].id = id;
+        strcpy(m_motors[m_initializedMotors].id, id);
         m_motors[m_initializedMotors].motor.initialize(pinout);
 
         m_initializedMotors++;
@@ -43,9 +39,9 @@ public:
         \param id motor id
         \return a pointer to motor, or nullptr if no motor was found
     */
-    PololuMC33926* operator[](ID const& id) {
+    PololuMC33926* operator[](const char* id) {
         for(uint i = 0; i < m_initializedMotors; i++) {
-            if (strcmp(m_motors[i].id.data, id.data) == 0) {
+            if (strcmp(m_motors[i].id, id) == 0) {
                 return &(m_motors[i].motor);
             }
         }
@@ -60,9 +56,9 @@ public:
         \param id motor id
         \return a pointer to motor, or nullptr if no motor was found
     */
-    PololuMC33926 const* operator[](ID const& id) const {
+    PololuMC33926 const* operator[](const char* id) const {
         for(uint i = 0; i < m_initializedMotors; i++) {
-            if (strcmp(m_motors[i].id.data, id.data) == 0) {
+            if (strcmp(m_motors[i].id, id) == 0) {
                 return &(m_motors[i].motor);
             }
         }
@@ -81,7 +77,7 @@ public:
 protected:
     struct MotorIDPair {
         PololuMC33926 motor;
-        ID id;
+        char id[maxIDLength];
     };
 
     MotorIDPair m_motors[motorCount];

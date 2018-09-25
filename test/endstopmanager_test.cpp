@@ -1,11 +1,7 @@
 #include <Arduino.h>
 #include <Globals.hpp>
-#include <Span.hpp>
 #include <EndstopManager.hpp>
 #include <string.h>
-
-constexpr uint maxJsonSize = 256u;
-constexpr char jsonTerminator = '\n';
 
 EndstopManager<2, 4> manager;
 

@@ -1,7 +1,6 @@
 #ifndef ENDSTOPMANAGER_HPP
 #define ENDSTOPMANAGER_HPP
 #include <Globals.hpp>
-#include <Span.hpp>
 #include <Endstop.hpp>
 #include <string.h>
 
@@ -15,9 +14,6 @@ public:
     //! Maximal ID length of endstop
     static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
-    //! Alias for ID data type
-    using ID = Span<char, maxIDLength>;
-
     //! Initializes next endstop
     /*!
         \param id ID of the endstop
@@ -25,11 +21,11 @@ public:
 
         \return true if initialized, false if all endstops are initialized
     */
-    bool initializeEndstop(ID const& id,
+    bool initializeEndstop(const char* id,
                          u8 endstopPin) {
         if (m_initializedEndstops >= endstopCount) return false;
 
-        m_endstops[m_initializedEndstops].id = id;
+        strcpy(m_endstops[m_initializedEndstops].id, id);
         m_endstops[m_initializedEndstops].endstop.initialize(endstopPin);
 
         m_initializedEndstops++;
@@ -43,9 +39,9 @@ public:
         \param id endstop id
         \return a pointer to endstop, or nullptr if no endstop was found
     */
-    Endstop* operator[](ID const& id) {
+    Endstop* operator[](const char* id) {
         for(uint i = 0; i < m_initializedEndstops; i++) {
-            if (strcmp(m_endstops[i].id.data, id.data) == 0) {
+            if (strcmp(m_endstops[i].id, id) == 0) {
                 return &(m_endstops[i].endstop);
             }
         }
@@ -60,9 +56,9 @@ public:
         \param id endstop id
         \return a pointer to endstop, or nullptr if no endstop was found
     */
-    Endstop const* operator[](ID const& id) const {
+    Endstop const* operator[](const char* id) const {
         for(uint i = 0; i < m_initializedEndstops; i++) {
-            if (strcmp(m_endstops[i].id.data, id.data) == 0) {
+            if (strcmp(m_endstops[i].id, id) == 0) {
                 return &(m_endstops[i].endstop);
             }
         }
@@ -81,7 +77,7 @@ public:
 protected:
     struct EndstopIDPair {
         Endstop endstop;
-        ID id;
+        char id[maxIDLength];
     };
 
     EndstopIDPair m_endstops[endstopCount];
