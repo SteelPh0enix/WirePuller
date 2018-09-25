@@ -56,15 +56,25 @@ public:
         JsonObject& jsonData = m_jsonBuffer.parseObject(data, maxJsonNestLevel);
         JsonObject& jsonResponse = m_jsonBuffer.createObject();
 
-        const char* request_type = jsonData.get<const char*>(JsonKey::Type);
-        if (request_type != nullptr) {
-            if (jsonData.containsKey(JsonKey::Data)) {
-                jsonResponse.set("dupa", "OK");
+        auto setError = [&jsonResponse, this](uint code){
+            jsonResponse.set(JsonKey::Type, ResponseType::Error);
+            jsonResponse.set(JsonKey::Data, getErrorJson(code));
+        };
+
+
+        if (jsonData != JsonObject::invalid()) {
+            const char* request_type = jsonData.get<const char*>(JsonKey::Type);
+            if (request_type != nullptr) {
+                if (jsonData.containsKey(JsonKey::Data)) {
+                    jsonResponse.set("dupa", "OK");
+                } else {
+                    setError(3);
+                }
             } else {
-                jsonResponse.set(JsonKey::Error, getErrorJson(2));
+                setError(2);
             }
         } else {
-            jsonResponse.set(JsonKey::Error, getErrorJson(1));
+            setError(1);
         }
 
         auto bytes_written = jsonResponse.printTo(response, Globals::MaxJsonSize);
@@ -79,28 +89,31 @@ protected:
     }
 
     JsonObject& getErrorJson(uint code) {
-        JsonObject& errorJson = m_jsonBuffer.createObject();
+        JsonObject& data = m_jsonBuffer.createObject();
+
+        auto setError = [&data](AppError const& error) {
+            data.set(JsonKey::ErrorCode, error.code);
+            data.set(JsonKey::ErrorMessage, error.message);
+        };
+
         switch (code) {
-            case 1: {
-                errorJson.set(JsonKey::ErrorCode, JsonError::NoTypeKey.code);
-                errorJson.set(JsonKey::ErrorMessage, JsonError::NoTypeKey.message);
+            case 1:
+                setError(JsonError::InvalidJson);
                 break;
-            }
 
-            case 2: {
-                errorJson.set(JsonKey::ErrorCode, JsonError::NoDataKey.code);
-                errorJson.set(JsonKey::ErrorMessage, JsonError::NoDataKey.message);
+            case 2:
+                setError(JsonError::NoTypeKey);
                 break;
-            }
 
-            default: {
-                errorJson.set(JsonKey::ErrorCode, JsonError::UnknownError.code);
-                errorJson.set(JsonKey::ErrorMessage, JsonError::UnknownError.message);
+            case 3:
+                setError(JsonError::NoDataKey);
                 break;
-            }
+
+            default: 
+                setError(JsonError::UnknownError);
+                break;
         }
-
-        return errorJson;
+        return data;
     }
 
     StaticJsonBuffer<bufferSize> m_jsonBuffer{};

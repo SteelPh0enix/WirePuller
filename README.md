@@ -221,10 +221,32 @@ Where
 }
 ```
 
+### Error handling
+
+In case of an error, following response will be sent
+
+```json
+{
+    "type": "error",
+    "data": {
+        "code": code,
+        "message": message
+    }
+}
+```
+
+Where
+
+* `code` - *number* - error code
+* `message` - *string* - error message
+
+All the codes and messages can be found in [`JsonConstants.hpp`](lib/Globals/JsonConstants.hpp)
+
 ## Performance metrics
 
-Dry request-response run (app skeleton, empty response) takes around 3ms, so i expect timings around 10ms which will give performance of around 100 requests and responses per second, but this is extremely optimistic number. Safe limit should be around 50 request and response cycles per second.
+By now, i have achieved around 110Hz of response rate, with basic requests and error handling. I'm expecting this number to lower to around 50Hz.
 
 ## Naming convention
 
-To be done soon. Element ID's will be short (15 character max, excluding terminator) strings. I will probably put them in [`WirePullerApp.hpp`](lib/WirePullerApp/WirePullerApp.hpp)
+All the names lierals are in [`DeviceNames.hpp`](lib/Globals/DeviceNames.hpp)
+JSON keys string literals can be found in [`JsonConstants.hpp`](lib/Globals/JsonConstants.hpp)
