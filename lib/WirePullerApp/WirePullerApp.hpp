@@ -9,6 +9,8 @@
 #include <DeviceNames.hpp>
 #include <string.h>
 
+#include <Encoder.h>
+
 //! Main application
 template <uint BufferSizeValue>
 class WirePuller {
@@ -63,17 +65,22 @@ public:
 
 
         if (jsonData != JsonObject::invalid()) {
+
             const char* request_type = jsonData.get<const char*>(JsonKey::Type);
             if (request_type != nullptr) {
                 if (jsonData.containsKey(JsonKey::Data)) {
+
                     JsonObject& requestData = jsonData.get<JsonObject&>(JsonKey::Data);
-
-                    if (strcmp(request_type, RequestType::SetMotorSpeed) == 0) {
-                        jsonResponse.set(JsonKey::Type, ResponseType::Data);
-                        jsonResponse.set(JsonKey::Data, setMotorSpeed())
-                    } else if (strcmp(request_type, RequestType::GetData) == 0) {
-                        jsonResponse.set(JsonKey::Type, ResponseType::Data);
-
+                    if (requestData != JsonObject::invalid()) {
+                        if (strcmp(request_type, RequestType::SetMotorSpeed) == 0) {
+                            jsonResponse.set(JsonKey::Type, ResponseType::Data);
+                            jsonResponse.set(JsonKey::Data, setMotorSpeed(requestData));
+                        } else if (strcmp(request_type, RequestType::GetData) == 0) {
+                            jsonResponse.set(JsonKey::Type, ResponseType::Data);
+                            jsonResponse.set(JsonKey::Data, getData(requestData));
+                        } else {
+                            setError(5);
+                        }
                     } else {
                         setError(4);
                     }
@@ -94,7 +101,17 @@ public:
 
 protected:
     
-    
+    JsonObject& setMotorSpeed(JsonObject& data) {
+        JsonObject& responseData = m_jsonBuffer.createObject();
+        
+        return responseData;
+    }
+
+    JsonObject& getData(JsonObject& data) {
+        JsonObject& responseData = m_jsonBuffer.createObject();
+
+        return responseData;
+    }
 
     JsonObject& getErrorJson(uint code) {
         JsonObject& data = m_jsonBuffer.createObject();

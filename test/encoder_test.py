@@ -54,15 +54,7 @@ def test(data):
 
 try:
     while True:
-        test(b'{ddd}') # invalid json
-        test(b'{}') # empty json
-        test(b'{"type":"test"}') # no data
-        test(b'{"type": "test", "data": {}}') # unknown request type
-        test(b'{"type": "data_request", "data":"not an object"}') # data not being an object
-        test(b'{"type": "data_request", "data":{}}') # data is an empty object
-        test(b'{"type": "data_request", "data":{"flag": "d"}}') # flag is not a number
-        test(b'{"type": "data_request", "data":{"flag": 929292}}') # invalid flag
-        test(b'{"type": "data_request", "data":{"flag": 7}}') # valid
+        test(b'{"type": "data_request", "data":{"flag": 7}}')
                 
 except KeyboardInterrupt:
     ardu.close()

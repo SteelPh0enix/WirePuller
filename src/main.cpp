@@ -2,7 +2,7 @@
 #include <Globals.hpp>
 #include <WirePullerApp.hpp>
 
-using WirePullerApp = WirePuller<Globals::MaxJsonSize>;
+using WirePullerApp = WirePuller<Globals::MaxJsonSize * 2>;
 
 WirePullerApp app;
 

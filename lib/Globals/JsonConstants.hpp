@@ -8,15 +8,16 @@ enum class DataFlags : u8 {
 };
 
 namespace Error {
-constexpr const char* AppError[5] {
-    "Unknown error",
-    "Invalid JSON",
-    "No type key in request JSON",
-    "No data key in request JSON",
-    "Request type not found"
-};
+    constexpr unsigned Count = 6;
 
-constexpr unsigned Count = sizeof(AppError) / sizeof(const char*);
+    constexpr const char* AppError[Count] {
+        "Unknown error",
+        "Invalid JSON",
+        "No type key in request JSON",
+        "No data key in request JSON",
+        "Data key does not contain a JSON object",
+        "Request type not found"
+    };
 }
 
 namespace JsonKey {
@@ -33,6 +34,8 @@ namespace JsonKey {
     constexpr const char* MotorDataObject = "motors";
     constexpr const char* EndstopDataObject = "endstops";
     constexpr const char* EncoderDataObject = "encoders";
+
+    constexpr const char* DataReqestFlag = "flag";
 }
 
 namespace RequestType {
