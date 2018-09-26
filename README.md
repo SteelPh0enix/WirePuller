@@ -246,7 +246,7 @@ Driver will respond with this JSON, containing all encoders ticks count
 
 ```json
 {
-    "type": "encoder_reset",
+    "type": "data",
     "data": {
         "encoders": {
             "ENCODER1": 0,

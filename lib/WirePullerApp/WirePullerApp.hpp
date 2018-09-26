@@ -4,12 +4,11 @@
 #include <ArduinoJson.h>
 #include <string.h>
 #include <DeviceNames.hpp>
+#include <EncoderManager.hpp>
 #include <EndstopManager.hpp>
 #include <Globals.hpp>
 #include <JsonConstants.hpp>
 #include <MotorManager.hpp>
-
-#include <Encoder.h>
 
 //! Main application
 template <uint BufferSizeValue>
@@ -46,7 +45,8 @@ class WirePuller {
     m_endstops.initializeEndstop(DeviceName::EndstopWheelXAxisRight, 35);
 
     // initailze encoders
-    // TODO
+    m_encoders.initializeEncoder(DeviceName::EncoderXAxis);
+    m_encoders.initializeEncoder(DeviceName::EncoderWheel);
   }
 
   //! Excutes JSON in byte form, readed from stream
@@ -75,6 +75,9 @@ class WirePuller {
             } else if (strcmp(request_type, RequestType::GetData) == 0) {
               jsonResponse.set(JsonKey::Type, ResponseType::Data);
               jsonResponse.set(JsonKey::Data, getData(requestData));
+            } else if (strcmp(request_type, RequestType::ResetEncoder) == 0) {
+              jsonResponse.set(JsonKey::Type, ResponseType::Data);
+              jsonResponse.set(JsonKey::Data, resetEncoders(requestData));
             } else {
               setError(5);
             }
@@ -133,6 +136,7 @@ class WirePuller {
 
   MotorManager<motorCount, IDLength> m_motors;
   EndstopManager<endstopCount, IDLength> m_endstops;
+  EncoderManager<encoderCount, IDLength> m_encoders;
 };
 
 #endif
