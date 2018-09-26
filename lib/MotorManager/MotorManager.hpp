@@ -14,6 +14,13 @@ class MotorManager {
   //! Maximal ID length of motor
   static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
+ protected:
+  struct MotorIDPair {
+    PololuMC33926 motor;
+    char id[maxIDLength];
+  };
+
+ public:
   //! Initializes next motor
   /*!
       \param id ID of the motor
@@ -71,12 +78,10 @@ class MotorManager {
   */
   uint initializedMotors() const { return m_initializedMotors; }
 
- protected:
-  struct MotorIDPair {
-    PololuMC33926 motor;
-    char id[maxIDLength];
-  };
+  MotorIDPair const* begin() const { return m_motors; }
+  MotorIDPair const* end() const { return &m_motors[motorCount]; }
 
+ protected:
   MotorIDPair m_motors[motorCount];
   uint m_initializedMotors{0};
 };

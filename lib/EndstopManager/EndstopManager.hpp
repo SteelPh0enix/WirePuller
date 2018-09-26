@@ -14,6 +14,13 @@ class EndstopManager {
   //! Maximal ID length of endstop
   static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
+ protected:
+  struct EndstopIDPair {
+    Endstop endstop;
+    char id[maxIDLength];
+  };
+
+ public:
   //! Initializes next endstop
   /*!
       \param id ID of the endstop
@@ -71,12 +78,10 @@ class EndstopManager {
   */
   uint initializedEndstops() const { return m_initializedEndstops; }
 
- protected:
-  struct EndstopIDPair {
-    Endstop endstop;
-    char id[maxIDLength];
-  };
+  EndstopIDPair const* begin() const { return m_endstops; }
+  EndstopIDPair const* end() const { return &m_endstops[endstopCount]; }
 
+ protected:
   EndstopIDPair m_endstops[endstopCount];
   uint m_initializedEndstops{0};
 };

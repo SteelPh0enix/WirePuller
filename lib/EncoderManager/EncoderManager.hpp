@@ -11,6 +11,13 @@ class EncoderManager {
 
   static constexpr uint maxIDLength = MaxIDLengthValue + 1;
 
+ protected:
+  struct EncoderIDPair {
+    Encoder encoder;
+    char id[maxIDLength];
+  };
+
+ public:
   bool initializeEncoder(const char* id) {
     if (m_intializedEncoders >= encoderCount) return false;
 
@@ -42,12 +49,10 @@ class EncoderManager {
 
   uint initializedEncoders() const { return m_intializedEncoders; }
 
- protected:
-  struct EncoderIDPair {
-    Encoder encoder;
-    char id[maxIDLength];
-  };
+  EncoderIDPair* begin() { return m_encoders; }
+  EncoderIDPair* end() { return &m_encoders[encoderCount]; }
 
+ protected:
   // This is hardcoded because of now Encoder class is made.
   EncoderIDPair m_encoders[encoderCount]{{Encoder(18, 19), ""},
                                          {Encoder(20, 21), ""}};

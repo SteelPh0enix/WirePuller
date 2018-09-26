@@ -101,20 +101,72 @@ class WirePuller {
 
  protected:
   JsonObject& setMotorSpeed(JsonObject& data) {
-    JsonObject& responseData = m_jsonBuffer.createObject();
+    for (auto const& motorData : data) {
+      PololuMC33926* motor = m_motors[motorData.key];
 
+      if (motor == nullptr) continue;
+
+      motor->speed(motorData.value.as<int>());
+    }
+
+    JsonObject& responseData = m_jsonBuffer.createObject();
+    responseData.set(JsonKey::MotorDataObject, getMotorData());
     return responseData;
   }
 
   JsonObject& getData(JsonObject& data) {
     JsonObject& responseData = m_jsonBuffer.createObject();
+    u8 flag = data.get<u8>(JsonKey::DataRequestFlag);
+
+    if (flag & static_cast<u8>(DataFlags::Motor))
+      responseData.set(JsonKey::MotorDataObject, getMotorData());
+
+    if (flag & static_cast<u8>(DataFlags::Endstop))
+      responseData.set(JsonKey::EndstopDataObject, getEndstopData());
+
+    if (flag & static_cast<u8>(DataFlags::Encoder))
+      responseData.set(JsonKey::EncoderDataObject, getEncoderData());
 
     return responseData;
   }
 
   JsonObject& resetEncoders(JsonObject& data) {
     JsonObject& responseData = m_jsonBuffer.createObject();
+    for (auto const& encoderData : data) {
+      Encoder* encoder = m_encoders[encoderData.key];
 
+      if (encoder == nullptr) continue;
+
+      if (encoderData.value.as<bool>()) encoder->write(0);
+    }
+    return responseData;
+  }
+
+  JsonObject& getMotorData() {
+    JsonObject& responseData = m_jsonBuffer.createObject();
+    for (const auto& motor : m_motors) {
+      JsonObject& motorData = m_jsonBuffer.createObject();
+      motorData.set(JsonKey::MotorSpeed, motor.motor.speed());
+      motorData.set(JsonKey::MotorCurrent, motor.motor.current());
+      motorData.set(JsonKey::MotorError, motor.motor.error());
+      responseData.set(motor.id, motorData);
+    }
+    return responseData;
+  }
+
+  JsonObject& getEndstopData() {
+    JsonObject& responseData = m_jsonBuffer.createObject();
+    for (const auto& endstop : m_endstops) {
+      responseData.set(endstop.id, endstop.endstop.state());
+    }
+    return responseData;
+  }
+
+  JsonObject& getEncoderData() {
+    JsonObject& responseData = m_jsonBuffer.createObject();
+    for (auto& encoder : m_encoders) {
+      responseData.set(encoder.id, encoder.encoder.read());
+    }
     return responseData;
   }
 

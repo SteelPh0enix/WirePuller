@@ -14,7 +14,7 @@ responses_time_sum = 0
 responses_count = 0
 
 try:
-    ardu = Serial(serial_port_name, 115200, timeout=serial_timeout)
+    ardu = Serial(serial_port_name, 250000, timeout=serial_timeout)
 except SerialException:
     print(SerialException)
 
@@ -56,18 +56,9 @@ def test(data):
 
 
 try:
+    test(b'{"type": "reset_encoder", "data": {"ENC_OX": true, "ENC_WH": true}}')
     while True:
-        # test(b'{ddd}')  # invalid json
-        # test(b'{}')  # empty json
-        # test(b'{"type":"test"}')  # no data
-        # test(b'{"type": "test", "data": {}}')  # unknown request type
-        # data not being an object
-        #test(b'{"type": "data_request", "data":"not an object"}')
-        # test(b'{"type": "data_request", "data":{}}')  # data is an empty object
-        # flag is not a number
-        #test(b'{"type": "data_request", "data":{"flag": "d"}}')
-        # well, this will yield a result
-        #test(b'{"type": "data_request", "data":{"flag": 929292}}')
+        test(b'{type: "set_motor_speed", "data": {"MOT_OX": 123, "MOT_WH": -6969}}')
         test(b'{"type": "data_request", "data":{"flag": 7}}')  # valid
 
 except KeyboardInterrupt:

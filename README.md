@@ -5,7 +5,7 @@
 ### Description
 
 JSON API will expose functionality of driver to external application by serial interface.
-**Serial data rate is set to `115200` by default. Consult [`Globals.hpp`](lib/Globals/Globals.hpp) for details**
+**Serial data rate is set to `250000` by default. Consult [`Globals.hpp`](lib/Globals/Globals.hpp) for details**
 
 Note, that JSON should have **no line breaks** and, if possible, as little as possible white characters.
 **Line break indicates the end of JSON (defined in [`Globals.hpp`](lib/Globals/Globals.hpp), `'\n'` by default)**
@@ -94,6 +94,8 @@ Where
 
 * `speed` - *number* - actual speed of the motor
 * `current` - *number* - current draw of motor, in milliampers
+
+**Note: in case of sending wrong motor/endstop/encoder ID, no error will be returned. Value will be silently ignored. This applies to all requests.**
 
 ##### Example 2 - response from driver with motor data
 
@@ -279,7 +281,12 @@ All the codes and messages can be found in [`JsonConstants.hpp`](lib/Globals/Jso
 
 ## Performance metrics
 
-While testing with encoder readings, a little less than 90Hz is possible. I expect this to be around 75-80Hz at full data request.
+On 250000bps baud rate, controller needs around 15ms to parse request and send response back. This can be tweaked in two ways:
+
+1) Increase baud rate
+2) Don't care about pretty API and just send all the data after receiving any request
+
+First one is dependend from environment (cable using which Arduino is connected), second one can be easely done if needed.
 
 ## Naming convention
 
