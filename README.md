@@ -178,8 +178,8 @@ And you will get a response (content will depend from the flag, but description 
         },
 
         "encoders": {
-            "encoder_ID": encoder_data,
-            "encoder_ID": encoder_data
+            "encoder_ID": position,
+            "encoder_ID": position
         }
     }
 }
@@ -189,7 +189,7 @@ Where
 
 * `speed` - *number* - actual speed of the motor
 * `current` - *number* - current draw of motor, in milliampers
-* `encoder_data` - *unknown yet* - data from encoder, the type and more info will be available soon
+* `position` - *number* - position in ticks, relative to calibrated one. 1600 ticks is a 360 degree rotation, so one tick is 0.225 degree
 
 ##### Example 4 - data from driver
 
@@ -216,6 +216,41 @@ Where
             "ENDSTOP2": false,
             "ENDSTOP3": true,
             "ENDSTOP4": false
+        },
+
+        "encoders": {
+            "ENCODER1": 64728,
+            "ENCODER2": -8773
+        }
+    }
+}
+```
+
+#### Resetting encoder position
+
+When calibrating, you can reset encoder position by sending this JSON
+
+```json
+{
+    "type": "reset_encoder",
+    "data": {
+        "ENCODER1": true/false,
+        "ENCODER2": true/false
+    }
+}
+```
+
+Where you have to specify the encoders you want to calibrate.
+
+Driver will respond with this JSON, containing all encoders ticks count
+
+```json
+{
+    "type": "encoder_reset",
+    "data": {
+        "encoders": {
+            "ENCODER1": 0,
+            "ENCODER2": 0
         }
     }
 }
@@ -244,7 +279,7 @@ All the codes and messages can be found in [`JsonConstants.hpp`](lib/Globals/Jso
 
 ## Performance metrics
 
-By now, i have achieved around 110Hz of response rate, with basic requests and error handling. I'm expecting this number to lower to around 50Hz.
+While testing with encoder readings, a little less than 90Hz is possible. I expect this to be around 75-80Hz at full data request.
 
 ## Naming convention
 

@@ -6,10 +6,10 @@ using uint = unsigned;
 
 // Application global variables
 namespace Globals {
-    constexpr uint MaxJsonSize = 256u;
-    constexpr unsigned long SerialDataRate = 115200u;
-    constexpr char JsonTerminator = '\n';
-    constexpr uint SerialTimeout = 200u;
-}
+constexpr uint MaxJsonSize = 256u;
+constexpr unsigned long SerialDataRate = 115200u;
+constexpr char JsonTerminator = '\n';
+constexpr uint SerialTimeout = 200u;
+}  // namespace Globals
 
 #endif
