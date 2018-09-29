@@ -4,7 +4,7 @@ from serial import Serial, SerialException
 from timeit import default_timer as timer
 from time import sleep
 
-serial_port_name = 'COM3'
+serial_port_name = '/dev/ttyACM0'
 serial_timeout = 5
 delay_time_ms = 300
 
@@ -58,8 +58,12 @@ def test(data):
 try:
     test(b'{"type": "reset_encoder", "data": {"ENC_OX": true, "ENC_WH": true}}')
     while True:
-        test(b'{type: "set_motor_speed", "data": {"MOT_OX": 123, "MOT_WH": -6969}}')
-        test(b'{"type": "data_request", "data":{"flag": 7}}')  # valid
+        test(b'{type: "set_motor_speed", "data": {"MOT_OX": -150, "MOT_WH": 00}}')
+        #test(b'{"type": "data_request", "data":{"flag": 7}}')  # valid
+        #sleep(1)
+        #test(b'{type: "set_motor_speed", "data": {"MOT_OX": 50, "MOT_WH": 200}}')
+        #test(b'{"type": "data_request", "data":{"flag": 7}}')  # valid
+        #sleep(1)
 
 except KeyboardInterrupt:
     ardu.close()

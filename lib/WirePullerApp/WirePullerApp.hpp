@@ -35,8 +35,8 @@ class WirePuller {
   //! Initializes the object and I/O
   void initialize() {
     // initialize motors
-    m_motors.initializeMotor(DeviceName::MotorXAxis, {6, 29, A2, 25, 24});
-    m_motors.initializeMotor(DeviceName::MotorWheel, {7, 30, A0, 23, 22});
+    m_motors.initializeMotor(DeviceName::MotorXAxis, {7, 28, A0, 23, 22}); // M1
+    m_motors.initializeMotor(DeviceName::MotorWheel, {8, 29, A1, 23, 22}); // M2
 
     // initialize endstops
     m_endstops.initializeEndstop(DeviceName::EndstopXAxisLeft, 32);

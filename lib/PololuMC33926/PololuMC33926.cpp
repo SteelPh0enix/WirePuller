@@ -47,9 +47,17 @@ void PololuMC33926::speed(int speed) {
 
   if (speed > maxSpeed) speed = maxSpeed;
 
+  /*
+  Serial.print("[[[DEBUG MESSAGE]]]");
+  Serial.print("Speed: ");
+  Serial.print(speed);
+  Serial.print(", reversed state: ");
+  Serial.println(reversed);
+  */
+
   // magic numbers here, unavoidable in any reasonable way, leave as-is.
   analogWrite(m_pinout.PWM, speed * 51 / 80);
-  digitalWrite(m_pinout.DIR, static_cast<u8>(reversed));
+  digitalWrite(m_pinout.DIR, reversed);
 
   m_speed = (reversed ? -speed : speed);
 }
