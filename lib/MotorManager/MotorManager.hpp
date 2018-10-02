@@ -28,7 +28,7 @@ class MotorManager {
 
       \return true if initialized, false if all motors are initialized
   */
-  bool initializeMotor(const char* id, PololuMC33926::Pinout const& pinout) {
+  bool initializeMotor(char const* id, PololuMC33926::Pinout const& pinout) {
     if (m_initializedMotors >= motorCount) return false;
 
     strcpy(m_motors[m_initializedMotors].id, id);
@@ -45,7 +45,7 @@ class MotorManager {
       \param id motor id
       \return a pointer to motor, or nullptr if no motor was found
   */
-  PololuMC33926* operator[](const char* id) {
+  PololuMC33926* operator[](char const* id) {
     for (uint i = 0; i < m_initializedMotors; i++) {
       if (strcmp(m_motors[i].id, id) == 0) {
         return &(m_motors[i].motor);
@@ -62,7 +62,7 @@ class MotorManager {
       \param id motor id
       \return a pointer to motor, or nullptr if no motor was found
   */
-  PololuMC33926 const* operator[](const char* id) const {
+  PololuMC33926 const* operator[](char const* id) const {
     for (uint i = 0; i < m_initializedMotors; i++) {
       if (strcmp(m_motors[i].id, id) == 0) {
         return &(m_motors[i].motor);

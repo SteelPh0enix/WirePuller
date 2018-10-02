@@ -1,37 +1,35 @@
 #include <Arduino.h>
+#include <string.h>
 #include <Globals.hpp>
 #include <MotorManager.hpp>
-#include <string.h>
 
 MotorManager<2, 4> manager;
 
-void setup() {
-    Serial.begin(115200);
-}
+void setup() { Serial.begin(115200); }
 
 void loop() {
-    Serial.print("Initialized motors: ");
-    Serial.println(manager.initializedMotors());
+  Serial.print("Initialized motors: ");
+  Serial.println(manager.initializedMotors());
 
-    for(uint i = 0; i < manager.motorCount; i++) {
-        char id[4];
-        sprintf(id, "MOT%d", i);
+  for (uint i = 0; i < manager.motorCount; i++) {
+    char id[4];
+    sprintf(id, "MOT%d", i);
 
-        Serial.print("Initializing motor ");
-        Serial.print(id);
-        Serial.print(": ");
-        Serial.println(manager.initializeMotor(id, {0, 0, 0, 0, 0}));
-    }
+    Serial.print("Initializing motor ");
+    Serial.print(id);
+    Serial.print(": ");
+    Serial.println(manager.initializeMotor(id, {0, 0, 0, 0, 0}));
+  }
 
-    char addr[16];
+  char addr[16];
 
-    Serial.print("Motor MOT1 address: ");
-    sprintf(addr, "0x%x", manager["MOT1"]);
-    Serial.println(addr);
+  Serial.print("Motor MOT1 address: ");
+  sprintf(addr, "0x%x", manager["MOT1"]);
+  Serial.println(addr);
 
-    Serial.print("Motor N_EX address: ");
-    sprintf(addr, "0x%x", manager["N_EX"]);
-    Serial.println(addr);
+  Serial.print("Motor N_EX address: ");
+  sprintf(addr, "0x%x", manager["N_EX"]);
+  Serial.println(addr);
 
-    delay(3000);
+  delay(3000);
 }

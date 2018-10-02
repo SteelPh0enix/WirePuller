@@ -4,43 +4,44 @@
 enum class DataFlags : u8 { Motor = 1, Endstop = 2, Encoder = 4 };
 
 namespace Error {
-constexpr unsigned Count = 6;
+constexpr char const* AppError[]{"Unknown error",
+                                 "Invalid JSON",
+                                 "No type key in request JSON",
+                                 "No data key in request JSON",
+                                 "Data key does not contain a JSON object",
+                                 "Request type not found"};
 
-constexpr const char* AppError[Count]{"Unknown error",
-                                      "Invalid JSON",
-                                      "No type key in request JSON",
-                                      "No data key in request JSON",
-                                      "Data key does not contain a JSON object",
-                                      "Request type not found"};
+constexpr unsigned Count = sizeof(AppError) / sizeof(char const*);
+
 }  // namespace Error
 
 namespace JsonKey {
-constexpr const char* Type = "type";
-constexpr const char* Data = "data";
+constexpr char const* Type = "type";
+constexpr char const* Data = "data";
 
-constexpr const char* ErrorCode = "code";
-constexpr const char* ErrorMessage = "message";
+constexpr char const* ErrorCode = "code";
+constexpr char const* ErrorMessage = "message";
 
-constexpr const char* MotorSpeed = "speed";
-constexpr const char* MotorCurrent = "current";
-constexpr const char* MotorError = "error";
+constexpr char const* MotorSpeed = "speed";
+constexpr char const* MotorCurrent = "current";
+constexpr char const* MotorError = "error";
 
-constexpr const char* MotorDataObject = "motors";
-constexpr const char* EndstopDataObject = "endstops";
-constexpr const char* EncoderDataObject = "encoders";
+constexpr char const* MotorDataObject = "motors";
+constexpr char const* EndstopDataObject = "endstops";
+constexpr char const* EncoderDataObject = "encoders";
 
-constexpr const char* DataRequestFlag = "flag";
+constexpr char const* DataRequestFlag = "flag";
 }  // namespace JsonKey
 
 namespace RequestType {
-constexpr const char* SetMotorSpeed = "set_motor_speed";
-constexpr const char* GetData = "data_request";
-constexpr const char* ResetEncoder = "reset_encoder";
+constexpr char const* SetMotorSpeed = "set_motor_speed";
+constexpr char const* GetData = "data_request";
+constexpr char const* ResetEncoder = "reset_encoder";
 }  // namespace RequestType
 
 namespace ResponseType {
-constexpr const char* Error = "error";
-constexpr const char* Data = "data";
+constexpr char const* Error = "error";
+constexpr char const* Data = "data";
 }  // namespace ResponseType
 
 #endif

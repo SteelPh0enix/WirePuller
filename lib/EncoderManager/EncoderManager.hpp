@@ -18,7 +18,7 @@ class EncoderManager {
   };
 
  public:
-  bool initializeEncoder(const char* id) {
+  bool initializeEncoder(char const* id) {
     if (m_intializedEncoders >= encoderCount) return false;
 
     strcpy(m_encoders[m_intializedEncoders].id, id);
@@ -27,7 +27,7 @@ class EncoderManager {
     return true;
   }
 
-  Encoder* operator[](const char* id) {
+  Encoder* operator[](char const* id) {
     for (uint i = 0; i < m_intializedEncoders; i++) {
       if (strcmp(m_encoders[i].id, id) == 0) {
         return &(m_encoders[i].encoder);
@@ -37,7 +37,7 @@ class EncoderManager {
     return nullptr;
   }
 
-  Encoder const* operator[](const char* id) const {
+  Encoder const* operator[](char const* id) const {
     for (uint i = 0; i < m_intializedEncoders; i++) {
       if (strcmp(m_encoders[i].id, id) == 0) {
         return &(m_encoders[i].encoder);
