@@ -8,4 +8,13 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES +=  tst_jsonmessagetest.cpp
+SOURCES +=  \
+    tst_jsonmessagetest.cpp \
+    $$APP_DIR/messages/RequestMessage.cpp
+
+INCLUDEPATH += \
+    $$APP_DIR
+
+DEPENDPATH += \
+    $$APP_DIR
+

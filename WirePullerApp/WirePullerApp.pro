@@ -3,7 +3,9 @@ TEMPLATE = subdirs
 include(configuration.pri)
 
 SUBDIRS += \
-    src/main \
-    src/test
+    src/main
 
-message($$ROOT_DIR)
+
+ENABLE_TEST {
+    SUBDIRS += src/test
+}
