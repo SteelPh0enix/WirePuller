@@ -77,6 +77,7 @@ public:
     template<typename TO_JSON_OBJ>
     void setData(const TO_JSON_OBJ &dataObject)
     {
+        setType(dataObject.getType());
         setData(dataObject.toObject());
     }
 
@@ -96,6 +97,7 @@ private:
 class MotorSpeedMessage : public Message<MotorSpeedMessage>
 {
 public:
+    RequestType getType() const;
     QJsonObject toObject() const;
 
     /**

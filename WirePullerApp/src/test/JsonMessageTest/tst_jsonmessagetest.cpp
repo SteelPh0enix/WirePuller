@@ -124,7 +124,6 @@ void JsonMessageTest::testSetJsonObject()
 void JsonMessageTest::testSetMotorSpeed()
 {
     RequestMessage request;
-    request.setType(RequestType::SET_MOTOR_SPEED);
     MotorSpeedMessage motorSpeed;
     QJsonObject speeds {
         {"motor1", 100},
@@ -143,6 +142,7 @@ void JsonMessageTest::testSetMotorSpeed()
     // the value must be correctly recognized and corrected
     speeds["motor2"] = -400;
     speeds["motor3"] = 400;
+    QVERIFY(containsValue("type", "set_motor_speed"));
     QVERIFY(containsValue("data", speeds));
 }
 

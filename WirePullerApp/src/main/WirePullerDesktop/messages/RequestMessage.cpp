@@ -45,6 +45,11 @@ QJsonObject RequestMessage::toObject() const
     return root;
 }
 
+RequestType MotorSpeedMessage::getType() const
+{
+    return RequestType::SET_MOTOR_SPEED;
+}
+
 QJsonObject MotorSpeedMessage::toObject() const
 {
     return data;
