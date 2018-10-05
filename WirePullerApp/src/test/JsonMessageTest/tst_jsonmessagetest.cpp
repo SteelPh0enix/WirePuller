@@ -1,19 +1,26 @@
 #include <QtTest>
+#include <QJsonParseError>
+#include <QJsonDocument>
+#include <QJsonObject>
 
-// add necessary includes here
 
 class JsonMessageTest : public QObject
 {
     Q_OBJECT
 
+    QJsonDocument document;
+    QJsonObject root;
+
 public:
     JsonMessageTest();
     ~JsonMessageTest();
 
+    void initializeJson(const QByteArray &json);
+    bool containsKey(const QString &key) const;
+
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void test_case1();
+    void cleanup();
+    void test_set_motor_speed_request();
 
 };
 
@@ -27,19 +34,35 @@ JsonMessageTest::~JsonMessageTest()
 
 }
 
-void JsonMessageTest::initTestCase()
+void JsonMessageTest::initializeJson(const QByteArray &json)
 {
-
+    QJsonParseError error;
+    document = QJsonDocument::fromJson(json, &error);
+    if (error.error != QJsonParseError::NoError)
+    {
+        QFAIL("Experienced an error when parsing JSON.");
+    }
 }
 
-void JsonMessageTest::cleanupTestCase()
+bool JsonMessageTest::containsKey(const QString &key) const
 {
-
+    return root.contains(key);
 }
 
-void JsonMessageTest::test_case1()
+void JsonMessageTest::cleanup()
 {
+    document = QJsonDocument();
+    root = QJsonObject();
+}
 
+void JsonMessageTest::test_set_motor_speed_request()
+{
+    RequestMessage request;
+    request.setType(RequestMessage::MOTOR_SPEED);
+
+    QByteArray rawJson = request.toJson();
+    initializeJson(rawJson);
+    QVERIFY(containsKey("type"));
 }
 
 QTEST_APPLESS_MAIN(JsonMessageTest)
