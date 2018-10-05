@@ -1,2 +1,6 @@
 #ignore .user file
 *.user
+
+#ignore builds
+build-*-Debug
+build-*-Release
