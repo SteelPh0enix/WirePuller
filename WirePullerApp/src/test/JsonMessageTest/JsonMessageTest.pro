@@ -13,7 +13,8 @@ SOURCES +=  \
     $$APP_DIR/messages/RequestMessage.cpp \
     $$APP_DIR/messages/MotorSpeedRequest.cpp \
     $$APP_DIR/messages/DataRequest.cpp \
-    $$APP_DIR/messages/ResetEncodersRequest.cpp
+    $$APP_DIR/messages/ResetEncodersRequest.cpp \
+    $$APP_DIR/messages/ResponseMessage.cpp
 
 INCLUDEPATH += \
     $$APP_DIR \

@@ -17,7 +17,8 @@ SOURCES += \
     messages/RequestMessage.cpp \
     messages/ResetEncodersRequest.cpp \
     messages/DataRequest.cpp \
-    messages/MotorSpeedRequest.cpp
+    messages/MotorSpeedRequest.cpp \
+    messages/ResponseMessage.cpp
 
 RESOURCES += qml.qrc
 
@@ -42,7 +43,9 @@ HEADERS += \
     messages/RequestType.h \
     messages/ResetEncodersRequest.h \
     messages/DataRequest.h \
-    messages/MotorSpeedRequest.h
+    messages/MotorSpeedRequest.h \
+    messages/ResponseMessage.h \
+    messages/ResponseType.h
 
 INCLUDEPATH += \
     messages
