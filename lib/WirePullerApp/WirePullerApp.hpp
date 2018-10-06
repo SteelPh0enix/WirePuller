@@ -56,7 +56,7 @@ class WirePuller {
       \param data Data with JSON to be parsed and executed
       \param response Pointer to char buffer in which response will be stored
   */
-  bool execute(const char* data, char* response) {
+  bool execute(char const* data, char* response) {
     JsonObject& jsonData = m_jsonBuffer.parseObject(data, maxJsonNestLevel);
     JsonObject& jsonResponse = m_jsonBuffer.createObject();
 
@@ -66,7 +66,7 @@ class WirePuller {
     };
 
     if (jsonData != JsonObject::invalid()) {
-      const char* request_type = jsonData.get<const char*>(JsonKey::Type);
+      char const* request_type = jsonData.get<char const*>(JsonKey::Type);
       if (request_type != nullptr) {
         if (jsonData.containsKey(JsonKey::Data)) {
           JsonObject& requestData = jsonData.get<JsonObject&>(JsonKey::Data);

@@ -28,7 +28,7 @@ class EndstopManager {
 
       \return true if initialized, false if all endstops are initialized
   */
-  bool initializeEndstop(const char* id, u8 endstopPin) {
+  bool initializeEndstop(char const* id, u8 endstopPin) {
     if (m_initializedEndstops >= endstopCount) return false;
 
     strcpy(m_endstops[m_initializedEndstops].id, id);
@@ -45,7 +45,7 @@ class EndstopManager {
       \param id endstop id
       \return a pointer to endstop, or nullptr if no endstop was found
   */
-  Endstop* operator[](const char* id) {
+  Endstop* operator[](char const* id) {
     for (uint i = 0; i < m_initializedEndstops; i++) {
       if (strcmp(m_endstops[i].id, id) == 0) {
         return &(m_endstops[i].endstop);
@@ -62,7 +62,7 @@ class EndstopManager {
       \param id endstop id
       \return a pointer to endstop, or nullptr if no endstop was found
   */
-  Endstop const* operator[](const char* id) const {
+  Endstop const* operator[](char const* id) const {
     for (uint i = 0; i < m_initializedEndstops; i++) {
       if (strcmp(m_endstops[i].id, id) == 0) {
         return &(m_endstops[i].endstop);
