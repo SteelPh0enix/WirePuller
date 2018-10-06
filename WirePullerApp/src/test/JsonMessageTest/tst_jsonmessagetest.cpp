@@ -12,6 +12,7 @@
 #include "DataRequest.h"
 #include "ResetEncodersRequest.h"
 #include "ResponseMessage.h"
+#include "MotorResponse.h"
 
 
 class JsonMessageTest : public QObject
@@ -44,7 +45,8 @@ private slots:
     void testSetMotorSpeed();
     void testRequestData();
     void testResetEncoderRequest();
-    void testParsingFeedbackData();
+    void testParseResponseType();
+    void testMotorFeedbackData();
 
 
 private:
@@ -225,17 +227,31 @@ void JsonMessageTest::testResetEncoderRequest()
      QVERIFY(containsValue("data", encoders));
 }
 
-void JsonMessageTest::testParsingFeedbackData()
+void JsonMessageTest::testParseResponseType()
 {
-     const QJsonObject rootData {createFeedbackData()};
-     const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
+    const QJsonObject rootData {createFeedbackData()};
+    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
 
-     ResponseMessage response(rawJson);
-     QCOMPARE(response.getType(), ResponseType::DATA);
+    ResponseMessage response(rawJson);
+    QCOMPARE(response.getType(), ResponseType::DATA);
+}
 
-     QVERIFY(response.contains("motors"));
-     QVERIFY(response.contains("endstops"));
-     QVERIFY(response.contains("encoders"));
+void JsonMessageTest::testMotorFeedbackData()
+{
+    const QJsonObject rootData {createFeedbackData()};
+    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
+
+    ResponseMessage response(rawJson);
+    QVERIFY(response.contains("motors"));
+
+    MotorResponse motors = response.get<MotorResponse>();
+    QList<QString> ids = motors.getMotorIds();
+    QCOMPARE(ids.size(), 1);
+    QCOMPARE(ids.at(0), "motor1");
+    MotorResponse::MotorData retrieved = motors.getData("motor1");
+    MotorResponse::MotorData expected { false, 100, 2000 };
+    QCOMPARE(retrieved, expected);
+
 }
 
 void JsonMessageTest::verifyRequestTypes(const std::unordered_map<RequestType, QString> &typeMapping)

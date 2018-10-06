@@ -9,4 +9,12 @@ enum class ResponseType
     DATA
 };
 
+enum class ResponseObject
+{
+    UNKNOWN,
+    MOTORS,
+    ENDSTOPS,
+    ENCODERS
+};
+
 #endif // RESPONSETYPE_H
