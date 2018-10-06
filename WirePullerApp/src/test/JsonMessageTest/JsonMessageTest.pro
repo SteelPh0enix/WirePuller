@@ -16,7 +16,8 @@ SOURCES +=  \
     $$APP_DIR/messages/ResetEncodersRequest.cpp \
     $$APP_DIR/messages/ResponseMessage.cpp \
     $$APP_DIR/messages/MotorResponse.cpp \
-    $$APP_DIR/messages/EndstopResponse.cpp
+    $$APP_DIR/messages/EndstopResponse.cpp \
+    $$APP_DIR/messages/EncoderResponse.cpp
 
 INCLUDEPATH += \
     $$APP_DIR \

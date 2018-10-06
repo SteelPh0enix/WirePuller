@@ -14,6 +14,7 @@
 #include "ResponseMessage.h"
 #include "MotorResponse.h"
 #include "EndstopResponse.h"
+#include "EncoderResponse.h"
 
 
 class JsonMessageTest : public QObject
@@ -37,6 +38,7 @@ public:
 
     RequestMessage createNonStandard();
     QJsonObject createFeedbackData();
+    ResponseMessage createResponseMessage();
 
 private slots:
     void cleanup();
@@ -49,6 +51,7 @@ private slots:
     void testParseResponseType();
     void testMotorFeedbackData();
     void testEndstopFeedbackData();
+    void testEncoderFeedbackData();
 
 
 private:
@@ -138,6 +141,15 @@ QJsonObject JsonMessageTest::createFeedbackData()
     };
     root["data"] = data;
     return root;
+}
+
+ResponseMessage JsonMessageTest::createResponseMessage()
+{
+    const QJsonObject rootData {createFeedbackData()};
+    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
+
+    ResponseMessage response(rawJson);
+    return response;
 }
 
 void JsonMessageTest::cleanup()
@@ -231,19 +243,13 @@ void JsonMessageTest::testResetEncoderRequest()
 
 void JsonMessageTest::testParseResponseType()
 {
-    const QJsonObject rootData {createFeedbackData()};
-    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
-
-    ResponseMessage response(rawJson);
+    ResponseMessage response(createResponseMessage());
     QCOMPARE(response.getType(), ResponseType::DATA);
 }
 
 void JsonMessageTest::testMotorFeedbackData()
 {
-    const QJsonObject rootData {createFeedbackData()};
-    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
-
-    ResponseMessage response(rawJson);
+    ResponseMessage response(createResponseMessage());
     QVERIFY(response.contains("motors"));
 
     MotorResponse motors = response.get<MotorResponse>();
@@ -258,15 +264,22 @@ void JsonMessageTest::testMotorFeedbackData()
 
 void JsonMessageTest::testEndstopFeedbackData()
 {
-    const QJsonObject rootData {createFeedbackData()};
-    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
-
-    ResponseMessage response(rawJson);
+    ResponseMessage response(createResponseMessage());
     QVERIFY(response.contains("endstops"));
 
     EndstopResponse endstops = response.get<EndstopResponse>();
     QCOMPARE(endstops.getState("endstop1"), false);
     QCOMPARE(endstops.getState("endstop2"), true);
+}
+
+void JsonMessageTest::testEncoderFeedbackData()
+{
+    ResponseMessage response(createResponseMessage());
+    QVERIFY(response.contains("encoders"));
+
+    EncoderResponse encoders = response.get<EncoderResponse>();
+    QCOMPARE(encoders.getPosition("encoder1"), 20012);
+    QCOMPARE(encoders.getPosition("encoder2"), -4322);
 }
 
 void JsonMessageTest::verifyRequestTypes(const std::unordered_map<RequestType, QString> &typeMapping)

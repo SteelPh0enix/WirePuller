@@ -20,7 +20,8 @@ SOURCES += \
     messages/MotorSpeedRequest.cpp \
     messages/ResponseMessage.cpp \
     messages/MotorResponse.cpp \
-    messages/EndstopResponse.cpp
+    messages/EndstopResponse.cpp \
+    messages/EncoderResponse.cpp
 
 RESOURCES += qml.qrc
 
@@ -49,7 +50,8 @@ HEADERS += \
     messages/ResponseMessage.h \
     messages/ResponseType.h \
     messages/MotorResponse.h \
-    messages/EndstopResponse.h
+    messages/EndstopResponse.h \
+    messages/EncoderResponse.h
 
 INCLUDEPATH += \
     messages
