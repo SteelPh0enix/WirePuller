@@ -28,4 +28,5 @@ void loop() {
     }
 #endif
   }
+  app.endstopCheck();
 }

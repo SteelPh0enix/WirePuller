@@ -35,8 +35,10 @@ class WirePuller {
   //! Initializes the object and I/O
   void initialize() {
     // initialize motors
-    m_motors.initializeMotor(DeviceName::MotorXAxis, {7, 28, A0, 23, 22}); // M1
-    m_motors.initializeMotor(DeviceName::MotorWheel, {8, 29, A1, 23, 22}); // M2
+    m_motors.initializeMotor(DeviceName::MotorXAxis,
+                             {7, 28, A0, 23, 22});  // M1
+    m_motors.initializeMotor(DeviceName::MotorWheel,
+                             {8, 29, A1, 23, 22});  // M2
 
     // initialize endstops
     m_endstops.initializeEndstop(DeviceName::EndstopXAxisLeft, 32);
@@ -97,6 +99,26 @@ class WirePuller {
     auto bytes_written = jsonResponse.printTo(response, Globals::MaxJsonSize);
     m_jsonBuffer.clear();
     return bytes_written != 0;
+  }
+
+  void endstopCheck() {
+    // TODO: test this, because i don't know which endstop is for which
+    // direction. Rewire the motors if necessary.
+
+    auto* leftXEndstop = m_endstops[DeviceName::EndstopXAxisLeft];
+    auto* rightXEndstop = m_endstops[DeviceName::EndstopXAxisRight];
+    auto* wheelLeftEndstop = m_endstops[DeviceName::EndstopWheelXAxisLeft];
+    auto* wheelRightEndstop = m_endstops[DeviceName::EndstopWheelXAxisRight];
+    auto* xMotor = m_motors[DeviceName::MotorXAxis];
+    auto* wheelMotor = m_motors[DeviceName::MotorWheel];
+
+    if (leftXEndstop->state() && xMotor->speed() > 0) xMotor->speed(0);
+    if (rightXEndstop->state() && xMotor->speed() < 0) xMotor->speed(0);
+
+    if (wheelLeftEndstop->state() && wheelMotor->speed() > 0)
+      wheelMotor->speed(0);
+    if (wheelRightEndstop->state() && wheelMotor->speed() < 0)
+      wheelMotor->speed(0);
   }
 
  protected:

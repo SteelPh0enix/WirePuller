@@ -4,14 +4,15 @@
 enum class DataFlags : u8 { Motor = 1, Endstop = 2, Encoder = 4 };
 
 namespace Error {
-constexpr unsigned Count = 6;
+constexpr const char* AppError[]{"Unknown error",
+                                 "Invalid JSON",
+                                 "No type key in request JSON",
+                                 "No data key in request JSON",
+                                 "Data key does not contain a JSON object",
+                                 "Request type not found"};
 
-constexpr const char* AppError[Count]{"Unknown error",
-                                      "Invalid JSON",
-                                      "No type key in request JSON",
-                                      "No data key in request JSON",
-                                      "Data key does not contain a JSON object",
-                                      "Request type not found"};
+constexpr unsigned Count = sizeof(AppError) / sizeof(const char*);
+
 }  // namespace Error
 
 namespace JsonKey {
