@@ -14,7 +14,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    messages/RequestMessage.cpp
+    messages/RequestMessage.cpp \
+    messages/ResetEncodersRequest.cpp \
+    messages/DataRequest.cpp \
+    messages/MotorSpeedRequest.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +37,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 include(../../../configuration.pri)
 
 HEADERS += \
-    messages/RequestMessage.h
+    messages/RequestMessage.h \
+    messages/Message.h \
+    messages/RequestType.h \
+    messages/ResetEncodersRequest.h \
+    messages/DataRequest.h \
+    messages/MotorSpeedRequest.h
+
+INCLUDEPATH += \
+    messages

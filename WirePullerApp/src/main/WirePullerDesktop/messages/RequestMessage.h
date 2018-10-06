@@ -5,32 +5,9 @@
 #include <QByteArray>
 #include <QString>
 
+#include "Message.h"
+#include "RequestType.h"
 
-template<class CRTP>
-class Message
-{
-public:
-    /**
-     * @brief toJson Generates JSON to be transfered
-     * @param pretty True if the JSON should be indented
-     * @return A serialized JSON messaged
-     */
-    QByteArray toJson(bool pretty = false) const;
-
-    /**
-     * @brief toString Prints pretty JSON
-     * @return Pretty JSON
-     */
-    QString toString() const;
-};
-
-
-enum class RequestType
-{
-    SET_MOTOR_SPEED,
-    GET_DATA,
-    RESET_ENCODER
-};
 /**
  * @brief The RequestMessage class encapsulates messages content
  *
@@ -91,39 +68,4 @@ private:
 };
 
 
-/**
- * @brief The MotorSpeedMessage class encapsulates a command to set desired motor speed
- */
-class MotorSpeedMessage : public Message<MotorSpeedMessage>
-{
-public:
-    RequestType getType() const;
-    QJsonObject toObject() const;
-
-    /**
-     * @brief setMotorSpeed Sets motor speed
-     * @param motorId ID of the motor
-     * @param value value in range of [-400, 400]
-     */
-    void setMotorSpeed(const QString &motorId, int value);
-
-
-private:
-    QJsonObject data;
-};
-
-
-template<class CRTP>
-QByteArray Message<CRTP>::toJson(bool pretty) const
-{
-    const CRTP &derived = static_cast<const CRTP&>(*this);
-    return QJsonDocument(derived.toObject()).toJson(
-                pretty ? QJsonDocument::Indented : QJsonDocument::Compact);
-}
-
-template<class CRTP>
-QString Message<CRTP>::toString() const
-{
-    return QString(toJson(true));
-}
 #endif // REQUESTMESSAGE_H

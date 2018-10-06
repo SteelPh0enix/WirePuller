@@ -5,7 +5,13 @@
 #include <QDebug>
 
 #include <unordered_map>
-#include "messages/RequestMessage.h"
+
+#include "RequestMessage.h"
+#include "MotorSpeedRequest.h"
+#include "DataRequest.h"
+#include "ResetEncodersRequest.h"
+
+
 class JsonMessageTest : public QObject
 {
     Q_OBJECT
@@ -23,6 +29,7 @@ public:
     bool containsKey(const QString &key) const;
     bool containsValue(const QString &key, const QString &value) const;
     bool containsValue(const QString &key, const QJsonObject &value) const;
+    bool containsValue(const QString &key, int flag) const;
 
     RequestMessage createNonStandard();
 
@@ -32,6 +39,8 @@ private slots:
     void testSetNonstandardType();
     void testSetJsonObject();
     void testSetMotorSpeed();
+    void testRequestData();
+    void testResetEncoderRequest();
 
 
 private:
@@ -73,6 +82,11 @@ bool JsonMessageTest::containsValue(const QString &key, const QString &value) co
 bool JsonMessageTest::containsValue(const QString &key, const QJsonObject &value) const
 {
     return root.value(key).toObject() == value;
+}
+
+bool JsonMessageTest::containsValue(const QString &key, int flag) const
+{
+    return root.value(key).toInt() == flag;
 }
 
 RequestMessage JsonMessageTest::createNonStandard()
@@ -124,7 +138,7 @@ void JsonMessageTest::testSetJsonObject()
 void JsonMessageTest::testSetMotorSpeed()
 {
     RequestMessage request;
-    MotorSpeedMessage motorSpeed;
+    MotorSpeedRequest motorSpeed;
     QJsonObject speeds {
         {"motor1", 100},
         {"motor2", -500},
@@ -144,6 +158,32 @@ void JsonMessageTest::testSetMotorSpeed()
     speeds["motor3"] = 400;
     QVERIFY(containsValue("type", "set_motor_speed"));
     QVERIFY(containsValue("data", speeds));
+}
+
+void JsonMessageTest::testRequestData()
+{
+    RequestMessage request;
+    DataRequest dataRequest;
+    dataRequest.setFlag(DataFlag::MOTOR);
+
+    request.setData(dataRequest);
+    initializeJson(request.toJson());
+
+    QVERIFY(containsKey("data"));
+    QCOMPARE(root["data"].toObject()["flag"].toInt(), 1);
+}
+
+void JsonMessageTest::testResetEncoderRequest()
+{
+     RequestMessage request;
+     ResetEncodersRequest resetEncoder;
+     resetEncoder.resetEncoder("encoder1");
+     QJsonObject encoders { {"encoder1", true} };
+
+     request.setData(resetEncoder);
+     initializeJson(request.toJson());
+     qDebug() << request.toString();
+     QVERIFY(containsValue("data", encoders));
 }
 
 void JsonMessageTest::verifyRequestTypes(const std::unordered_map<RequestType, QString> &typeMapping)

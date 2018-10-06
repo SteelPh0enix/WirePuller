@@ -44,22 +44,3 @@ QJsonObject RequestMessage::toObject() const
     root["data"] = this->data;
     return root;
 }
-
-RequestType MotorSpeedMessage::getType() const
-{
-    return RequestType::SET_MOTOR_SPEED;
-}
-
-QJsonObject MotorSpeedMessage::toObject() const
-{
-    return data;
-}
-
-void MotorSpeedMessage::setMotorSpeed(const QString &motorId, int value)
-{
-    constexpr auto MAX_SPEED {400};
-    auto sign = value < 0 ? -1 : 1;
-    value = std::abs(value) > MAX_SPEED ? sign * MAX_SPEED : value;
-
-    data.insert(motorId, value);
-}
