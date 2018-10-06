@@ -39,26 +39,18 @@ public:
      */
     bool contains(const QString &dataKey) const;
 
+    /**
+     * Returns an object that is capable of parsing JSON data messages
+     */
+    template<typename Response> Response get() const;
 
-    template<typename Response>
-    Response get() const;
-
-
-    static ResponseObject getResponseObject(const QString &objectType);
 
 private:
     QJsonObject root;
 };
 
-template<typename Response>
-Response ResponseMessage::get() const
+template<typename Response> Response ResponseMessage::get() const
 {
-    auto type {ResponseMessage::getResponseObject(Response::RESPONSE_OBJECT)};
-    if (type == ResponseObject::UNKNOWN)
-    {
-        throw std::invalid_argument("Cannot retrieve ResponseObject");
-    }
-
     return Response::fromJson(root["data"].toObject()
             .value(Response::RESPONSE_OBJECT).toObject());
 }
