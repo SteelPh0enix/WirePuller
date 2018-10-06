@@ -17,7 +17,8 @@ SOURCES +=  \
     $$APP_DIR/messages/ResponseMessage.cpp \
     $$APP_DIR/messages/MotorResponse.cpp \
     $$APP_DIR/messages/EndstopResponse.cpp \
-    $$APP_DIR/messages/EncoderResponse.cpp
+    $$APP_DIR/messages/EncoderResponse.cpp \
+    $$APP_DIR/messages/ErrorResponse.cpp
 
 INCLUDEPATH += \
     $$APP_DIR \

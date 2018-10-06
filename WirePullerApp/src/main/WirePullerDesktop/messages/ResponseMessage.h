@@ -56,8 +56,20 @@ private:
 
 template<typename Response> Response ResponseMessage::get() const
 {
-    return Response::fromJson(root["data"].toObject()
+    switch (getType())
+    {
+    case ResponseType::DATA:
+        return Response::fromJson(root["data"].toObject()
             .value(Response::RESPONSE_OBJECT).toObject());
+    case ResponseType::ERROR:
+        if (strcmp(Response::RESPONSE_OBJECT, ERROR) == 0)
+        {
+            return Response::fromJson(root["data"].toObject());
+        }
+        // fallthrough
+    default:
+        throw std::invalid_argument("Cannot parse the message");
+    }
 }
 
 #endif // RESPONSEMESSAGE_H

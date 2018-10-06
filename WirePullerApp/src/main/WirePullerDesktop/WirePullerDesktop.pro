@@ -21,7 +21,8 @@ SOURCES += \
     messages/ResponseMessage.cpp \
     messages/MotorResponse.cpp \
     messages/EndstopResponse.cpp \
-    messages/EncoderResponse.cpp
+    messages/EncoderResponse.cpp \
+    messages/ErrorResponse.cpp
 
 RESOURCES += qml.qrc
 
@@ -51,7 +52,8 @@ HEADERS += \
     messages/ResponseType.h \
     messages/MotorResponse.h \
     messages/EndstopResponse.h \
-    messages/EncoderResponse.h
+    messages/EncoderResponse.h \
+    messages/ErrorResponse.h
 
 INCLUDEPATH += \
     messages

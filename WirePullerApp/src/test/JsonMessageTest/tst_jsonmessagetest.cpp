@@ -15,6 +15,7 @@
 #include "MotorResponse.h"
 #include "EndstopResponse.h"
 #include "EncoderResponse.h"
+#include "ErrorResponse.h"
 
 
 class JsonMessageTest : public QObject
@@ -40,6 +41,9 @@ public:
     QJsonObject createFeedbackData();
     ResponseMessage createResponseMessage();
 
+    QJsonObject createErrorData();
+
+
 private slots:
     void cleanup();
     void testSetType();
@@ -52,6 +56,7 @@ private slots:
     void testMotorFeedbackData();
     void testEndstopFeedbackData();
     void testEncoderFeedbackData();
+    void testErrorResponse();
 
 
 private:
@@ -150,6 +155,18 @@ ResponseMessage JsonMessageTest::createResponseMessage()
 
     ResponseMessage response(rawJson);
     return response;
+}
+
+QJsonObject JsonMessageTest::createErrorData()
+{
+    QJsonObject root;
+    root["type"] = "error";
+    QJsonObject errorMessage {
+        {"code", 0},
+        {"message", "No error"}
+    };
+    root["data"] = errorMessage;
+    return root;
 }
 
 void JsonMessageTest::cleanup()
@@ -280,6 +297,17 @@ void JsonMessageTest::testEncoderFeedbackData()
     EncoderResponse encoders = response.get<EncoderResponse>();
     QCOMPARE(encoders.getPosition("encoder1"), 20012);
     QCOMPARE(encoders.getPosition("encoder2"), -4322);
+}
+
+void JsonMessageTest::testErrorResponse()
+{
+    QJsonObject errorMsg {createErrorData()};
+    ResponseMessage response(QJsonDocument(errorMsg).toJson(QJsonDocument::Compact));
+
+    QCOMPARE(response.getType(), ResponseType::ERROR);
+    ErrorResponse errorResponse = response.get<ErrorResponse>();
+    QCOMPARE(errorResponse.getCode(), 0);
+    QCOMPARE(errorResponse.getMessage(), "No error");
 }
 
 void JsonMessageTest::verifyRequestTypes(const std::unordered_map<RequestType, QString> &typeMapping)
