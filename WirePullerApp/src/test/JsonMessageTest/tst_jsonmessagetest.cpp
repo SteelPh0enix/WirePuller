@@ -13,6 +13,7 @@
 #include "ResetEncodersRequest.h"
 #include "ResponseMessage.h"
 #include "MotorResponse.h"
+#include "EndstopResponse.h"
 
 
 class JsonMessageTest : public QObject
@@ -47,6 +48,7 @@ private slots:
     void testResetEncoderRequest();
     void testParseResponseType();
     void testMotorFeedbackData();
+    void testEndstopFeedbackData();
 
 
 private:
@@ -252,6 +254,19 @@ void JsonMessageTest::testMotorFeedbackData()
     MotorResponse::MotorData expected { false, 100, 2000 };
     QCOMPARE(retrieved, expected);
 
+}
+
+void JsonMessageTest::testEndstopFeedbackData()
+{
+    const QJsonObject rootData {createFeedbackData()};
+    const QByteArray rawJson {QJsonDocument(rootData).toJson(QJsonDocument::Compact)};
+
+    ResponseMessage response(rawJson);
+    QVERIFY(response.contains("endstops"));
+
+    EndstopResponse endstops = response.get<EndstopResponse>();
+    QCOMPARE(endstops.getState("endstop1"), false);
+    QCOMPARE(endstops.getState("endstop2"), true);
 }
 
 void JsonMessageTest::verifyRequestTypes(const std::unordered_map<RequestType, QString> &typeMapping)

@@ -21,7 +21,6 @@ public:
     MotorData getData(const QString &motorId) const;
 
     static MotorResponse fromJson(const QJsonObject &object);
-
     friend bool operator==(const MotorData &lhs, const MotorData &rhs);
 private:
     QJsonObject motors;

@@ -40,7 +40,12 @@ public:
     bool contains(const QString &dataKey) const;
 
     /**
-     * Returns an object that is capable of parsing JSON data messages
+     * Returns an object that is capable of parsing JSON data messages.
+     *
+     * Requires Response class to have the following entities:
+     * * RESPONSE_OBJECT : constexpr char[] - name that defines serialized object
+     * * Response::fromJson(obj : QJsonObject) : Response - a static method
+     * that creates Response object
      */
     template<typename Response> Response get() const;
 
