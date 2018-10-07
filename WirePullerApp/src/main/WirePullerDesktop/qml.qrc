@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>pages/IntroPage.qml</file>
+        <file>pages/SerialDevicePage.qml</file>
+        <file>pages/ControlPage.qml</file>
+        <file>pages/PwmControlWidget.qml</file>
+        <file>pages/DeviceWidget.qml</file>
     </qresource>
 </RCC>
