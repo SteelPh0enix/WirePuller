@@ -25,6 +25,15 @@ ApplicationWindow {
         }
 
         Menu {
+            title: qsTr("&Settings")
+            MenuItem {
+                text: qsTr("Serial Settings")
+                enabled: stackView.currentIndex == 0
+                onClicked: serialSettingsDialog.open()
+            }
+        }
+
+        Menu {
             title: qsTr("&Help")
         }
     }
@@ -92,5 +101,14 @@ ApplicationWindow {
         ListElement { name: qsTr("Introduction page"); src: "qrc:/pages/IntroPage.qml" }
         ListElement { name: qsTr("Select device"); src: "qrc:/pages/SerialDevicePage.qml" }
         ListElement { name: qsTr("Device Control"); src: "qrc:/pages/ControlPage.qml" }
+    }
+
+    SerialSettingsDialog {
+        id: serialSettingsDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width * 4 / 5
+        height: parent.height * 4 / 5
+
     }
 }

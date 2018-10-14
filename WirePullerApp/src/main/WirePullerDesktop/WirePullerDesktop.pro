@@ -22,7 +22,8 @@ SOURCES += \
     messages/MotorResponse.cpp \
     messages/EndstopResponse.cpp \
     messages/EncoderResponse.cpp \
-    messages/ErrorResponse.cpp
+    messages/ErrorResponse.cpp \
+    SerialSettings.cpp
 
 RESOURCES += qml.qrc
 
@@ -53,7 +54,9 @@ HEADERS += \
     messages/MotorResponse.h \
     messages/EndstopResponse.h \
     messages/EncoderResponse.h \
-    messages/ErrorResponse.h
+    messages/ErrorResponse.h \
+    SerialSettings.h \
+    WireSerialSettings.h
 
 INCLUDEPATH += \
     messages

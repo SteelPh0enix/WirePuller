@@ -6,5 +6,6 @@
         <file>pages/ControlPage.qml</file>
         <file>pages/PwmControlWidget.qml</file>
         <file>pages/DeviceWidget.qml</file>
+        <file>SerialSettingsDialog.qml</file>
     </qresource>
 </RCC>
