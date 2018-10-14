@@ -267,7 +267,7 @@ void JsonMessageTest::testParseResponseType()
 void JsonMessageTest::testMotorFeedbackData()
 {
     ResponseMessage response(createResponseMessage());
-    QVERIFY(response.contains("motors"));
+    QVERIFY(response.contains(MotorResponse::RESPONSE_OBJECT));
 
     MotorResponse motors = response.get<MotorResponse>();
     QList<QString> ids = motors.getMotorIds();
@@ -282,7 +282,7 @@ void JsonMessageTest::testMotorFeedbackData()
 void JsonMessageTest::testEndstopFeedbackData()
 {
     ResponseMessage response(createResponseMessage());
-    QVERIFY(response.contains("endstops"));
+    QVERIFY(response.contains(EndstopResponse::RESPONSE_OBJECT));
 
     EndstopResponse endstops = response.get<EndstopResponse>();
     QCOMPARE(endstops.getState("endstop1"), false);
@@ -292,7 +292,7 @@ void JsonMessageTest::testEndstopFeedbackData()
 void JsonMessageTest::testEncoderFeedbackData()
 {
     ResponseMessage response(createResponseMessage());
-    QVERIFY(response.contains("encoders"));
+    QVERIFY(response.contains(EncoderResponse::RESPONSE_OBJECT));
 
     EncoderResponse encoders = response.get<EncoderResponse>();
     QCOMPARE(encoders.getPosition("encoder1"), 20012);
