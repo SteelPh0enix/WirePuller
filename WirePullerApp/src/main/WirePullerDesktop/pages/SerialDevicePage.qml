@@ -1,11 +1,18 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.11
+import pl.projektorion.serial 1.0
 
 Page {
     id: serialDevicePage
 
     signal connected()
+
+    function reload_model()
+    {
+        model.reload()
+        discoveredDevices.currentIndex = 0
+    }
 
     Column {
         anchors.fill: parent
@@ -26,6 +33,7 @@ Page {
 
             ComboBox {
                 id: discoveredDevices
+                textRole: "display"
                 model: model
             }
 
@@ -42,12 +50,16 @@ Page {
             width: row.width
             text: qsTr("Reload")
             onActivated: {
-                model.append({"data": "DATA"})
+                reload_model()
             }
         }
     }
 
-    ListModel {
+    SerialDeviceListModel {
         id: model
+    }
+
+    Component.onCompleted: {
+        reload_model()
     }
 }
