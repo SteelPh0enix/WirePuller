@@ -40,7 +40,11 @@ Page {
             Button {
                 text: qsTr("Connect")
                 onClicked: {
-                    connected()
+                    if (discoveredDevices.currentText.length > 0)
+                    {
+                        backend.setPortName(discoveredDevices.currentText)
+                        connected()
+                    }
                 }
             }
         }

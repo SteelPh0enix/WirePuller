@@ -9,8 +9,17 @@ class WireSerialSettings : public SerialSettings
     Q_OBJECT
 public:
     WireSerialSettings(QObject *parent = nullptr)
-        : SerialSettings ("pl.projektorion", QGuiApplication::applicationName(), parent)
+        : WireSerialSettings(true, parent)
     {
+    }
+
+    WireSerialSettings(bool storeOnDestroy, QObject *parent = nullptr)
+        : SerialSettings ("pl.projektorion",
+                          QGuiApplication::applicationName(),
+                          storeOnDestroy,
+                          parent)
+    {
+
     }
 
     ~WireSerialSettings()

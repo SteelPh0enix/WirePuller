@@ -1,9 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include "WireSerialSettings.h"
 #include "SerialDeviceListModel.h"
-
+#include "DeviceControllerBackend.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +18,10 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
+    DeviceControllerBackend backend;
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.rootContext()->setContextProperty("backend", &backend);
     if (engine.rootObjects().isEmpty())
     {
         return -1;
