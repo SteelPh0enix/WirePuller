@@ -21,7 +21,7 @@ class WirePuller {
   static constexpr uint IDLength = DeviceName::MaxLength;
 
   //! Motor count
-  static constexpr uint motorCount = 2;
+  static constexpr uint motorCount = 3;
 
   //! Endstop count
   static constexpr uint endstopCount = 4;
@@ -39,6 +39,8 @@ class WirePuller {
                              {7, 28, A0, 23, 22});  // M1
     m_motors.initializeMotor(DeviceName::MotorWheel,
                              {8, 29, A1, 23, 22});  // M2
+    m_motors.initializeMotor(DeviceName::MotorBreakerAxis,
+                             {6, 31, A2, 26, 25});  // M3
 
     // initialize endstops
     m_endstops.initializeEndstop(DeviceName::EndstopXAxisLeft, 32);
@@ -112,8 +114,10 @@ class WirePuller {
     auto* xMotor = m_motors[DeviceName::MotorXAxis];
     auto* wheelMotor = m_motors[DeviceName::MotorWheel];
 
-    if (leftXEndstop->state() && xMotor->speed() > 0) xMotor->speed(0);
-    if (rightXEndstop->state() && xMotor->speed() < 0) xMotor->speed(0);
+    if (leftXEndstop->state() && xMotor->speed() > 0)
+      xMotor->speed(0);
+    if (rightXEndstop->state() && xMotor->speed() < 0)
+      xMotor->speed(0);
 
     if (wheelLeftEndstop->state() && wheelMotor->speed() > 0)
       wheelMotor->speed(0);
@@ -126,7 +130,8 @@ class WirePuller {
     for (auto const& motorData : data) {
       PololuMC33926* motor = m_motors[motorData.key];
 
-      if (motor == nullptr) continue;
+      if (motor == nullptr)
+        continue;
 
       motor->speed(motorData.value.as<int>());
     }
@@ -157,9 +162,11 @@ class WirePuller {
     for (auto const& encoderData : data) {
       Encoder* encoder = m_encoders[encoderData.key];
 
-      if (encoder == nullptr) continue;
+      if (encoder == nullptr)
+        continue;
 
-      if (encoderData.value.as<bool>()) encoder->write(0);
+      if (encoderData.value.as<bool>())
+        encoder->write(0);
     }
     return responseData;
   }
