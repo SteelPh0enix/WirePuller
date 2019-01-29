@@ -1,3 +1,5 @@
+// #define DEBUG_TRANSMISSION
+
 #include <Arduino.h>
 #include <Globals.hpp>
 #include <WirePullerApp.hpp>
@@ -7,9 +9,9 @@ using WirePullerApp = WirePuller<Globals::MaxJsonSize * 2>;
 WirePullerApp app;
 
 void setup() {
-  app.initialize();
   Serial.begin(Globals::SerialDataRate);
   Serial.setTimeout(Globals::SerialTimeout);
+  app.initialize();
 }
 
 void loop() {
@@ -18,8 +20,13 @@ void loop() {
     char response[Globals::MaxJsonSize];
     Serial.readBytesUntil(Globals::JsonTerminator, buffer,
                           Globals::MaxJsonSize);
+#ifdef DEBUG_TRANSMISSION
+    Serial.println(buffer);
+#else
     if (app.execute(buffer, response)) {
       Serial.println(response);
     }
+#endif
   }
+  app.endstopCheck();
 }
