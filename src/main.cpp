@@ -21,17 +21,17 @@ const char* CMD_2 =
 
 void loop() {
   // if (Serial.available()) {
-    // char buffer[Globals::MaxJsonSize];
-    char response[Globals::MaxJsonSize];
-    // Serial.readBytesUntil(Globals::JsonTerminator, buffer,
-    // Globals::MaxJsonSize);
-// #ifdef DEBUG_TRANSMISSION
-//     Serial.println(buffer);
-// #else
-    // if (app.execute(buffer, response)) {
-      // Serial.println(response);
-    // }
-// #endif
+  // char buffer[Globals::MaxJsonSize];
+  char response[Globals::MaxJsonSize];
+  // Serial.readBytesUntil(Globals::JsonTerminator, buffer,
+  // Globals::MaxJsonSize);
+  // #ifdef DEBUG_TRANSMISSION
+  //     Serial.println(buffer);
+  // #else
+  // if (app.execute(buffer, response)) {
+  // Serial.println(response);
+  // }
+  // #endif
   // }
 
   app.execute(CMD_1, response);
