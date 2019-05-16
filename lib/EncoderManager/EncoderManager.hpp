@@ -4,12 +4,12 @@
 #include <string.h>
 #include <Globals.hpp>
 
-template <uint EncoderCountValue, uint MaxIDLengthValue>
+template <unsigned EncoderCountValue, unsigned MaxIDLengthValue>
 class EncoderManager {
  public:
-  static constexpr uint encoderCount = EncoderCountValue;
+  static constexpr unsigned encoderCount = EncoderCountValue;
 
-  static constexpr uint maxIDLength = MaxIDLengthValue + 1;
+  static constexpr unsigned maxIDLength = MaxIDLengthValue + 1;
 
  protected:
   struct EncoderIDPair {
@@ -28,7 +28,7 @@ class EncoderManager {
   }
 
   Encoder* operator[](char const* id) {
-    for (uint i = 0; i < m_intializedEncoders; i++) {
+    for (unsigned i = 0; i < m_intializedEncoders; i++) {
       if (strcmp(m_encoders[i].id, id) == 0) {
         return &(m_encoders[i].encoder);
       }
@@ -38,7 +38,7 @@ class EncoderManager {
   }
 
   Encoder const* operator[](char const* id) const {
-    for (uint i = 0; i < m_intializedEncoders; i++) {
+    for (unsigned i = 0; i < m_intializedEncoders; i++) {
       if (strcmp(m_encoders[i].id, id) == 0) {
         return &(m_encoders[i].encoder);
       }
@@ -47,7 +47,7 @@ class EncoderManager {
     return nullptr;
   }
 
-  uint initializedEncoders() const { return m_intializedEncoders; }
+  unsigned initializedEncoders() const { return m_intializedEncoders; }
 
   EncoderIDPair* begin() { return m_encoders; }
   EncoderIDPair* end() { return &m_encoders[encoderCount]; }
@@ -56,7 +56,7 @@ class EncoderManager {
   // This is hardcoded because of now Encoder class is made.
   EncoderIDPair m_encoders[encoderCount]{{Encoder(18, 19), ""},
                                          {Encoder(20, 21), ""}};
-  uint m_intializedEncoders{0};
+  unsigned m_intializedEncoders{0};
 };
 
 #endif

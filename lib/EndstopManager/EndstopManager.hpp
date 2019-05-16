@@ -5,14 +5,14 @@
 #include <Globals.hpp>
 
 //! Class for managing multiple endstops by their ID's
-template <uint EndstopCountValue, uint MaxIDLengthValue>
+template <unsigned EndstopCountValue, unsigned MaxIDLengthValue>
 class EndstopManager {
  public:
   //! Number of endstops managed by object
-  static constexpr uint endstopCount = EndstopCountValue;
+  static constexpr unsigned endstopCount = EndstopCountValue;
 
   //! Maximal ID length of endstop
-  static constexpr uint maxIDLength = MaxIDLengthValue + 1;
+  static constexpr unsigned maxIDLength = MaxIDLengthValue + 1;
 
  protected:
   struct EndstopIDPair {
@@ -28,7 +28,7 @@ class EndstopManager {
 
       \return true if initialized, false if all endstops are initialized
   */
-  bool initializeEndstop(char const* id, u8 endstopPin) {
+  bool initializeEndstop(char const* id, uint8_t endstopPin) {
     if (m_initializedEndstops >= endstopCount) return false;
 
     strcpy(m_endstops[m_initializedEndstops].id, id);
@@ -46,7 +46,7 @@ class EndstopManager {
       \return a pointer to endstop, or nullptr if no endstop was found
   */
   Endstop* operator[](char const* id) {
-    for (uint i = 0; i < m_initializedEndstops; i++) {
+    for (unsigned i = 0; i < m_initializedEndstops; i++) {
       if (strcmp(m_endstops[i].id, id) == 0) {
         return &(m_endstops[i].endstop);
       }
@@ -63,7 +63,7 @@ class EndstopManager {
       \return a pointer to endstop, or nullptr if no endstop was found
   */
   Endstop const* operator[](char const* id) const {
-    for (uint i = 0; i < m_initializedEndstops; i++) {
+    for (unsigned i = 0; i < m_initializedEndstops; i++) {
       if (strcmp(m_endstops[i].id, id) == 0) {
         return &(m_endstops[i].endstop);
       }
@@ -76,14 +76,14 @@ class EndstopManager {
   /*!
       \return number of initialized endstops
   */
-  uint initializedEndstops() const { return m_initializedEndstops; }
+  unsigned initializedEndstops() const { return m_initializedEndstops; }
 
   EndstopIDPair const* begin() const { return m_endstops; }
   EndstopIDPair const* end() const { return &m_endstops[endstopCount]; }
 
  protected:
   EndstopIDPair m_endstops[endstopCount];
-  uint m_initializedEndstops{0};
+  unsigned m_initializedEndstops{0};
 };
 
 #endif

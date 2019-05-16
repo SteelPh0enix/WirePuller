@@ -11,26 +11,26 @@
 #include <MotorManager.hpp>
 
 //! Main application
-template <uint BufferSizeValue>
+template <unsigned BufferSizeValue>
 class WirePuller {
  public:
   //! Alias for buffer size
-  static constexpr uint bufferSize = BufferSizeValue;
+  static constexpr unsigned bufferSize = BufferSizeValue;
 
   //! ID string length
-  static constexpr uint IDLength = DeviceName::MaxLength;
+  static constexpr unsigned IDLength = DeviceName::MaxLength;
 
   //! Motor count
-  static constexpr uint motorCount = 3;
+  static constexpr unsigned motorCount = 3;
 
   //! Endstop count
-  static constexpr uint endstopCount = 4;
+  static constexpr unsigned endstopCount = 4;
 
   //! Encoder count
-  static constexpr uint encoderCount = 2;
+  static constexpr unsigned encoderCount = 2;
 
   //! Maximal JSON nesting level
-  static constexpr uint maxJsonNestLevel = 5;
+  static constexpr unsigned maxJsonNestLevel = 5;
 
   //! Initializes the object and I/O
   void initialize() {
@@ -62,7 +62,7 @@ class WirePuller {
     JsonObject& jsonData = m_jsonBuffer.parseObject(data, maxJsonNestLevel);
     JsonObject& jsonResponse = m_jsonBuffer.createObject();
 
-    auto setError = [&jsonResponse, this](uint code) {
+    auto setError = [&jsonResponse, this](unsigned code) {
       jsonResponse.set(JsonKey::Type, ResponseType::Error);
       jsonResponse.set(JsonKey::Data, getErrorJson(code));
     };
@@ -114,15 +114,19 @@ class WirePuller {
     auto* xMotor = m_motors[DeviceName::MotorXAxis];
     auto* wheelMotor = m_motors[DeviceName::MotorWheel];
 
-    if (leftXEndstop->state() && xMotor->speed() > 0)
+    if (leftXEndstop->state() && xMotor->speed() > 0) {
       xMotor->speed(0);
-    if (rightXEndstop->state() && xMotor->speed() < 0)
+    }
+    if (rightXEndstop->state() && xMotor->speed() < 0) {
       xMotor->speed(0);
+    }
 
-    if (wheelLeftEndstop->state() && wheelMotor->speed() > 0)
+    if (wheelLeftEndstop->state() && wheelMotor->speed() > 0) {
       wheelMotor->speed(0);
-    if (wheelRightEndstop->state() && wheelMotor->speed() < 0)
+    }
+    if (wheelRightEndstop->state() && wheelMotor->speed() < 0) {
       wheelMotor->speed(0);
+    }
   }
 
  protected:
@@ -130,8 +134,7 @@ class WirePuller {
     for (auto const& motorData : data) {
       PololuMC33926* motor = m_motors[motorData.key];
 
-      if (motor == nullptr)
-        continue;
+      if (motor == nullptr) continue;
 
       motor->speed(motorData.value.as<int>());
     }
@@ -143,15 +146,15 @@ class WirePuller {
 
   JsonObject& getData(JsonObject& data) {
     JsonObject& responseData = m_jsonBuffer.createObject();
-    u8 flag = data.get<u8>(JsonKey::DataRequestFlag);
+    uint8_t flag = data.get<uint8_t>(JsonKey::DataRequestFlag);
 
-    if (flag & static_cast<u8>(DataFlags::Motor))
+    if (flag & static_cast<uint8_t>(DataFlags::Motor))
       responseData.set(JsonKey::MotorDataObject, getMotorData());
 
-    if (flag & static_cast<u8>(DataFlags::Endstop))
+    if (flag & static_cast<uint8_t>(DataFlags::Endstop))
       responseData.set(JsonKey::EndstopDataObject, getEndstopData());
 
-    if (flag & static_cast<u8>(DataFlags::Encoder))
+    if (flag & static_cast<uint8_t>(DataFlags::Encoder))
       responseData.set(JsonKey::EncoderDataObject, getEncoderData());
 
     return responseData;
@@ -162,11 +165,9 @@ class WirePuller {
     for (auto const& encoderData : data) {
       Encoder* encoder = m_encoders[encoderData.key];
 
-      if (encoder == nullptr)
-        continue;
+      if (encoder == nullptr) continue;
 
-      if (encoderData.value.as<bool>())
-        encoder->write(0);
+      if (encoderData.value.as<bool>()) encoder->write(0);
     }
     return responseData;
   }
@@ -199,7 +200,7 @@ class WirePuller {
     return responseData;
   }
 
-  JsonObject& getErrorJson(uint code) {
+  JsonObject& getErrorJson(unsigned code) {
     JsonObject& data = m_jsonBuffer.createObject();
 
     if (code >= Error::Count) {

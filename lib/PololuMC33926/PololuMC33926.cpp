@@ -1,7 +1,7 @@
 #include "PololuMC33926.hpp"
 
 namespace {
-constexpr uint currentMultiplier = 9u;
+constexpr unsigned currentMultiplier = 9u;
 }
 
 PololuMC33926::PololuMC33926(PololuMC33926::Pinout const& pinout) {
@@ -68,7 +68,7 @@ bool PololuMC33926::initialized() const { return m_initialized; }
 
 bool PololuMC33926::pinsSet() const { return m_pinsSet; }
 
-uint PololuMC33926::current() const {
+unsigned PololuMC33926::current() const {
   if (!initialized()) return 0u;
   return analogRead(m_pinout.FB) * currentMultiplier;
 }

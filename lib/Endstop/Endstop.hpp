@@ -21,13 +21,13 @@ class Endstop {
   /*!
       \param feedback pin to which endstop is connected
   */
-  Endstop(u8 feedback) { initialize(feedback); }
+  Endstop(uint8_t feedback) { initialize(feedback); }
 
   //! Initializes the object and I/O
   /*!
       \param feedback pin to which endstop is connected
   */
-  void initialize(u8 feedback) {
+  void initialize(uint8_t feedback) {
     if (initialized()) return;
 
     setFeedbackPin(feedback);
@@ -51,7 +51,7 @@ class Endstop {
   /*!
       \param feedback pin to which endstop is connected
   */
-  void setFeedbackPin(u8 feedback) {
+  void setFeedbackPin(uint8_t feedback) {
     m_feedback = feedback;
     m_pinsSet = true;
   }
@@ -85,7 +85,7 @@ class Endstop {
  protected:
   bool m_initialized{false};
   bool m_pinsSet{false};
-  u8 m_feedback{0};
+  uint8_t m_feedback{0};
 };
 
 #endif

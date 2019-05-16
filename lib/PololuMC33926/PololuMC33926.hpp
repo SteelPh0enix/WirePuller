@@ -87,7 +87,7 @@ class PololuMC33926 {
       If object is not initialized, it will always return 0
       \return current draw of motor in miliampers
   */
-  uint current() const;
+  unsigned current() const;
 
   //! Checks if an error happened
   /*!

@@ -5,14 +5,14 @@
 #include <PololuMC33926.hpp>
 
 //! Class for managing multiple motors by their ID's
-template <uint MotorCountValue, uint MaxIDLengthValue>
+template <unsigned MotorCountValue, unsigned MaxIDLengthValue>
 class MotorManager {
  public:
   //! Number of motors managed by object
-  static constexpr uint motorCount = MotorCountValue;
+  static constexpr unsigned motorCount = MotorCountValue;
 
   //! Maximal ID length of motor
-  static constexpr uint maxIDLength = MaxIDLengthValue + 1;
+  static constexpr unsigned maxIDLength = MaxIDLengthValue + 1;
 
  protected:
   struct MotorIDPair {
@@ -46,7 +46,7 @@ class MotorManager {
       \return a pointer to motor, or nullptr if no motor was found
   */
   PololuMC33926* operator[](char const* id) {
-    for (uint i = 0; i < m_initializedMotors; i++) {
+    for (unsigned i = 0; i < m_initializedMotors; i++) {
       if (strcmp(m_motors[i].id, id) == 0) {
         return &(m_motors[i].motor);
       }
@@ -63,7 +63,7 @@ class MotorManager {
       \return a pointer to motor, or nullptr if no motor was found
   */
   PololuMC33926 const* operator[](char const* id) const {
-    for (uint i = 0; i < m_initializedMotors; i++) {
+    for (unsigned i = 0; i < m_initializedMotors; i++) {
       if (strcmp(m_motors[i].id, id) == 0) {
         return &(m_motors[i].motor);
       }
@@ -76,14 +76,14 @@ class MotorManager {
   /*!
       \return number of initialized motors
   */
-  uint initializedMotors() const { return m_initializedMotors; }
+  unsigned initializedMotors() const { return m_initializedMotors; }
 
   MotorIDPair const* begin() const { return m_motors; }
   MotorIDPair const* end() const { return &m_motors[motorCount]; }
 
  protected:
   MotorIDPair m_motors[motorCount];
-  uint m_initializedMotors{0};
+  unsigned m_initializedMotors{0};
 };
 
 #endif
