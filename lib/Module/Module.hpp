@@ -13,22 +13,22 @@ class Module {
  public:
   // Resolution constants. Change them in case of moving code to another
   // microcontroller
-  template <typename T>
+  template <typename T = double>
   static constexpr T ADCResolution() {
     return 1024.;
   }
 
-  template <typename T>
+  template <typename T = double>
   static constexpr T PWMResolution() {
     return 256.;
   }
 
-  template <typename T>
+  template <typename T = double>
   static constexpr T DefaultADCVoltage() {
     return 5.;
   }
 
-  template <typename T>
+  template <typename T = double>
   static constexpr T VoltsPerADCUnit(T ADCVoltage = DefaultADCVoltage()) {
     return ADCVoltage / ADCResolution<T>();
   }

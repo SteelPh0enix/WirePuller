@@ -17,7 +17,7 @@ void MC33926::setPins(uint8_t PWM, uint8_t direction, uint8_t feedback,
   pinsHasBeenSet();
 }
 
-int MC33926::maxPower() const { return 400; }
+int MC33926::maxPower() const { return 255; }
 
 bool MC33926::setPower(int power) {
   if (!initialized()) {
@@ -34,7 +34,7 @@ bool MC33926::setPower(int power) {
     reverse = true;
   }
 
-  analogWrite(pinPWM, power * 51 / 80);
+  analogWrite(pinPWM, power);
   digitalWrite(pinDirection, reverse);
 
   return true;
@@ -42,12 +42,12 @@ bool MC33926::setPower(int power) {
 
 int MC33926::power() const { return actualPower; }
 
-unsigned MC33926::current() const {
+double MC33926::current() const {
   if (!initialized()) {
     return 0;
   }
 
-  return analogRead(pinFeedback) * CurrentMultiplier;
+  return analogRead(pinFeedback) * CurrentMultiplier();
 }
 
 bool MC33926::error() const {

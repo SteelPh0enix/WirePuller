@@ -15,7 +15,7 @@ class MC33926 : public Module {
   bool setPower(int power);
   int power() const;
 
-  unsigned current() const;
+  double current() const;
   bool error() const;
 
  private:
@@ -29,5 +29,9 @@ class MC33926 : public Module {
 
   int actualPower{};
 
-  constexpr static unsigned CurrentMultiplier{9};
+  constexpr static double FeedbackVoltsPerAmp{0.525};
+  constexpr static double CurrentMultiplier() {
+    return Module::DefaultADCVoltage<double>() /
+           Module::ADCResolution<double>() / FeedbackVoltsPerAmp;
+  }
 };
