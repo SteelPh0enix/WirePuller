@@ -40,8 +40,15 @@ class Axis : public Module {
                                      (1 >> rightEndstop.read()));
   }
 
-  long readEncoderValue() const { return encoder.read(); }
+  long encoderValue() const { return encoder.read(); }
   void resetEncoderValue() { encoder.write(0); }
+
+  bool setMotorPower(int power) { return motor.setPower(power); }
+  int motorMaxPower() const { return motor.maxPower(); }
+
+  bool motorError() const { return motor.error(); }
+  unsigned motorCurrent() const { return motor.current(); }
+  int motorPower() const { return motor.power(); }
 
  private:
   Encoder encoder{EncoderPinA, EncoderPinB};
