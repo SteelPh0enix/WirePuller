@@ -7,3 +7,4 @@
 .vscode/settings.json
 .vscode/ipch
 tmp/
+.vscode/c_cpp_properties.json
