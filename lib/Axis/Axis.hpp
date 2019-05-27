@@ -4,7 +4,8 @@
 #include "../Module/Module.hpp"
 #include "../PololuMC33926/MC33926.hpp"
 
-// Template-passed arguments are necessary due to Encoder class limitations
+// Template-passed arguments are necessary due to Encoder class limitations. DO
+// NOT PASS AS CONST if you want to be able to read encoder value.
 template <uint8_t EncoderPinA, uint8_t EncoderPinB>
 class Axis : public Module {
  public:
@@ -40,7 +41,7 @@ class Axis : public Module {
                                      (1 >> rightEndstop.read()));
   }
 
-  long encoderValue() const { return encoder.read(); }
+  long encoderValue() { return encoder.read(); }
   void resetEncoderValue() { encoder.write(0); }
 
   bool setMotorPower(int power) { return motor.setPower(power); }
