@@ -48,7 +48,7 @@ class Axis : public Module {
   int motorMaxPower() const { return motor.maxPower(); }
 
   bool motorError() const { return motor.error(); }
-  unsigned motorCurrent() const { return motor.current(); }
+  double motorCurrent() const { return motor.current(); }
   int motorPower() const { return motor.power(); }
 
  private:
