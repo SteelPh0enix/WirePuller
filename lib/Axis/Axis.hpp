@@ -40,9 +40,10 @@ class Axis : public Module {
                                      (1 >> rightEndstop.read()));
   }
 
- private:
-  long encoderPosition{0};
+  long readEncoderValue() const { return encoder.read(); }
+  void resetEncoderValue() { encoder.write(0); }
 
+ private:
   Encoder encoder{EncoderPinA, EncoderPinB};
   MC33926 motor;
   Endstop leftEndstop;
