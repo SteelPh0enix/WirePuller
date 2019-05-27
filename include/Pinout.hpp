@@ -12,8 +12,8 @@ constexpr uint8_t Disable{23};
 constexpr uint8_t StatusFlag{22};
 }  // namespace MotorDriver
 namespace Endstop {
-constexpr uint8_t Left{32};
-constexpr uint8_t Right{33};
+constexpr uint8_t Left{33};
+constexpr uint8_t Right{32};
 }  // namespace Endstop
 namespace Encoder {
 constexpr uint8_t A{18};
@@ -29,8 +29,8 @@ constexpr uint8_t Disable{23};
 constexpr uint8_t StatusFlag{22};
 }  // namespace MotorDriver
 namespace Endstop {
-constexpr uint8_t Left{34};
-constexpr uint8_t Right{35};
+constexpr uint8_t Left{35};
+constexpr uint8_t Right{34};
 }  // namespace Endstop
 namespace Encoder {
 constexpr uint8_t A{20};
