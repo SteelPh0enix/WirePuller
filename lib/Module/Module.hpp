@@ -40,7 +40,8 @@ class Module {
       return false;
     }
 
-    return internalInitialize();
+    isInitialized = internalInitialize();
+    return isInitialized;
   }
 
   bool initialized() const { return isInitialized; }

@@ -44,7 +44,7 @@ int MC33926::power() const { return actualPower; }
 
 double MC33926::current() const {
   if (!initialized()) {
-    return 0;
+    return -1.;
   }
 
   return analogRead(pinFeedback) * CurrentMultiplier();
@@ -64,6 +64,8 @@ bool MC33926::internalInitialize() {
   pinMode(pinFeedback, INPUT);
   pinMode(pinDisable, OUTPUT);
   pinMode(pinStatusFlag, INPUT);
+
+  digitalWrite(pinDisable, HIGH);
 
   return true;
 }
