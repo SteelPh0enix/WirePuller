@@ -38,7 +38,7 @@ class Axis : public Module {
 
   EndstopState endstopStates() const {
     return static_cast<EndstopState>(leftEndstop.read() &
-                                     (1 >> rightEndstop.read()));
+                                     (1 << rightEndstop.read()));
   }
 
   long encoderValue() { return encoder.read(); }

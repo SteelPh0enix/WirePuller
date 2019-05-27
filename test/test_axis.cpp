@@ -2,23 +2,22 @@
 #include <stdio.h>
 #include <Axis.hpp>
 #include <Constants.hpp>
+#include <Pinout.hpp>
 
-constexpr uint8_t EncoderPinA{};
-constexpr uint8_t EncoderPinB{};
+constexpr uint8_t EncoderPinA{Pin::XAxis::Encoder::A};
+constexpr uint8_t EncoderPinB{Pin::XAxis::Encoder::B};
 
-constexpr uint8_t EndstopLeftPin{};
-constexpr uint8_t EndstopRightPin{};
+constexpr uint8_t EndstopLeftPin{Pin::XAxis::Endstop::Left};
+constexpr uint8_t EndstopRightPin{Pin::XAxis::Endstop::Right};
 
-constexpr uint8_t MotorPWMPin{};
-constexpr uint8_t MotorDirectionPin{};
-constexpr uint8_t MotorFeedbackPin{};
-constexpr uint8_t MotorDisablePin{};
-constexpr uint8_t MotorStatusFlagPin{};
+constexpr uint8_t MotorPWMPin{Pin::XAxis::MotorDriver::PWM};
+constexpr uint8_t MotorDirectionPin{Pin::XAxis::MotorDriver::Direction};
+constexpr uint8_t MotorFeedbackPin{Pin::XAxis::MotorDriver::Feedback};
+constexpr uint8_t MotorDisablePin{Pin::XAxis::MotorDriver::Disable};
+constexpr uint8_t MotorStatusFlagPin{Pin::XAxis::MotorDriver::StatusFlag};
 
-constexpr int PowerLimit{100};
-constexpr long SleepTime{100};
-
-bool feedbackEnabled{true};
+constexpr int PowerLimit{150};
+constexpr long SleepTime{500};
 
 Axis<EncoderPinA, EncoderPinB> axis;
 
@@ -26,20 +25,25 @@ void test_axis_initialization() {
   axis.setEndstopsPins(EndstopLeftPin, EndstopRightPin);
   axis.setMotorDriverPins(MotorPWMPin, MotorDirectionPin, MotorFeedbackPin,
                           MotorDisablePin, MotorStatusFlagPin);
+  axis.setEndstopsInversion(true);
+  axis.setEndstopsPullups(true);
 
   Serial.print("Axis initialization... ");
   Serial.println(axis.initialize() ? "OK" : "FAILED");
 }
 
 void print_axis_feedback() {
-  char buffer[256]{};
-  sprintf(buffer,
-          "Axis feedback:\n   Motor power: %d\n   Motor current: %lf\n   Motor "
-          "error: %d\n   Endstop states: %d\n   Encoder reading: %ld",
-          axis.motorPower(), axis.motorCurrent(), axis.motorError(),
-          static_cast<int>(axis.endstopStates()), axis.encoderValue());
-
-  Serial.println(buffer);
+  Serial.println("Axis feedback:");
+  Serial.print("   Motor power: ");
+  Serial.println(axis.motorPower());
+  Serial.print("   Motor current: ");
+  Serial.println(axis.motorCurrent());
+  Serial.print("   Motor error: ");
+  Serial.println(axis.motorError() ? "YES" : "NO");
+  Serial.print("   Endstop states: ");
+  Serial.println(static_cast<int>(axis.endstopStates()));
+  Serial.print("   Encoder reading: ");
+  Serial.println(axis.encoderValue());
 }
 
 void setup() {
@@ -53,22 +57,22 @@ void loop() {
     char command = Serial.read();
     switch (command) {
       case 'l': {
-        axis.setMotorPower(-PowerLimit);
+        Serial.println(axis.setMotorPower(-PowerLimit) ? "SET" : "ERROR");
+        break;
       }
       case 'r': {
-        axis.setMotorPower(PowerLimit);
+        Serial.println(axis.setMotorPower(PowerLimit) ? "SET" : "ERROR");
+        break;
       }
       case 's': {
         axis.setMotorPower(0);
+        break;
       }
       case 'f': {
-        feedbackEnabled = !feedbackEnabled;
+        print_axis_feedback();
+        break;
       }
     }
-  }
-
-  if (feedbackEnabled) {
-    print_axis_feedback();
   }
 
   delay(SleepTime);
