@@ -4,16 +4,41 @@
 #include "../Module/Module.hpp"
 #include "../PololuMC33926/MC33926.hpp"
 
+// Template-passed arguments are necessary due to Encoder class limitations
 template <uint8_t EncoderPinA, uint8_t EncoderPinB>
 class Axis : public Module {
  public:
   enum class EndstopState : uint8_t { None = 0, Left = 1, Right = 2, Both = 3 };
+
   Axis() = default;
 
-  // left and right relatively to the front of device
-  void setEndstopsPins(uint8_t left, uint8_t right) {}
+  // `left` and `right` relatively to the front of device
+  void setEndstopsPins(uint8_t left, uint8_t right) {
+    leftEndstop.setPins(left);
+    rightEndstop.setPins(right);
+    checkIfPinsAreSet();
+  }
+
   void setMotorDriverPins(uint8_t PWM, uint8_t direction, uint8_t feedback,
-                          uint8_t disable, uint8_t statusFlag) {}
+                          uint8_t disable, uint8_t statusFlag) {
+    motor.setPins(PWM, direction, feedback, disable, statusFlag);
+    checkIfPinsAreSet();
+  }
+
+  void setEndstopsPullups(bool state) {
+    leftEndstop.setPullup(state);
+    rightEndstop.setPullup(state);
+  }
+
+  void setEndstopsInversion(bool state) {
+    leftEndstop.setOutputInversion(state);
+    rightEndstop.setOutputInversion(state);
+  }
+
+  EndstopState endstopStates() const {
+    return static_cast<EndstopState>(leftEndstop.read() &
+                                     (1 >> rightEndstop.read()));
+  }
 
  private:
   long encoderPosition{0};
@@ -26,5 +51,11 @@ class Axis : public Module {
   virtual bool internalInitialize() override {
     return motor.initialize() && leftEndstop.initialize() &&
            rightEndstop.initialize();
+  }
+
+  void checkIfPinsAreSet() {
+    if (motor.pinsSet() && leftEndstop.pinsSet() && rightEndstop.pinsSet()) {
+      pinsHasBeenSet();
+    }
   }
 };
