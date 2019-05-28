@@ -10,7 +10,7 @@ namespace Json {
 constexpr size_t DocumentSize{256};
 
 namespace Key {
-constexpr char* const ParsingError{"PARSE_ERROR"};
+constexpr char const* const ParsingError{"PARSE_ERROR"};
 }
 }  // namespace Json
 }  // namespace Constant
