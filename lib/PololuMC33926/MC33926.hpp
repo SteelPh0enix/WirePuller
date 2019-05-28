@@ -5,11 +5,11 @@
 class MC33926 : public Module {
  public:
   MC33926() = default;
-  MC33926(uint8_t PWMPin, uint8_t directionPin, uint8_t feedbackPin,
-          uint8_t disablePin, uint8_t statusFlagPin);
+  MC33926(uint8_t PWMPin, uint8_t directionPin, uint8_t feedbackPin, uint8_t disablePin,
+          uint8_t statusFlagPin);
 
-  void setPins(uint8_t PWM, uint8_t direction, uint8_t feedback,
-               uint8_t disable, uint8_t statusFlag);
+  void setPins(uint8_t PWM, uint8_t direction, uint8_t feedback, uint8_t disable,
+               uint8_t statusFlag);
 
   int maxPower() const;
   bool setPower(int power);
@@ -31,7 +31,7 @@ class MC33926 : public Module {
 
   constexpr static double FeedbackVoltsPerAmp{0.525};
   constexpr static double CurrentMultiplier() {
-    return Module::DefaultADCVoltage<double>() /
-           Module::ADCResolution<double>() / FeedbackVoltsPerAmp;
+    return Module::DefaultADCVoltage<double>() / Module::ADCResolution<double>() /
+           FeedbackVoltsPerAmp;
   }
 };

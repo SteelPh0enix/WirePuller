@@ -24,6 +24,7 @@ constexpr char const* const InitializationFailed{"InitializationFailed"};
 namespace RequestType {
 constexpr char const* const Callibrate{"Callibrate"};
 constexpr char const* const SetPower{"SetPower"};
+constexpr char const* const GetData{"GetData"};
 }  // namespace RequestType
 
 namespace RequestError {

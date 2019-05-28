@@ -22,9 +22,7 @@ void Endstop::setPullup(bool pullupEnabled) { isPullupEnabled = pullupEnabled; }
 
 bool Endstop::pullupEnabled() const { return isPullupEnabled; }
 
-void Endstop::setOutputInversion(bool shouldNegate) {
-  isOutputInverted = shouldNegate;
-}
+void Endstop::setOutputInversion(bool shouldNegate) { isOutputInverted = shouldNegate; }
 
 bool Endstop::outputInverted() const { return isOutputInverted; }
 

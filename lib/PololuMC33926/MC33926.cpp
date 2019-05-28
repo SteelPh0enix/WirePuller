@@ -1,13 +1,13 @@
 #include "MC33926.hpp"
 #include <Arduino.h>
 
-MC33926::MC33926(uint8_t PWMPin, uint8_t directionPin, uint8_t feedbackPin,
-                 uint8_t disablePin, uint8_t statusFlagPin) {
+MC33926::MC33926(uint8_t PWMPin, uint8_t directionPin, uint8_t feedbackPin, uint8_t disablePin,
+                 uint8_t statusFlagPin) {
   setPins(PWMPin, directionPin, feedbackPin, disablePin, statusFlagPin);
 }
 
-void MC33926::setPins(uint8_t PWM, uint8_t direction, uint8_t feedback,
-                      uint8_t disable, uint8_t statusFlag) {
+void MC33926::setPins(uint8_t PWM, uint8_t direction, uint8_t feedback, uint8_t disable,
+                      uint8_t statusFlag) {
   pinPWM = PWM;
   pinDirection = direction;
   pinFeedback = feedback;

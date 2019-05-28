@@ -27,8 +27,7 @@ void test_initialize_motor(MC33926& motor) {
   Serial.println(motor.initialize() ? "OK" : "FAILED");
 }
 
-void test_motor_set_power(MC33926& motor, int step = 20,
-                          unsigned long delayBetweenSteps = 100,
+void test_motor_set_power(MC33926& motor, int step = 20, unsigned long delayBetweenSteps = 100,
                           bool printData = true) {
   Serial.println("Powering up...");
 
@@ -70,5 +69,7 @@ void setup() {
   delay(4000);
 }
 
-void loop() { test_motor_set_power(motor); 
-delay(1000);}
+void loop() {
+  test_motor_set_power(motor);
+  delay(1000);
+}

@@ -23,8 +23,8 @@ Axis<EncoderPinA, EncoderPinB> axis;
 
 void test_axis_initialization() {
   axis.setEndstopsPins(EndstopLeftPin, EndstopRightPin);
-  axis.setMotorDriverPins(MotorPWMPin, MotorDirectionPin, MotorFeedbackPin,
-                          MotorDisablePin, MotorStatusFlagPin);
+  axis.setMotorDriverPins(MotorPWMPin, MotorDirectionPin, MotorFeedbackPin, MotorDisablePin,
+                          MotorStatusFlagPin);
   axis.setEndstopsInversion(true);
   axis.setEndstopsPullups(true);
 

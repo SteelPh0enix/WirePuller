@@ -22,8 +22,8 @@ class Axis : public Module {
     checkIfPinsAreSet();
   }
 
-  void setMotorDriverPins(uint8_t PWM, uint8_t direction, uint8_t feedback,
-                          uint8_t disable, uint8_t statusFlag) {
+  void setMotorDriverPins(uint8_t PWM, uint8_t direction, uint8_t feedback, uint8_t disable,
+                          uint8_t statusFlag) {
     motor.setPins(PWM, direction, feedback, disable, statusFlag);
     checkIfPinsAreSet();
   }
@@ -40,8 +40,7 @@ class Axis : public Module {
 
   EndstopState endstopStates() const {
     if (endstopsEnabled()) {
-      return static_cast<EndstopState>(leftEndstop.read() &
-                                       (1 << rightEndstop.read()));
+      return static_cast<EndstopState>(leftEndstop.read() & (1 << rightEndstop.read()));
     } else {
       return EndstopState::None;
     }
@@ -71,13 +70,12 @@ class Axis : public Module {
 
   virtual bool internalInitialize() override {
     return motor.initialize() &&
-           (!endstopsEnabled() ||
-            (leftEndstop.initialize() && rightEndstop.initialize()));
+           (!endstopsEnabled() || (leftEndstop.initialize() && rightEndstop.initialize()));
   }
 
   void checkIfPinsAreSet() {
-    if (motor.pinsSet() && (!endstopsEnabled() || (leftEndstop.pinsSet() &&
-                                                   rightEndstop.pinsSet()))) {
+    if (motor.pinsSet() &&
+        (!endstopsEnabled() || (leftEndstop.pinsSet() && rightEndstop.pinsSet()))) {
       pinsHasBeenSet();
     }
   }
