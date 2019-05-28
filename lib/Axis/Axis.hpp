@@ -15,8 +15,10 @@ class Axis : public Module {
 
   // `left` and `right` relatively to the front of device
   void setEndstopsPins(uint8_t left, uint8_t right) {
-    leftEndstop.setPins(left);
-    rightEndstop.setPins(right);
+    if (endstopsEnabled()) {
+      leftEndstop.setPins(left);
+      rightEndstop.setPins(right);
+    }
     checkIfPinsAreSet();
   }
 
@@ -37,8 +39,12 @@ class Axis : public Module {
   }
 
   EndstopState endstopStates() const {
-    return static_cast<EndstopState>(leftEndstop.read() &
-                                     (1 << rightEndstop.read()));
+    if (endstopsEnabled()) {
+      return static_cast<EndstopState>(leftEndstop.read() &
+                                       (1 << rightEndstop.read()));
+    } else {
+      return EndstopState::None;
+    }
   }
 
   long encoderValue() { return encoder.read(); }
@@ -51,19 +57,27 @@ class Axis : public Module {
   double motorCurrent() const { return motor.current(); }
   int motorPower() const { return motor.power(); }
 
+  void enableEndstops() { endstopsAreEnabled = true; }
+  void enableEndstops() { endstopsAreEnabled = false; }
+  bool endstopsEnabled() const { return endstopsAreEnabled; }
+
  private:
   Encoder encoder{EncoderPinA, EncoderPinB};
   MC33926 motor;
   Endstop leftEndstop;
   Endstop rightEndstop;
 
+  bool endstopsAreEnabled{false};
+
   virtual bool internalInitialize() override {
-    return motor.initialize() && leftEndstop.initialize() &&
-           rightEndstop.initialize();
+    return motor.initialize() &&
+           (!endstopsEnabled() ||
+            (leftEndstop.initialize() && rightEndstop.initialize()));
   }
 
   void checkIfPinsAreSet() {
-    if (motor.pinsSet() && leftEndstop.pinsSet() && rightEndstop.pinsSet()) {
+    if (motor.pinsSet() && (!endstopsEnabled() || (leftEndstop.pinsSet() &&
+                                                   rightEndstop.pinsSet()))) {
       pinsHasBeenSet();
     }
   }
