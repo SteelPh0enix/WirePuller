@@ -6,7 +6,8 @@
 class JsonAxisController {
  public:
   JsonAxisController();
-  void parseJsonInput(ArduinoJson::JsonDocument const& input, ArduinoJson::JsonDocument& output);
+  void parseJsonInput(ArduinoJson::JsonDocument const& input,
+                      ArduinoJson::JsonDocument& output);
 
   bool initialize();
 
@@ -14,4 +15,8 @@ class JsonAxisController {
   Axis<Pin::XAxis::Encoder::A, Pin::XAxis::Encoder::B> axisX{};
   Axis<Pin::WheelAxis::Encoder::A, Pin::WheelAxis::Encoder::B> axisWheel{};
   Axis<Pin::BreakerAxis::Encoder::A, Pin::BreakerAxis::Encoder::B> axisBreaker{};
+
+  void callibrate(ArduinoJson::JsonObjectConst data, ArduinoJson::JsonDocument& output);
+  void setPower(ArduinoJson::JsonObjectConst data, ArduinoJson::JsonDocument& output);
+  void getData(ArduinoJson::JsonObjectConst data, ArduinoJson::JsonDocument& output);
 };

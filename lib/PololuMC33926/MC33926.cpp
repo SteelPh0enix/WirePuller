@@ -1,8 +1,8 @@
 #include "MC33926.hpp"
 #include <Arduino.h>
 
-MC33926::MC33926(uint8_t PWMPin, uint8_t directionPin, uint8_t feedbackPin, uint8_t disablePin,
-                 uint8_t statusFlagPin) {
+MC33926::MC33926(uint8_t PWMPin, uint8_t directionPin, uint8_t feedbackPin,
+                 uint8_t disablePin, uint8_t statusFlagPin) {
   setPins(PWMPin, directionPin, feedbackPin, disablePin, statusFlagPin);
 }
 
