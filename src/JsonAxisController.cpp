@@ -3,6 +3,7 @@
 #include <Pinout.hpp>
 
 JsonAxisController::JsonAxisController() {
+  // Motors
   axisX.setMotorDriverPins(
       Pin::XAxis::MotorDriver::PWM, Pin::XAxis::MotorDriver::Direction,
       Pin::XAxis::MotorDriver::Feedback, Pin::XAxis::MotorDriver::Direction,
@@ -15,6 +16,22 @@ JsonAxisController::JsonAxisController() {
       Pin::BreakerAxis::MotorDriver::PWM, Pin::BreakerAxis::MotorDriver::Direction,
       Pin::BreakerAxis::MotorDriver::Feedback, Pin::BreakerAxis::MotorDriver::Direction,
       Pin::BreakerAxis::MotorDriver::StatusFlag);
+
+  // Endstops
+  axisX.setEndstopsPins(Pin::XAxis::Endstop::Left, Pin::XAxis::Endstop::Right);
+  axisWheel.setEndstopsPins(Pin::WheelAxis::Endstop::Left,
+                            Pin::WheelAxis::Endstop::Right);
+  axisBreaker.disableEndstops();
+
+  axisX.setEndstopsPullups(true);
+  axisWheel.setEndstopsPullups(true);
+
+  axisX.setEndstopsInversion(true);
+  axisWheel.setEndstopsInversion(true);
+
+  axisX.checkPinsInitialization();
+  axisWheel.checkPinsInitialization();
+  axisBreaker.checkPinsInitialization();
 }
 
 void JsonAxisController::parseJsonInput(ArduinoJson::JsonDocument const& input,

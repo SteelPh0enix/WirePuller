@@ -60,13 +60,15 @@ class Axis : public Module {
   void disableEndstops() { endstopsAreEnabled = false; }
   bool endstopsEnabled() const { return endstopsAreEnabled; }
 
+  void checkPinsInitialization() { checkIfPinsAreSet(); }
+
  private:
   Encoder encoder{EncoderPinA, EncoderPinB};
   MC33926 motor;
   Endstop leftEndstop;
   Endstop rightEndstop;
 
-  bool endstopsAreEnabled{false};
+  bool endstopsAreEnabled{true};
 
   virtual bool internalInitialize() override {
     return motor.initialize() && (!endstopsEnabled() || (leftEndstop.initialize() &&
