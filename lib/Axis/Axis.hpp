@@ -58,7 +58,7 @@ class Axis : public Module {
   int motorPower() const { return motor.power(); }
 
   void enableEndstops() { endstopsAreEnabled = true; }
-  void enableEndstops() { endstopsAreEnabled = false; }
+  void disableEndstops() { endstopsAreEnabled = false; }
   bool endstopsEnabled() const { return endstopsAreEnabled; }
 
  private:
