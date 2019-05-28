@@ -45,16 +45,16 @@ constexpr uint8_t Feedback{A2};
 constexpr uint8_t Disable{26};
 constexpr uint8_t StatusFlag{25};
 }  // namespace MotorDriver
-// This is disabled due to lack of endstops and encoder on breaker axis.
+// This is disabled due to lack of endstops on breaker axis.
 /*
 namespace Endstop {
 constexpr uint8_t Left{};
 constexpr uint8_t Right{};
 }  // namespace Endstop
+*/
 namespace Encoder {
 constexpr uint8_t A{};
 constexpr uint8_t B{};
 }  // namespace Encoder
-*/
 }  // namespace BreakerAxis
 }  // namespace Pin

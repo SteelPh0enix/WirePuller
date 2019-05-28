@@ -5,13 +5,30 @@
 
 ArduinoJson::StaticJsonDocument<Constant::Json::DocumentSize> jsonInputDoc{};
 ArduinoJson::StaticJsonDocument<Constant::Json::DocumentSize> jsonOutputDoc{};
+JsonAxisController controller{};
 
-void printError(ArduinoJson::DeserializationError const& error) {
-  jsonOutputDoc[Constant::Json::Key::ParsingError] = error.c_str();
-  ArduinoJson::serializeJson(jsonOutputDoc, Serial);
+void printParsingError(ArduinoJson::DeserializationError const& error,
+                       ArduinoJson::JsonDocument& json) {
+  json[Constant::Json::Key::ParsingError] = error.c_str();
+  ArduinoJson::serializeJson(json, Serial);
 }
 
-void setup() { Serial.begin(Constant::Serial::BaudRate); }
+void setup() {
+  Serial.begin(Constant::Serial::BaudRate);
+  if (!controller.initialize()) {
+    jsonOutputDoc[Constant::Json::Key::GeneralError] =
+        Constant::Json::Value::GeneralError::InitializationFailed;
+    ArduinoJson::serializeJson(jsonOutputDoc, Serial);
+
+    pinMode(LED_BUILTIN, OUTPUT);
+    while (true) {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(500);
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(500);
+    }
+  }
+}
 
 void loop() {
   if (Serial.available()) {
@@ -23,12 +40,13 @@ void loop() {
         ArduinoJson::deserializeJson(jsonInputDoc, inputBuffer);
 
     if (inputDeserializationResult == ArduinoJson::DeserializationError::Ok) {
-      JsonAxisController::parseJsonInput(jsonInputDoc, jsonOutputDoc);
+      controller.parseJsonInput(jsonInputDoc, jsonOutputDoc);
       ArduinoJson::serializeJson(jsonOutputDoc, Serial);
     } else {
-      printError(inputDeserializationResult);
+      printParsingError(inputDeserializationResult, jsonOutputDoc);
     }
 
+    Serial.println();
     jsonInputDoc.clear();
     jsonOutputDoc.clear();
   }
