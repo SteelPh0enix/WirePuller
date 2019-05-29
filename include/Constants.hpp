@@ -15,6 +15,8 @@ constexpr char const* const ParsingError{"ParseError"};
 
 constexpr char const* const RequestType{"Request"};
 constexpr char const* const RequestError{"RequestError"};
+
+constexpr char const* const RequestData{"Data"};
 }  // namespace Key
 
 namespace Value {
@@ -30,6 +32,7 @@ constexpr char const* const GetData{"GetData"};
 namespace RequestError {
 constexpr char const* const NoRequestType{"NoRequestType"};
 constexpr char const* const InvalidRequestType{"InvalidRequest"};
+constexpr char const* const NoData{"NoData"};
 }  // namespace RequestError
 }  // namespace Value
 }  // namespace Json

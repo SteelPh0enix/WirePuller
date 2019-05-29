@@ -29,6 +29,7 @@ JsonAxisController::JsonAxisController() {
   axisX.setEndstopsInversion(true);
   axisWheel.setEndstopsInversion(true);
 
+  // Additional check
   axisX.checkPinsInitialization();
   axisWheel.checkPinsInitialization();
   axisBreaker.checkPinsInitialization();
@@ -41,9 +42,23 @@ void JsonAxisController::parseJsonInput(ArduinoJson::JsonDocument const& input,
   if (requestType == NULL) {
     output[Constant::Json::Key::RequestError] =
         Constant::Json::Value::RequestError::NoRequestType;
-  } else if (strcmp(requestType, Constant::Json::Value::RequestType::Callibrate) == 0) {
+    return;
+  }
+
+  auto inputData =
+      input[Constant::Json::Key::RequestData].as<ArduinoJson::JsonObjectConst>();
+  if (inputData.isNull()) {
+    output[Constant::Json::Key::RequestError] =
+        Constant::Json::Value::RequestError::NoData;
+    return;
+  }
+
+  if (strcmp(requestType, Constant::Json::Value::RequestType::Callibrate) == 0) {
+    commandCallibrate(inputData, output);
   } else if (strcmp(requestType, Constant::Json::Value::RequestType::SetPower) == 0) {
+    commandSetPower(inputData, output);
   } else if (strcmp(requestType, Constant::Json::Value::RequestType::GetData) == 0) {
+    commandGetData(inputData, output);
   } else {
     output[Constant::Json::Key::RequestError] =
         Constant::Json::Value::RequestError::InvalidRequestType;
@@ -53,3 +68,18 @@ void JsonAxisController::parseJsonInput(ArduinoJson::JsonDocument const& input,
 bool JsonAxisController::initialize() {
   return axisX.initialize() && axisWheel.initialize() && axisBreaker.initialize();
 }
+
+void JsonAxisController::safetyEndstopCheck() {
+  axisX.stopOnEndstopHit();
+  axisWheel.stopOnEndstopHit();
+  axisBreaker.stopOnEndstopHit();
+}
+
+void JsonAxisController::commandCallibrate(ArduinoJson::JsonObjectConst data,
+                                           ArduinoJson::JsonDocument& output) {}
+
+void JsonAxisController::commandSetPower(ArduinoJson::JsonObjectConst data,
+                                         ArduinoJson::JsonDocument& output) {}
+
+void JsonAxisController::commandGetData(ArduinoJson::JsonObjectConst data,
+                                        ArduinoJson::JsonDocument& output) {}

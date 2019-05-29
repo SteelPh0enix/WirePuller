@@ -50,4 +50,6 @@ void loop() {
     jsonInputDoc.clear();
     jsonOutputDoc.clear();
   }
+
+  controller.safetyEndstopCheck();
 }

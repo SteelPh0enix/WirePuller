@@ -9,7 +9,7 @@
 template <uint8_t EncoderPinA, uint8_t EncoderPinB>
 class Axis : public Module {
  public:
-  enum class EndstopState : uint8_t { None = 0, Left = 1, Right = 2, Both = 3 };
+  enum class EndstopsState : uint8_t { None = 0, Left = 1, Right = 2, Both = 3 };
 
   Axis() = default;
 
@@ -38,11 +38,11 @@ class Axis : public Module {
     rightEndstop.setOutputInversion(state);
   }
 
-  EndstopState endstopStates() const {
+  EndstopsState endstopsState() const {
     if (endstopsEnabled()) {
-      return static_cast<EndstopState>(leftEndstop.read() & (1 << rightEndstop.read()));
+      return static_cast<EndstopsState>(leftEndstop.read() & (1 << rightEndstop.read()));
     } else {
-      return EndstopState::None;
+      return EndstopsState::None;
     }
   }
 
@@ -61,6 +61,16 @@ class Axis : public Module {
   bool endstopsEnabled() const { return endstopsAreEnabled; }
 
   void checkPinsInitialization() { checkIfPinsAreSet(); }
+
+  void stopOnEndstopHit() {
+    if (!endstopsEnabled() || !initialized()) {
+      return;
+    }
+
+    if (endstopsState() != EndstopsState::None) {
+      setMotorPower(0);
+    }
+  }
 
  private:
   Encoder encoder{EncoderPinA, EncoderPinB};

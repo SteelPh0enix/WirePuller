@@ -11,12 +11,17 @@ class JsonAxisController {
 
   bool initialize();
 
+  void safetyEndstopCheck();
+
  private:
   Axis<Pin::XAxis::Encoder::A, Pin::XAxis::Encoder::B> axisX{};
   Axis<Pin::WheelAxis::Encoder::A, Pin::WheelAxis::Encoder::B> axisWheel{};
   Axis<Pin::BreakerAxis::Encoder::A, Pin::BreakerAxis::Encoder::B> axisBreaker{};
 
-  void callibrate(ArduinoJson::JsonObjectConst data, ArduinoJson::JsonDocument& output);
-  void setPower(ArduinoJson::JsonObjectConst data, ArduinoJson::JsonDocument& output);
-  void getData(ArduinoJson::JsonObjectConst data, ArduinoJson::JsonDocument& output);
+  void commandCallibrate(ArduinoJson::JsonObjectConst data,
+                         ArduinoJson::JsonDocument& output);
+  void commandSetPower(ArduinoJson::JsonObjectConst data,
+                       ArduinoJson::JsonDocument& output);
+  void commandGetData(ArduinoJson::JsonObjectConst data,
+                      ArduinoJson::JsonDocument& output);
 };
