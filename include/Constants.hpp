@@ -18,7 +18,7 @@ constexpr char const* const RequestError{"RequestError"};
 
 constexpr char const* const RequestData{"Data"};
 
-constexpr char const* const AxisName{"Axis"};
+constexpr char const* const Callibration{"Callibration"};
 
 constexpr char const* const EncoderTicks{"EncoderTicks"};
 constexpr char const* const EndstopLeft{"EndstopLeft"};
@@ -30,9 +30,17 @@ constexpr char const* const Power{"Power"};
 constexpr char const* const Current{"Current"};
 constexpr char const* const Error{"Error"};
 }  // namespace Motor
+
+namespace AxisName {
+constexpr char const* const X{"X"};
+constexpr char const* const Wheel{"Wheel"};
+constexpr char const* const Breaker{"Breaker"};
+}  // namespace AxisName
 }  // namespace Key
 
 namespace Value {
+constexpr char const* const OK{"OK"};
+
 namespace GeneralError {
 constexpr char const* const InitializationFailed{"InitializationFailed"};
 }
@@ -49,11 +57,6 @@ constexpr char const* const InvalidRequestType{"InvalidRequest"};
 constexpr char const* const NoData{"NoData"};
 }  // namespace RequestError
 
-namespace AxisName {
-constexpr char const* const X{"X"};
-constexpr char const* const Wheel{"Wheel"};
-constexpr char const* const Breaker{"Breaker"};
-}  // namespace AxisName
 }  // namespace Value
 }  // namespace Json
 }  // namespace Constant

@@ -1,6 +1,7 @@
 #pragma once
 #include <ArduinoJson.hpp>
 #include <Axis.hpp>
+#include <Constants.hpp>
 #include <Pinout.hpp>
 
 class JsonAxisController {
@@ -30,4 +31,21 @@ class JsonAxisController {
                       ArduinoJson::JsonDocument& output);
   void commandResetEncoder(ArduinoJson::JsonObjectConst data,
                            ArduinoJson::JsonDocument& output);
+
+  void fillOutputWithAxisData(ArduinoJson::JsonDocument& output);
+
+  template <typename AxisT>
+  void fillJsonObjectWithAxisData(ArduinoJson::JsonObject object, AxisT& axis) {
+    object[Constant::Json::Key::Motor::Power] = axis.motorPower();
+    object[Constant::Json::Key::Motor::Current] = axis.motorCurrent();
+    object[Constant::Json::Key::Motor::Error] = axis.motorError();
+    auto endstopsState = axis.endstopsState();
+    object[Constant::Json::Key::EndstopLeft] =
+        static_cast<uint8_t>(endstopsState) &
+        static_cast<uint8_t>(AxisT::EndstopsState::Left);
+    object[Constant::Json::Key::EndstopRight] =
+        static_cast<uint8_t>(endstopsState) &
+        static_cast<uint8_t>(AxisT::EndstopsState::Right);
+    object[Constant::Json::Key::EncoderTicks] = axis.encoderValue();
+  }
 };

@@ -2,6 +2,11 @@
 #include <Constants.hpp>
 #include <Pinout.hpp>
 
+namespace {
+namespace JsonKey = Constant::Json::Key;
+namespace JsonValue = Constant::Json::Value;
+}  // namespace
+
 JsonAxisController::JsonAxisController() {
   // Motors
   axisX.setMotorDriverPins(
@@ -37,33 +42,29 @@ JsonAxisController::JsonAxisController() {
 
 void JsonAxisController::parseJsonInput(ArduinoJson::JsonDocument const& input,
                                         ArduinoJson::JsonDocument& output) {
-  char const* requestType = input[Constant::Json::Key::RequestType].as<char const*>();
+  char const* requestType = input[JsonKey::RequestType].as<char const*>();
 
   if (requestType == NULL) {
-    output[Constant::Json::Key::RequestError] =
-        Constant::Json::Value::RequestError::NoRequestType;
+    output[JsonKey::RequestError] = JsonValue::RequestError::NoRequestType;
     return;
   }
 
-  auto inputData =
-      input[Constant::Json::Key::RequestData].as<ArduinoJson::JsonObjectConst>();
+  auto inputData = input[JsonKey::RequestData].as<ArduinoJson::JsonObjectConst>();
   if (inputData.isNull()) {
-    output[Constant::Json::Key::RequestError] =
-        Constant::Json::Value::RequestError::NoData;
+    output[JsonKey::RequestError] = JsonValue::RequestError::NoData;
     return;
   }
 
-  if (strcmp(requestType, Constant::Json::Value::RequestType::Callibrate) == 0) {
+  if (strcmp(requestType, JsonValue::RequestType::Callibrate) == 0) {
     commandCallibrate(inputData, output);
-  } else if (strcmp(requestType, Constant::Json::Value::RequestType::SetPower) == 0) {
+  } else if (strcmp(requestType, JsonValue::RequestType::SetPower) == 0) {
     commandSetPower(inputData, output);
-  } else if (strcmp(requestType, Constant::Json::Value::RequestType::GetData) == 0) {
+  } else if (strcmp(requestType, JsonValue::RequestType::GetData) == 0) {
     commandGetData(inputData, output);
-  } else if (strcmp(requestType, Constant::Json::Value::RequestType::ResetEncoder) == 0) {
+  } else if (strcmp(requestType, JsonValue::RequestType::ResetEncoder) == 0) {
     commandResetEncoder(inputData, output);
   } else {
-    output[Constant::Json::Key::RequestError] =
-        Constant::Json::Value::RequestError::InvalidRequestType;
+    output[JsonKey::RequestError] = JsonValue::RequestError::InvalidRequestType;
   }
 }
 
@@ -88,13 +89,49 @@ void JsonAxisController::commandCallibrate(ArduinoJson::JsonObjectConst data,
   if (axisBreaker.endstopsEnabled()) {
     axisBreaker.callibrate(AxisBreaker::EndstopsState::Right);
   }
+
+  output[JsonKey::Callibration] = JsonValue::OK;
 }
 
 void JsonAxisController::commandSetPower(ArduinoJson::JsonObjectConst data,
-                                         ArduinoJson::JsonDocument& output) {}
+                                         ArduinoJson::JsonDocument& output) {
+  if (!data[JsonKey::AxisName::X].isNull()) {
+    axisX.setMotorPower(data[JsonKey::AxisName::X].as<int>());
+  }
+  if (!data[JsonKey::AxisName::Wheel].isNull()) {
+    axisWheel.setMotorPower(data[JsonKey::AxisName::Wheel].as<int>());
+  }
+  if (!data[JsonKey::AxisName::Breaker].isNull()) {
+    axisBreaker.setMotorPower(data[JsonKey::AxisName::Breaker].as<int>());
+  }
+
+  fillOutputWithAxisData(output);
+}
 
 void JsonAxisController::commandGetData(ArduinoJson::JsonObjectConst data,
-                                        ArduinoJson::JsonDocument& output) {}
+                                        ArduinoJson::JsonDocument& output) {
+  fillOutputWithAxisData(output);
+}
 
 void JsonAxisController::commandResetEncoder(ArduinoJson::JsonObjectConst data,
-                                             ArduinoJson::JsonDocument& output) {}
+                                             ArduinoJson::JsonDocument& output) {
+  if (!data[JsonKey::AxisName::X].isNull()) {
+    axisX.resetEncoderValue();
+  }
+  if (!data[JsonKey::AxisName::Wheel].isNull()) {
+    axisWheel.resetEncoderValue();
+  }
+  if (!data[JsonKey::AxisName::Breaker].isNull()) {
+    axisBreaker.resetEncoderValue();
+  }
+
+  fillOutputWithAxisData(output);
+}
+
+void JsonAxisController::fillOutputWithAxisData(ArduinoJson::JsonDocument& output) {
+  fillJsonObjectWithAxisData(output.createNestedObject(JsonKey::AxisName::X), axisX);
+  fillJsonObjectWithAxisData(output.createNestedObject(JsonKey::AxisName::Wheel),
+                             axisWheel);
+  fillJsonObjectWithAxisData(output.createNestedObject(JsonKey::AxisName::Breaker),
+                             axisBreaker);
+}
