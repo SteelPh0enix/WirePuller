@@ -91,6 +91,7 @@ void JsonAxisController::commandCallibrate(ArduinoJson::JsonObjectConst data,
   }
 
   output[JsonKey::Callibration] = JsonValue::OK;
+  fillOutputWithAxisData(output);
 }
 
 void JsonAxisController::commandSetPower(ArduinoJson::JsonObjectConst data,
