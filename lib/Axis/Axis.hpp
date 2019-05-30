@@ -62,13 +62,42 @@ class Axis : public Module {
 
   void checkPinsInitialization() { checkIfPinsAreSet(); }
 
-  void stopOnEndstopHit() {
+  bool stopOnEndstopHit() {
     if (!endstopsEnabled() || !initialized()) {
-      return;
+      return false;
     }
 
     if (endstopsState() != EndstopsState::None) {
       setMotorPower(0);
+      return true;
+    }
+
+    return false;
+  }
+
+  void callibrate(EndstopsState whichEndstop, bool waitForCallibration = true) {
+    if (!endstopsEnabled()) {
+      return;
+    }
+
+    switch (whichEndstop) {
+      case EndstopsState::Left: {
+        setMotorPower(-motorMaxPower());
+        break;
+      }
+      case EndstopsState::Right: {
+        setMotorPower(motorMaxPower());
+        break;
+      }
+      default: {
+        return;
+      }
+    }
+
+    if (waitForCallibration) {
+      while (!stopOnEndstopHit())
+        ;
+      resetEncoderValue();
     }
   }
 

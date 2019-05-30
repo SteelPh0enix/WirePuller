@@ -14,9 +14,13 @@ class JsonAxisController {
   void safetyEndstopCheck();
 
  private:
-  Axis<Pin::XAxis::Encoder::A, Pin::XAxis::Encoder::B> axisX{};
-  Axis<Pin::WheelAxis::Encoder::A, Pin::WheelAxis::Encoder::B> axisWheel{};
-  Axis<Pin::BreakerAxis::Encoder::A, Pin::BreakerAxis::Encoder::B> axisBreaker{};
+  using AxisX = Axis<Pin::XAxis::Encoder::A, Pin::XAxis::Encoder::B>;
+  using AxisWheel = Axis<Pin::WheelAxis::Encoder::A, Pin::WheelAxis::Encoder::B>;
+  using AxisBreaker = Axis<Pin::BreakerAxis::Encoder::A, Pin::BreakerAxis::Encoder::B>;
+
+  AxisX axisX{};
+  AxisWheel axisWheel{};
+  AxisBreaker axisBreaker{};
 
   void commandCallibrate(ArduinoJson::JsonObjectConst data,
                          ArduinoJson::JsonDocument& output);
@@ -24,4 +28,6 @@ class JsonAxisController {
                        ArduinoJson::JsonDocument& output);
   void commandGetData(ArduinoJson::JsonObjectConst data,
                       ArduinoJson::JsonDocument& output);
+  void commandResetEncoder(ArduinoJson::JsonObjectConst data,
+                           ArduinoJson::JsonDocument& output);
 };

@@ -59,6 +59,8 @@ void JsonAxisController::parseJsonInput(ArduinoJson::JsonDocument const& input,
     commandSetPower(inputData, output);
   } else if (strcmp(requestType, Constant::Json::Value::RequestType::GetData) == 0) {
     commandGetData(inputData, output);
+  } else if (strcmp(requestType, Constant::Json::Value::RequestType::ResetEncoder) == 0) {
+    commandResetEncoder(inputData, output);
   } else {
     output[Constant::Json::Key::RequestError] =
         Constant::Json::Value::RequestError::InvalidRequestType;
@@ -76,10 +78,23 @@ void JsonAxisController::safetyEndstopCheck() {
 }
 
 void JsonAxisController::commandCallibrate(ArduinoJson::JsonObjectConst data,
-                                           ArduinoJson::JsonDocument& output) {}
+                                           ArduinoJson::JsonDocument& output) {
+  if (axisX.endstopsEnabled()) {
+    axisX.callibrate(AxisX::EndstopsState::Right);
+  }
+  if (axisWheel.endstopsEnabled()) {
+    axisWheel.callibrate(AxisWheel::EndstopsState::Left);
+  }
+  if (axisBreaker.endstopsEnabled()) {
+    axisBreaker.callibrate(AxisBreaker::EndstopsState::Right);
+  }
+}
 
 void JsonAxisController::commandSetPower(ArduinoJson::JsonObjectConst data,
                                          ArduinoJson::JsonDocument& output) {}
 
 void JsonAxisController::commandGetData(ArduinoJson::JsonObjectConst data,
                                         ArduinoJson::JsonDocument& output) {}
+
+void JsonAxisController::commandResetEncoder(ArduinoJson::JsonObjectConst data,
+                                             ArduinoJson::JsonDocument& output) {}
