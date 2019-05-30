@@ -167,3 +167,9 @@ void WirePullerWindow::on_wheelAxisModePower_toggled(bool checked) {}
 void WirePullerWindow::on_breakerAxisModePosition_toggled(bool checked) {}
 
 void WirePullerWindow::on_breakerAxisModePower_toggled(bool checked) {}
+
+void WirePullerWindow::on_xAxisResetDistance_clicked() {}
+
+void WirePullerWindow::on_wheelAxisResetDistance_clicked() {}
+
+void WirePullerWindow::on_breakerAxisResetDistance_clicked() {}

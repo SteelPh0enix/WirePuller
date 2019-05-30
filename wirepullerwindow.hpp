@@ -49,6 +49,12 @@ class WirePullerWindow : public QMainWindow {
 
   void on_breakerAxisModePower_toggled(bool checked);
 
+  void on_xAxisResetDistance_clicked();
+
+  void on_wheelAxisResetDistance_clicked();
+
+  void on_breakerAxisResetDistance_clicked();
+
  public slots:
   void setMovingState(bool state);
   void updateAxisData(UIData::Axis axis, UIData::AxisInputData const& data);

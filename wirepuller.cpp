@@ -1,8 +1,8 @@
 #include "wirepuller.hpp"
+#include <QJsonObject>
 
 WirePuller::WirePuller(QObject* parent) : QObject(parent) {
   communicator.setBaudRate(QSerialPort::Baud115200);
-  communicator.setDataParser(&jsonMessageParser);
 
   communicatorTimer.setInterval(100);
   QObject::connect(&communicatorTimer, &QTimer::timeout, this,
@@ -32,7 +32,12 @@ void WirePuller::stopMoving() {
   setMovingState(false);
 }
 
-void WirePuller::callibrate() {}
+void WirePuller::callibrate() {
+  QJsonObject callibrationRequest{};
+  callibrationRequest["Request"] = "Callibrate";
+  callibrationRequest["Data"] = QJsonObject();
+  communicator.send(QJsonDocument(callibrationRequest), 1000, 100);
+}
 
 bool WirePuller::movingState() const {
   return movingStateFlag;

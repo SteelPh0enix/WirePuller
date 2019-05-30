@@ -38,7 +38,7 @@
       <x>10</x>
       <y>10</y>
       <width>654</width>
-      <height>404</height>
+      <height>414</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -228,6 +228,13 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="xAxisResetDistance">
+                 <property name="text">
+                  <string>Reset distance</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
              <item>
@@ -240,7 +247,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QGroupBox" name="">
+                <widget class="QGroupBox" name="groupBox">
                  <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
                    <widget class="QRadioButton" name="xAxisModePosition">
@@ -431,6 +438,13 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="wheelAxisResetDistance">
+                 <property name="text">
+                  <string>Reset distance</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
              <item>
@@ -443,7 +457,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QGroupBox" name="">
+                <widget class="QGroupBox" name="groupBox">
                  <layout class="QHBoxLayout" name="horizontalLayout_4">
                   <item>
                    <widget class="QRadioButton" name="wheelAxisModePosition">
@@ -634,6 +648,13 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="breakerAxisResetDistance">
+                 <property name="text">
+                  <string>Reset distance</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
              <item>
@@ -646,7 +667,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QGroupBox" name="">
+                <widget class="QGroupBox" name="groupBox">
                  <layout class="QHBoxLayout" name="horizontalLayout_11">
                   <item>
                    <widget class="QRadioButton" name="breakerAxisModePosition">

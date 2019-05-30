@@ -6,9 +6,7 @@
 #include <QSerialPort>
 #include <QString>
 #include <QTimer>
-#include "Messages/jsonmessageparser.hpp"
 #include "communicator.hpp"
-#include "requestbuilder.hpp"
 #include "uidata.hpp"
 
 class WirePuller : public QObject {
@@ -40,9 +38,7 @@ class WirePuller : public QObject {
   void setMovingState(bool state);
   bool movingStateFlag{false};
 
-  RequestBuilder requestBuilder;
   Communicator communicator;
-  JsonMessageParser jsonMessageParser;
 
   QTimer communicatorTimer;
 

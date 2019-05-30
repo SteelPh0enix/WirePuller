@@ -1,10 +1,8 @@
 #ifndef COMMUNICATOR_HPP
 #define COMMUNICATOR_HPP
 
+#include <QJsonDocument>
 #include <QSerialPort>
-#include "Messages/messageparser.hpp"
-#include "Messages/wirepullerrequest.hpp"
-#include "Messages/wirepullerresponse.hpp"
 
 class Communicator {
  public:
@@ -12,9 +10,10 @@ class Communicator {
 
   void setSerialPort(QSerialPortInfo const& portInfo);
   void setSerialPort(QString const& portName);
-  void setDataParser(MessageParser* parser);
 
-  Response send(Request const& request);
+  QJsonDocument send(QJsonDocument const& request,
+                     int responseTryCount = 10,
+                     int responseWaitTime = 100);
 
   bool open();
   void close();
@@ -23,7 +22,6 @@ class Communicator {
   bool isOpen() const;
 
  private:
-  MessageParser* messageParser{nullptr};
   QSerialPort serialPort;
 };
 

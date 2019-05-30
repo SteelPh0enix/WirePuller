@@ -1,20 +1,28 @@
 #include "communicator.hpp"
+#include <QDebug>
+#include <QThread>
 
 Communicator::~Communicator() {
   serialPort.close();
 }
 
-Response Communicator::send(Request const& request) {
-  if (messageParser == nullptr) {
-    return Response{};
+QJsonDocument Communicator::send(QJsonDocument const& request,
+                                 int responseTryCount,
+                                 int responseWaitTime) {
+  QByteArray requestBytes = request.toJson(QJsonDocument::Compact);
+  qDebug() << "Sending " << requestBytes;
+  requestBytes.append('\n');
+
+  serialPort.write(requestBytes);
+  QByteArray responseBytes{};
+  int trialCount{0};
+  while (responseBytes.isEmpty() && trialCount < responseTryCount) {
+    responseBytes = serialPort.readLine();
+    QThread::sleep(responseWaitTime);
   }
+  qDebug() << "Received " << responseBytes;
 
-  QByteArray rawRequest = messageParser->parseRequest(request);
-  serialPort.write(rawRequest);
-
-  QByteArray rawResponse = serialPort.readLine();
-
-  return messageParser->parseResponse(rawResponse);
+  return QJsonDocument::fromJson(responseBytes);
 }
 
 bool Communicator::open() {
@@ -47,10 +55,6 @@ void Communicator::setSerialPort(QSerialPortInfo const& portInfo) {
 
 void Communicator::setSerialPort(QString const& portName) {
   serialPort.setPortName(portName);
-}
-
-void Communicator::setDataParser(MessageParser* parser) {
-  messageParser = parser;
 }
 
 bool Communicator::isOpen() const {

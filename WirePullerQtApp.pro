@@ -25,27 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++14
 
 SOURCES += \
-        Messages/jsonmessageparser.cpp \
         communicator.cpp \
         main.cpp \
-        requestbuilder.cpp \
         serialportinfomanager.cpp \
         wirepuller.cpp \
         wirepullerwindow.cpp
 
 HEADERS += \
-  Messages/jsonmessageparser.hpp \
         communicator.hpp \
   jsonconstants.hpp \
-        requestbuilder.hpp \
         serialportinfomanager.hpp \
   uidata.hpp \
   wirepuller.hpp \
         wirepullerwindow.hpp \
-    Messages/messageparser.hpp \
-    Messages/wirepullerrequest.hpp \
-    Messages/wirepullerresponse.hpp \
-    Messages/messagetypes.hpp \
     devicenames.hpp
 
 FORMS += \
