@@ -1,6 +1,5 @@
 #include "wirepullerwindow.hpp"
 #include <QMessageBox>
-#include "devicenames.hpp"
 #include "ui_wirepullerwindow.h"
 
 WirePullerWindow::WirePullerWindow(QWidget* parent)
@@ -173,3 +172,15 @@ void WirePullerWindow::on_xAxisResetDistance_clicked() {}
 void WirePullerWindow::on_wheelAxisResetDistance_clicked() {}
 
 void WirePullerWindow::on_breakerAxisResetDistance_clicked() {}
+
+void WirePullerWindow::on_xAxisResetPower_clicked() {
+  ui->xAxisMotorPower->setValue(0);
+}
+
+void WirePullerWindow::on_wheelAxisResetPower_clicked() {
+  ui->wheelAxisMotorPower->setValue(0);
+}
+
+void WirePullerWindow::on_breakerAxisResetPower_clicked() {
+  ui->breakerAxisMotorPower->setValue(0);
+}

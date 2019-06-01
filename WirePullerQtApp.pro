@@ -37,8 +37,7 @@ HEADERS += \
         serialportinfomanager.hpp \
   uidata.hpp \
   wirepuller.hpp \
-        wirepullerwindow.hpp \
-    devicenames.hpp
+        wirepullerwindow.hpp
 
 FORMS += \
         wirepullerwindow.ui

@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
   QObject::connect(&wirePuller, &WirePuller::movingStateFeedback, &ui,
                    &WirePullerWindow::setMovingState);
 
-  QObject::connect(&wirePuller, &WirePuller::updateUI, &ui,
+  QObject::connect(&wirePuller, &WirePuller::updateData, &ui,
                    &WirePullerWindow::updateAxisData);
   QObject::connect(&ui, &WirePullerWindow::axisUpdated, &wirePuller,
                    &WirePuller::axisUpdated);

@@ -4,6 +4,7 @@
 
 namespace UIData {
 enum class Axis { None = 0, X, Wheel, Breaker };
+
 struct AxisInputData {
   bool leftEndstopState;
   bool rightEndstopState;
@@ -13,7 +14,9 @@ struct AxisInputData {
 struct AxisOutputData {
   enum class Mode { None, SetPower, SetPosition } mode;
   int power;
-  int distance;
+  double distanceCm;
+  int ticksPerCm;
+  bool destinationAchieved;
 };
 }  // namespace UIData
 
