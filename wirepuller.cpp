@@ -3,6 +3,10 @@
 #include "jsonconstants.hpp"
 
 WirePuller::WirePuller(QObject* parent) : QObject(parent) {
+  storedData[UIData::Axis::X] = UIData::AxisOutputData{};
+  storedData[UIData::Axis::Wheel] = UIData::AxisOutputData{};
+  storedData[UIData::Axis::Breaker] = UIData::AxisOutputData{};
+
   communicator.setBaudRate(QSerialPort::Baud115200);
 
   communicatorTimer.setInterval(100);
@@ -56,11 +60,6 @@ void WirePuller::setMovingState(bool state) {
 
 void WirePuller::openSerialPort(QString const& portName) {
   emit serialPortOpened(setSerialPort(portName));
-}
-
-void WirePuller::axisUpdated(UIData::Axis axis,
-                             UIData::AxisOutputData const& data) {
-  storedData[axis] = data;
 }
 
 void WirePuller::sendData() {
@@ -145,4 +144,17 @@ void WirePuller::checkDistances(
     storedData[axisDataIt.key()].destinationAchieved =
         distanceAchieved(axisDataIt.key(), axisDataIt.value());
   }
+}
+
+void WirePuller::axisPowerUpdated(UIData::Axis axis, int power) {
+  storedData[axis].power = power;
+}
+
+void WirePuller::axisPositionUpdate(UIData::Axis axis, double position) {
+  storedData[axis].distanceCm = position;
+}
+
+void WirePuller::axisModeUpdated(UIData::Axis axis,
+                                 UIData::AxisOutputData::Mode mode) {
+  storedData[axis].mode = mode;
 }

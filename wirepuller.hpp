@@ -31,7 +31,10 @@ class WirePuller : public QObject {
   void startMoving();
   void stopMoving();
   void callibrate();
-  void axisUpdated(UIData::Axis axis, UIData::AxisOutputData const& data);
+
+  void axisPowerUpdated(UIData::Axis axis, int power);
+  void axisPositionUpdate(UIData::Axis axis, double position);
+  void axisModeUpdated(UIData::Axis axis, UIData::AxisOutputData::Mode mode);
 
  private slots:
   void sendData();
@@ -40,11 +43,11 @@ class WirePuller : public QObject {
   void setMovingState(bool state);
   bool movingStateFlag{false};
 
-  Communicator communicator;
+  Communicator communicator{};
 
-  QTimer communicatorTimer;
+  QTimer communicatorTimer{};
 
-  QMap<UIData::Axis, UIData::AxisOutputData> storedData;
+  QMap<UIData::Axis, UIData::AxisOutputData> storedData{};
 
   QJsonObject storedDataToJson() const;
   QMap<UIData::Axis, UIData::AxisInputData> responseToInputData(

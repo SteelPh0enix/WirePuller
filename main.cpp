@@ -22,11 +22,16 @@ int main(int argc, char* argv[]) {
 
   QObject::connect(&wirePuller, &WirePuller::updateData, &ui,
                    &WirePullerWindow::updateAxisData);
-  QObject::connect(&ui, &WirePullerWindow::axisUpdated, &wirePuller,
-                   &WirePuller::axisUpdated);
 
   QObject::connect(&ui, &WirePullerWindow::callibrate, &wirePuller,
                    &WirePuller::callibrate);
+
+  QObject::connect(&ui, &WirePullerWindow::axisPowerUpdated, &wirePuller,
+                   &WirePuller::axisPowerUpdated);
+  QObject::connect(&ui, &WirePullerWindow::axisPositionUpdate, &wirePuller,
+                   &WirePuller::axisPositionUpdate);
+  QObject::connect(&ui, &WirePullerWindow::axisModeUpdated, &wirePuller,
+                   &WirePuller::axisModeUpdated);
 
   ui.show();
   return a.exec();

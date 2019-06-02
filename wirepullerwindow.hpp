@@ -71,7 +71,10 @@ class WirePullerWindow : public QMainWindow {
   void startMoving();
   void stopMoving();
   void openSerialPort(QString const& portName);
-  void axisUpdated(UIData::Axis axis, UIData::AxisOutputData const& data);
+
+  void axisPowerUpdated(UIData::Axis axis, int power);
+  void axisPositionUpdate(UIData::Axis axis, double position);
+  void axisModeUpdated(UIData::Axis axis, UIData::AxisOutputData::Mode mode);
 
  private:
   Ui::WirePullerWindow* ui{nullptr};

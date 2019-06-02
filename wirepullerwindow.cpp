@@ -143,29 +143,73 @@ double WirePullerWindow::translateTicksToDistance(UIData::Axis axis,
   }
 }
 
-void WirePullerWindow::on_xAxisMotorPower_valueChanged(int value) {}
+void WirePullerWindow::on_xAxisMotorPower_valueChanged(int value) {
+  emit axisPowerUpdated(UIData::Axis::X, value);
+}
 
-void WirePullerWindow::on_wheelAxisMotorPower_valueChanged(int value) {}
+void WirePullerWindow::on_wheelAxisMotorPower_valueChanged(int value) {
+  emit axisPowerUpdated(UIData::Axis::Wheel, value);
+}
 
-void WirePullerWindow::on_breakerAxisMotorPower_valueChanged(int value) {}
+void WirePullerWindow::on_breakerAxisMotorPower_valueChanged(int value) {
+  emit axisPowerUpdated(UIData::Axis::Breaker, value);
+}
 
-void WirePullerWindow::on_xAxisPosition_returnPressed() {}
+void WirePullerWindow::on_xAxisPosition_returnPressed() {
+  emit axisPositionUpdate(UIData::Axis::X, ui->xAxisPosition->text().toInt());
+}
 
-void WirePullerWindow::on_wheelAxisPosition_returnPressed() {}
+void WirePullerWindow::on_wheelAxisPosition_returnPressed() {
+  emit axisPositionUpdate(UIData::Axis::Wheel,
+                          ui->wheelAxisPosition->text().toInt());
+}
 
-void WirePullerWindow::on_breakerAxisPosition_returnPressed() {}
+void WirePullerWindow::on_breakerAxisPosition_returnPressed() {
+  emit axisPositionUpdate(UIData::Axis::Breaker,
+                          ui->breakerAxisPosition->text().toInt());
+}
 
-void WirePullerWindow::on_xAxisModePosition_toggled(bool checked) {}
+void WirePullerWindow::on_xAxisModePosition_toggled(bool checked) {
+  if (checked) {
+    emit axisModeUpdated(UIData::Axis::X,
+                         UIData::AxisOutputData::Mode::SetPosition);
+  }
+}
 
-void WirePullerWindow::on_xAxisModePower_toggled(bool checked) {}
+void WirePullerWindow::on_xAxisModePower_toggled(bool checked) {
+  if (checked) {
+    emit axisModeUpdated(UIData::Axis::X,
+                         UIData::AxisOutputData::Mode::SetPower);
+  }
+}
 
-void WirePullerWindow::on_wheelAxisModePosition_toggled(bool checked) {}
+void WirePullerWindow::on_wheelAxisModePosition_toggled(bool checked) {
+  if (checked) {
+    emit axisModeUpdated(UIData::Axis::Wheel,
+                         UIData::AxisOutputData::Mode::SetPosition);
+  }
+}
 
-void WirePullerWindow::on_wheelAxisModePower_toggled(bool checked) {}
+void WirePullerWindow::on_wheelAxisModePower_toggled(bool checked) {
+  if (checked) {
+    emit axisModeUpdated(UIData::Axis::Wheel,
+                         UIData::AxisOutputData::Mode::SetPower);
+  }
+}
 
-void WirePullerWindow::on_breakerAxisModePosition_toggled(bool checked) {}
+void WirePullerWindow::on_breakerAxisModePosition_toggled(bool checked) {
+  if (checked) {
+    emit axisModeUpdated(UIData::Axis::Breaker,
+                         UIData::AxisOutputData::Mode::SetPosition);
+  }
+}
 
-void WirePullerWindow::on_breakerAxisModePower_toggled(bool checked) {}
+void WirePullerWindow::on_breakerAxisModePower_toggled(bool checked) {
+  if (checked) {
+    emit axisModeUpdated(UIData::Axis::Breaker,
+                         UIData::AxisOutputData::Mode::SetPower);
+  }
+}
 
 void WirePullerWindow::on_xAxisResetDistance_clicked() {}
 

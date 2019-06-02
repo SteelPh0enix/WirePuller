@@ -1,6 +1,16 @@
 #include "communicator.hpp"
+#include <QCoreApplication>
 #include <QDebug>
-#include <QThread>
+#include <QTime>
+
+namespace {
+void delayms(int time) {
+  QTime endTime = QTime::currentTime().addMSecs(time);
+  while (QTime::currentTime() < endTime) {
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+  }
+}
+}  // namespace
 
 Communicator::~Communicator() {
   serialPort.close();
@@ -17,8 +27,9 @@ QJsonDocument Communicator::send(QJsonDocument const& request,
   QByteArray responseBytes{};
   int trialCount{0};
   while (responseBytes.isEmpty() && trialCount < responseTryCount) {
+    qDebug() << "Failed.";
     responseBytes = serialPort.readLine();
-    QThread::sleep(responseWaitTime);
+    delayms(responseWaitTime);
   }
   qDebug() << "Received " << responseBytes;
 
