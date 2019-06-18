@@ -50,7 +50,7 @@ class WirePuller : public QObject {
   QMap<UIData::Axis, UIData::AxisOutputData> storedData{};
 
   QJsonObject storedDataToJson() const;
-  QMap<UIData::Axis, UIData::AxisInputData> responseToInputData(
+  QMap<UIData::Axis, UIData::AxisInputData> convertResponseToInputData(
       QJsonDocument const& response) const;
 
   void checkDistances(QMap<UIData::Axis, UIData::AxisInputData>& data);

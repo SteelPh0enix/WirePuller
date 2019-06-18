@@ -71,7 +71,7 @@ void WirePuller::sendData() {
 
   QJsonDocument response = communicator.send(QJsonDocument(std::move(request)));
 
-  auto UIDataMap = responseToInputData(response);
+  auto UIDataMap = convertResponseToInputData(response);
 
   checkDistances(UIDataMap);
 
@@ -107,7 +107,7 @@ QJsonObject WirePuller::storedDataToJson() const {
   return data;
 }
 
-QMap<UIData::Axis, UIData::AxisInputData> WirePuller::responseToInputData(
+QMap<UIData::Axis, UIData::AxisInputData> WirePuller::convertResponseToInputData(
     const QJsonDocument& response) const {
   QMap<UIData::Axis, UIData::AxisInputData> data{};
 
@@ -134,10 +134,10 @@ void WirePuller::checkDistances(
   auto distanceAchieved = [&](auto axisID, auto axisData) -> bool {
     return (axisData.distanceTicks >=
             (storedData[axisID].distanceCm *
-             (storedData[axisID].ticksPerCm - TICK_HISTERESIS))) ||
+             (static_cast<unsigned>(storedData[axisID].ticksPerCm) - TICK_HISTERESIS))) ||
            (axisData.distanceTicks <=
             (storedData[axisID].distanceCm *
-             (storedData[axisID].ticksPerCm + TICK_HISTERESIS)));
+             (static_cast<unsigned>(storedData[axisID].ticksPerCm) + TICK_HISTERESIS)));
   };
 
   for (auto axisDataIt = data.begin(); axisDataIt != data.end(); axisDataIt++) {
