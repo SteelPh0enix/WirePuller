@@ -1,16 +1,29 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 Item {
+    property alias name: labelAxisName.text
+    property alias leftEndstopState: checkEndstopLeft.state
+    property alias rightEndstopState: checkEndstopRight.state
+    property alias endstopsEnabled: groupEndstops.visible
+    property alias leftEndstopEnabled: checkEndstopLeft.visible
+    property alias rightEndstopEnabled: checkEndstopRight.visible
+    property alias leftEndstopName: checkEndstopLeft.text
+    property alias rightEndstopName: checkEndstopRight.text
+
+    property real speed: 0.0
+    property real distance: 0.0
+    property string speedUnit: "mm/s"
+    property string distanceUnit: "mm"
+
+    signal distanceReset()
+
     id: axisControl
     width: 300
     height: 240
 
     Rectangle {
-        width: parent.width
-        height: parent.height
-        x: 0
-        y: 0
+        anchors.fill: parent
         border.width: 1
         border.color: "black"
     }
@@ -25,12 +38,14 @@ Item {
         anchors.leftMargin: 10
         anchors.top: labelSpeed.bottom
         anchors.topMargin: 5
-        value: 0.5
+        from: -100
+        to: 100
+        value: 0
     }
 
     Text {
         id: labelSpeed
-        text: qsTr("Szybkość: 0")
+        text: qsTr("Szybkość: ") + speed + speedUnit
         verticalAlignment: Text.AlignVCenter
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -82,7 +97,7 @@ Item {
 
     Text {
         id: labelDistance
-        text: qsTr("Przebyta odległość:")
+        text: qsTr("Przebyta odległość: ") + distance + distanceUnit
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.FixedSize
         anchors.top: groupEndstops.bottom
@@ -102,6 +117,8 @@ Item {
         anchors.leftMargin: 10
         anchors.top: sliderSpeed.bottom
         anchors.topMargin: 5
+
+        onClicked: sliderSpeed.value = 0
     }
 
     Button {
@@ -114,6 +131,8 @@ Item {
         anchors.leftMargin: 10
         anchors.top: labelDistance.bottom
         anchors.topMargin: 5
+
+        onClicked: distanceReset()
     }
 
     Text {
@@ -132,32 +151,3 @@ Item {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*##^## Designer {
-    D{i:8;anchors_width:280;anchors_x:10;anchors_y:195}
-}
- ##^##*/
