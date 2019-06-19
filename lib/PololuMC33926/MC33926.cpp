@@ -35,7 +35,7 @@ bool MC33926::setPower(int power) {
   }
 
   analogWrite(pinPWM, power);
-  digitalWrite(pinDirection, reverse);
+  digitalWrite(pinDirection, (isDirectionInverted() ? !reverse : reverse));
 
   return true;
 }
@@ -68,4 +68,12 @@ bool MC33926::internalInitialize() {
   digitalWrite(pinDisable, HIGH);
 
   return true;
+}
+
+void MC33926::invertDirection(bool state) {
+  directionInversionFlag = state;
+}
+
+bool MC33926::isDirectionInverted() const {
+  return directionInversionFlag;
 }

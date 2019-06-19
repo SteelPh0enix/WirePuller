@@ -12,22 +12,19 @@ def main():
 
     while(True):
         try:
-            cmd = input("Query: ")
-            if (cmd == "data"):
+            cmd = input("Query: ").split(' ')
+            if (cmd[0] == "data"):
                 print(sendMessage(arduinoPort, '{"Request": "GetData", "Data":{ } }'))
-            if (cmd == "power"):
-               powerRequest(arduinoPort) 
-            if (cmd == "stop"):
+            if (cmd[0] == "power"):
+               powerRequest(cmd, arduinoPort) 
+            if (cmd[0] == "stop"):
                 print(sendMessage(arduinoPort, '{"Request": "SetPower", "Data": {"X": 0, "Wheel": 0, "Breaker": 0} }'))
         except KeyboardInterrupt:
             arduinoPort.close()
             exit(0)
 
-def powerRequest(arduinoPort):
-    request = input("Enter motor name and power, separated with space: ")
-    motor_data = request.split(' ', maxsplit=1)
-
-    actual_request = '{"Request": "SetPower", "Data":{"' + motor_data[0] + '": ' + motor_data[1] + ' } }'
+def powerRequest(command, arduinoPort):
+    actual_request = '{"Request": "SetPower", "Data":{"' + command[1] + '": ' + command[2] + ' } }'
 
     print("Message: " + actual_request)
 

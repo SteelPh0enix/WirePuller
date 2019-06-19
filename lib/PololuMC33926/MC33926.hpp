@@ -18,6 +18,9 @@ class MC33926 : public Module {
   double current() const;
   bool error() const;
 
+  void invertDirection(bool state);
+  bool isDirectionInverted() const;
+
  private:
   virtual bool internalInitialize() override;
 
@@ -28,6 +31,8 @@ class MC33926 : public Module {
   uint8_t pinStatusFlag{};
 
   int actualPower{};
+
+  bool directionInversionFlag{false};
 
   constexpr static double FeedbackVoltsPerAmp{0.525};
   constexpr static double CurrentMultiplier() {

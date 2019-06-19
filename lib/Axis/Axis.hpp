@@ -70,7 +70,9 @@ class Axis : public Module {
       return false;
     }
 
-    if (endstopsState() != EndstopsState::None) {
+    if ((endstopsState() == EndstopsState::Left && motorPower() < 0) ||
+        (endstopsState() == EndstopsState::Right && motorPower() > 0) ||
+        endstopsState() == EndstopsState::Both) {
       setMotorPower(0);
       return true;
     }
@@ -102,6 +104,10 @@ class Axis : public Module {
     }
   }
 
+  void invertMotorDirection(bool state) {
+    motor.invertDirection(state);
+  }
+
  private:
   Encoder encoder{EncoderPinA, EncoderPinB};
   MC33926 motor;
@@ -111,7 +117,8 @@ class Axis : public Module {
   bool endstopsAreEnabled{true};
 
   virtual bool internalInitialize() override {
-    return motor.initialize() && (!endstopsEnabled() || (leftEndstop.initialize() && rightEndstop.initialize()));
+    return motor.initialize() && (!endstopsEnabled() || (leftEndstop.initialize() &&
+                                                         rightEndstop.initialize()));
   }
 
   void checkIfPinsAreSet() {
