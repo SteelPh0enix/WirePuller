@@ -5,7 +5,7 @@
 
 ArduinoJson::StaticJsonDocument<Constant::Json::DocumentSize> jsonInputDoc{};
 ArduinoJson::StaticJsonDocument<Constant::Json::DocumentSize> jsonOutputDoc{};
-JsonAxisController controller{};
+JsonAxisController controller;
 
 void printParsingError(ArduinoJson::DeserializationError const& error,
                        ArduinoJson::JsonDocument& json) {
@@ -15,6 +15,7 @@ void printParsingError(ArduinoJson::DeserializationError const& error,
 
 void setup() {
   Serial.begin(Constant::Serial::BaudRate);
+  controller.setPins();
   if (!controller.initialize()) {
     jsonOutputDoc[Constant::Json::Key::GeneralError] =
         Constant::Json::Value::GeneralError::InitializationFailed;

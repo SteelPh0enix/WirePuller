@@ -7,7 +7,7 @@ namespace JsonKey = Constant::Json::Key;
 namespace JsonValue = Constant::Json::Value;
 }  // namespace
 
-JsonAxisController::JsonAxisController() {
+void JsonAxisController::setPins() {
   // Motors
   axisX.setMotorDriverPins(
       Pin::XAxis::MotorDriver::PWM, Pin::XAxis::MotorDriver::Direction,

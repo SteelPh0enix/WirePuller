@@ -40,7 +40,10 @@ class Axis : public Module {
 
   EndstopsState endstopsState() const {
     if (endstopsEnabled()) {
-      return static_cast<EndstopsState>(leftEndstop.read() & (1 << rightEndstop.read()));
+      uint8_t endstopsFlag = leftEndstop.read();
+      if (rightEndstop.read()) endstopsFlag |= 2;
+
+      return static_cast<EndstopsState>(endstopsFlag);
     } else {
       return EndstopsState::None;
     }
@@ -89,9 +92,7 @@ class Axis : public Module {
         setMotorPower(motorMaxPower());
         break;
       }
-      default: {
-        return;
-      }
+      default: { return; }
     }
 
     if (waitForCallibration) {
@@ -110,8 +111,7 @@ class Axis : public Module {
   bool endstopsAreEnabled{true};
 
   virtual bool internalInitialize() override {
-    return motor.initialize() && (!endstopsEnabled() || (leftEndstop.initialize() &&
-                                                         rightEndstop.initialize()));
+    return motor.initialize() && (!endstopsEnabled() || (leftEndstop.initialize() && rightEndstop.initialize()));
   }
 
   void checkIfPinsAreSet() {

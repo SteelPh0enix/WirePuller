@@ -15,6 +15,7 @@ void printParsingError(ArduinoJson::DeserializationError const& error,
 
 void setup() {
   Serial.begin(Constant::Serial::BaudRate);
+  controller.setPins();
   if (!controller.initialize()) {
     jsonOutputDoc[Constant::Json::Key::GeneralError] =
         Constant::Json::Value::GeneralError::InitializationFailed;

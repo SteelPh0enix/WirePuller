@@ -6,7 +6,8 @@
 
 class JsonAxisController {
  public:
-  JsonAxisController();
+  JsonAxisController() = default;
+  void setPins();
   void parseJsonInput(ArduinoJson::JsonDocument const& input,
                       ArduinoJson::JsonDocument& output);
 
@@ -42,10 +43,10 @@ class JsonAxisController {
     auto endstopsState = axis.endstopsState();
     object[Constant::Json::Key::EndstopLeft] =
         static_cast<uint8_t>(endstopsState) &
-        static_cast<uint8_t>(AxisT::EndstopsState::Left);
+        static_cast<uint8_t>(AxisT::EndstopsState::Left) ? true : false;
     object[Constant::Json::Key::EndstopRight] =
         static_cast<uint8_t>(endstopsState) &
-        static_cast<uint8_t>(AxisT::EndstopsState::Right);
+        static_cast<uint8_t>(AxisT::EndstopsState::Right) ? true : false;
     object[Constant::Json::Key::EncoderTicks] = axis.encoderValue();
   }
 };
