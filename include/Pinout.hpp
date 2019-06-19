@@ -16,8 +16,8 @@ constexpr uint8_t Left{33};
 constexpr uint8_t Right{32};
 }  // namespace Endstop
 namespace Encoder {
-constexpr uint8_t A{18};
-constexpr uint8_t B{19};
+constexpr uint8_t A{20};
+constexpr uint8_t B{21};
 }  // namespace Encoder
 }  // namespace XAxis
 namespace WheelAxis {
@@ -33,8 +33,8 @@ constexpr uint8_t Left{35};
 constexpr uint8_t Right{34};
 }  // namespace Endstop
 namespace Encoder {
-constexpr uint8_t A{20};
-constexpr uint8_t B{21};
+constexpr uint8_t A{18};
+constexpr uint8_t B{19};
 }  // namespace Encoder
 }  // namespace WheelAxis
 namespace BreakerAxis {
@@ -53,8 +53,8 @@ constexpr uint8_t Right{};
 }  // namespace Endstop
 */
 namespace Encoder {
-constexpr uint8_t A{};
-constexpr uint8_t B{};
+constexpr uint8_t A{2};
+constexpr uint8_t B{3};
 }  // namespace Encoder
 }  // namespace BreakerAxis
 }  // namespace Pin

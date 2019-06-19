@@ -2,7 +2,7 @@ import serial
 import time
 import json
 
-SERIAL_PORT_NAME = "COM12"
+SERIAL_PORT_NAME = "/dev/ttyACM0"
 
 
 def main():
@@ -16,6 +16,8 @@ def main():
     if (cmd == "power"):
         print(sendMessage(arduinoPort,
                           '{"Request": "SetPower", "Data": {"X": 123, "Wheel": 456, "Breaker": -123} }'))
+    if (cmd == "stop"):
+        print(sendMessage(arduinoPort, '{"Request": "SetPower", "Data": {"X": 0, "Wheel": 0, "Breaker": 0} }'))
 
     arduinoPort.close()
 
