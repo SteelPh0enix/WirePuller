@@ -11,15 +11,15 @@ void JsonAxisController::setPins() {
   // Motors
   axisX.setMotorDriverPins(
       Pin::XAxis::MotorDriver::PWM, Pin::XAxis::MotorDriver::Direction,
-      Pin::XAxis::MotorDriver::Feedback, Pin::XAxis::MotorDriver::Direction,
+      Pin::XAxis::MotorDriver::Feedback, Pin::XAxis::MotorDriver::Disable,
       Pin::XAxis::MotorDriver::StatusFlag);
   axisWheel.setMotorDriverPins(
       Pin::WheelAxis::MotorDriver::PWM, Pin::WheelAxis::MotorDriver::Direction,
-      Pin::WheelAxis::MotorDriver::Feedback, Pin::WheelAxis::MotorDriver::Direction,
+      Pin::WheelAxis::MotorDriver::Feedback, Pin::WheelAxis::MotorDriver::Disable,
       Pin::WheelAxis::MotorDriver::StatusFlag);
   axisBreaker.setMotorDriverPins(
       Pin::BreakerAxis::MotorDriver::PWM, Pin::BreakerAxis::MotorDriver::Direction,
-      Pin::BreakerAxis::MotorDriver::Feedback, Pin::BreakerAxis::MotorDriver::Direction,
+      Pin::BreakerAxis::MotorDriver::Feedback, Pin::BreakerAxis::MotorDriver::Disable,
       Pin::BreakerAxis::MotorDriver::StatusFlag);
 
   // Endstops
