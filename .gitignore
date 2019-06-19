@@ -3,3 +3,5 @@
 .vscode/
 .piolibdeps/
 tmp/
+*.user
+build-*/
