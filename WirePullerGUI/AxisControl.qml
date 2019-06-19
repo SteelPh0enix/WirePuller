@@ -4,7 +4,16 @@ import QtQuick.Controls 2.3
 Item {
     id: axisControl
     width: 300
-    height: 230
+    height: 240
+
+    Rectangle {
+        width: parent.width
+        height: parent.height
+        x: 0
+        y: 0
+        border.width: 1
+        border.color: "black"
+    }
 
     Slider {
         id: sliderSpeed
@@ -25,8 +34,8 @@ Item {
         verticalAlignment: Text.AlignVCenter
         anchors.left: parent.left
         anchors.leftMargin: 10
-        anchors.top: parent.top
-        anchors.topMargin: 10
+        anchors.top: labelAxisName.bottom
+        anchors.topMargin: 5
         font.pixelSize: 12
     }
 
@@ -44,6 +53,7 @@ Item {
         CheckDelegate {
             id: checkEndstopLeft
             text: qsTr("Lewa")
+            checkable: false
             anchors.top: parent.top
             anchors.topMargin: 0
             anchors.bottom: parent.bottom
@@ -59,6 +69,7 @@ Item {
             width: 96
             height: 40
             text: qsTr("Prawa")
+            checkable: false
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
             anchors.top: parent.top
@@ -105,6 +116,21 @@ Item {
         anchors.topMargin: 5
     }
 
+    Text {
+        id: labelAxisName
+        width: 282
+        height: 14
+        text: qsTr("AxisName")
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.bold: true
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.top: parent.top
+        anchors.topMargin: 5
+        font.pixelSize: 16
+    }
+
 }
 
 
@@ -121,10 +147,17 @@ Item {
 
 
 
+
+
+
+
+
+
+
+
+
+
 /*##^## Designer {
-    D{i:1;anchors_width:280;anchors_x:50;anchors_y:66}D{i:2;anchors_x:50;anchors_y:207}
-D{i:4;anchors_x:0;anchors_y:2}D{i:5;anchors_height:52;anchors_y:-4}D{i:3;anchors_width:280;anchors_x:10;anchors_y:75}
-D{i:6;anchors_x:10;anchors_y:140}D{i:7;anchors_width:280;anchors_x:10;anchors_y:75}
-D{i:8;anchors_width:280;anchors_x:10;anchors_y:195}
+    D{i:8;anchors_width:280;anchors_x:10;anchors_y:195}
 }
  ##^##*/
