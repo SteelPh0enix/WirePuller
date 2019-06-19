@@ -13,8 +13,8 @@ Item {
 
     property real speed: 0.0
     property real distance: 0.0
-    property string speedUnit: "mm/s"
-    property string distanceUnit: "mm"
+    property string speedUnit: qsTr("mm/s")
+    property string distanceUnit: qsTr("mm")
 
     signal distanceReset()
 

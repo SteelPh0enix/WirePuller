@@ -46,7 +46,7 @@ Window {
             }
             AxisControl {
                 id: breakerAxisControl
-                name: qsTr("Oś pomiaru siły")
+                name: qsTr("Oś napinacza")
                 anchors.topMargin: 35
                 anchors.leftMargin: 5
                 anchors.top: parent.top
@@ -62,7 +62,7 @@ Window {
                 anchors.left: parent.left
 
                 leftEndstopEnabled: false
-                rightEndstopName: "Zakres"
+                rightEndstopName: qsTr("Zakres")
             }
 
             ColumnLayout {
@@ -77,7 +77,7 @@ Window {
 
                 Text {
                     id: labelSerialPort
-                    text: "Port"
+                    text: qsTr("Port")
                     font.pointSize: 14
                     font.bold: true
 
@@ -95,7 +95,7 @@ Window {
 
                 Button {
                     id: buttonRefreshSerialPorts
-                    text: "Odśwież listę portów"
+                    text: qsTr("Odśwież listę portów")
 
                     Layout.fillHeight: false
                     Layout.fillWidth: true
@@ -104,7 +104,7 @@ Window {
 
                 Button {
                     id: buttonSelectPort
-                    text: "Wybierz port"
+                    text: qsTr("Wybierz port")
 
                     Layout.fillHeight: false
                     Layout.fillWidth: true
@@ -121,9 +121,9 @@ Window {
 
                 onRunningChanged: {
                     if (running) {
-                        text: "Stop"
+                        text: qsTr("Stop")
                     } else {
-                        text: "Start"
+                        text: qsTr("Start")
                     }
                 }
 
@@ -135,7 +135,86 @@ Window {
         }
 
         Item {
-            id: settingsScreen
+            id: settings
+            property int ticksXAxis: parseInt(inputXAxisTicksPerMillimeter.text)
+            property int ticksWheelAxis: parseInt(inputWheelAxisTicksPerMillimeter.text)
+            property int ticksBreakerAxis: parseInt(inputBreakerAxisTicksPerMillimeter.text)
+            signal save()
+            signal restore()
+
+            ColumnLayout {
+                id: settingsLayout
+                anchors.fill: parent
+                anchors.leftMargin: 10
+                anchors.topMargin: 40
+
+                Item {
+                    id: encoderSettingsBox
+
+                    GridLayout {
+                        id: encoderSettingsGrid
+                        columns: 2
+                        anchors.fill: parent
+
+                        Text {
+                            id: labelEncoderSettingsBoxDescription
+                            Layout.columnSpan: 2
+                            text: qsTr("\"Ticki\" enkodera per milimetr")
+                            font.bold: true
+                            font.pointSize: 14
+                        }
+
+                        Text {
+                            id: labelEncoderSettingsXAxis
+                            text: qsTr("Oś X:")
+                            font.pointSize: 10
+                        }
+
+                        TextField {
+                            id: inputXAxisTicksPerMillimeter
+                            text: qsTr("0")
+                        }
+
+                        Text {
+                            id: labelEncoderSettingsWheelAxis
+                            text: qsTr("Koło:")
+                            font.pointSize: 10
+                        }
+
+                        TextField {
+                            id: inputWheelAxisTicksPerMillimeter
+                            text: qsTr("0")
+                        }
+
+                        Text {
+                            id: labelEncoderSettingsBreakerAxisDescription
+                            text: qsTr("Oś napinacza:")
+                            font.pointSize: 10
+                        }
+
+                        TextField {
+                            id: inputBreakerAxisTicksPerMillimeter
+                            text: qsTr("0")
+                        }
+
+                        Button {
+                            id: buttonRestoreEncoderSettings
+                            Layout.columnSpan: 2
+                            Layout.fillWidth: true
+                            text: qsTr("Przywróć z ustawień")
+                            onPressed: settings.save()
+                        }
+
+                        Button {
+                            id: buttonSaveEncoderSettings
+                            Layout.columnSpan: 2
+                            Layout.fillWidth: true
+                            text: qsTr("Zapisz ustawienia")
+                            onPressed: settings.restore()
+                        }
+                    }
+                }
+            }
         }
     }
 }
