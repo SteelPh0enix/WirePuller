@@ -20,7 +20,7 @@ Item {
 
     id: axisControl
     width: 300
-    height: 240
+    height: 310
 
     Rectangle {
         anchors.fill: parent
@@ -56,7 +56,7 @@ Item {
 
     GroupBox {
         id: groupEndstops
-        height: 59
+        height: 55
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.left: parent.left
@@ -67,6 +67,7 @@ Item {
 
         CheckDelegate {
             id: checkEndstopLeft
+            height: 30
             text: qsTr("Lewa")
             checkable: false
             anchors.top: parent.top
@@ -75,14 +76,14 @@ Item {
             anchors.bottomMargin: 0
             anchors.left: parent.left
             anchors.leftMargin: 0
-            padding: 5
+            padding: 1
         }
 
         CheckDelegate {
             id: checkEndstopRight
             x: 160
             width: 96
-            height: 40
+            height: 30
             text: qsTr("Prawa")
             checkable: false
             anchors.bottom: parent.bottom
@@ -91,7 +92,7 @@ Item {
             anchors.topMargin: 0
             anchors.right: parent.right
             anchors.rightMargin: 0
-            padding: 5
+            padding: 1
         }
     }
 
@@ -100,11 +101,46 @@ Item {
         text: qsTr("Przebyta odległość: ") + distance + distanceUnit
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.FixedSize
-        anchors.top: groupEndstops.bottom
+        anchors.top: groupMode.bottom
         anchors.topMargin: 5
         anchors.left: parent.left
         anchors.leftMargin: 10
         font.pixelSize: 14
+    }
+
+    GroupBox {
+        id: groupMode
+        height: 65
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.top: groupEndstops.bottom
+        anchors.topMargin: 5
+        title: qsTr("Tryb")
+
+        RadioButton {
+            id: radioModeSpeed
+            height: 30
+            text: qsTr("Szybkosć")
+            padding: 1
+            checked: true
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 0
+        }
+
+        RadioButton {
+            id: radioModePower
+            height: 30
+            text: qsTr("Moc")
+            padding: 1
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 0
+        }
     }
 
     Button {
@@ -150,4 +186,26 @@ Item {
         font.pixelSize: 16
     }
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*##^## Designer {
+    D{i:9;anchors_x:11;anchors_y:0}D{i:8;anchors_width:200;anchors_x:10;anchors_y:183}
+}
+ ##^##*/

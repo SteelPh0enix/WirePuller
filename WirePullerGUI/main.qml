@@ -8,8 +8,8 @@ import steelph0enix.settings 1.0
 Window {
     id: mainWindow
     visible: true
-    width: 620
-    height: 530
+    width: 920
+    height: 500
     maximumHeight: height
     minimumHeight: height
     maximumWidth: width
@@ -62,10 +62,10 @@ Window {
             AxisControl {
                 id: wheelAxisControl
                 name: qsTr("Koło")
-                anchors.topMargin: 5
+                anchors.topMargin: 35
                 anchors.leftMargin: 5
-                anchors.top: xAxisControl.bottom
-                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.left: breakerAxisControl.right
 
                 leftEndstopEnabled: false
                 rightEndstopName: qsTr("Zakres")
@@ -73,10 +73,12 @@ Window {
 
             ColumnLayout {
                 id: serialPortLayout
-                anchors.left: wheelAxisControl.right
-                anchors.top: breakerAxisControl.bottom
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
+                width: 200
+                height: 120
+                anchors.leftMargin: 10
+                anchors.topMargin: 10
+                anchors.left: parent.left
+                anchors.top: xAxisControl.bottom
                 anchors.margins: 10
                 spacing: 5
 
@@ -233,6 +235,14 @@ Window {
         }
     }
 }
+
+
+
+
+
+
+
+
 
 
 
