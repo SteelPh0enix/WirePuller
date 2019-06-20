@@ -20,10 +20,6 @@ Window {
         id: portManager
     }
 
-    ProgramSettings {
-        id: programSettings
-    }
-
     TabBar {
         id: tabBar
         width: parent.width
@@ -125,7 +121,7 @@ Window {
                     Layout.fillHeight: false
                     Layout.fillWidth: true
                     Layout.preferredHeight: 25
-                 }
+                }
 
             }
 
@@ -158,7 +154,7 @@ Window {
             signal save()
             signal restore()
 
-            ColumnLayout {
+            RowLayout {
                 id: settingsLayout
                 anchors.fill: parent
                 anchors.leftMargin: 10
@@ -166,67 +162,70 @@ Window {
 
                 Item {
                     id: encoderSettingsBox
+                    Layout.fillHeight: true
 
-                    GridLayout {
-                        id: encoderSettingsGrid
-                        columns: 2
+                    ColumnLayout {
+                        id: encoderSettingsLayout
                         anchors.fill: parent
 
                         Text {
-                            id: labelEncoderSettingsBoxDescription
-                            Layout.columnSpan: 2
                             text: qsTr("\"Ticki\" enkodera per milimetr")
+                            Layout.fillWidth: true
                             font.bold: true
                             font.pointSize: 14
                         }
 
-                        Text {
-                            id: labelEncoderSettingsXAxis
-                            text: qsTr("Oś X:")
-                            font.pointSize: 10
-                        }
-
-                        TextField {
+                        LabeledInput {
                             id: inputXAxisTicksPerMillimeter
-                            text: programSettings.xAxisData
+                            inputDescription: qsTr("Oś X:")
+                            inputData: programSettings.settingsData["X"]["ticksPerMm"]
+                            Layout.fillWidth: true
                         }
 
-                        Text {
-                            id: labelEncoderSettingsWheelAxis
-                            text: qsTr("Koło:")
-                            font.pointSize: 10
-                        }
-
-                        TextField {
+                        LabeledInput {
                             id: inputWheelAxisTicksPerMillimeter
-                            text: qsTr("0")
+                            inputDescription: qsTr("Koło:")
+                            inputData: programSettings.settingsData["Wheel"]["ticksPerMm"]
+                            Layout.fillWidth: true
                         }
 
-                        Text {
-                            id: labelEncoderSettingsBreakerAxisDescription
-                            text: qsTr("Oś napinacza:")
-                            font.pointSize: 10
-                        }
-
-                        TextField {
+                        LabeledInput {
                             id: inputBreakerAxisTicksPerMillimeter
-                            text: qsTr("0")
+                            inputDescription: qsTr("Oś napinacza:")
+                            inputData: programSettings.settingsData["Breaker"]["ticksPerMm"]
+                            Layout.fillWidth: true
                         }
 
                         Button {
                             id: buttonRestoreEncoderSettings
-                            Layout.columnSpan: 2
                             Layout.fillWidth: true
                             text: qsTr("Przywróć z ustawień")
                             onPressed: settings.save()
+                            visible: false
                         }
 
                         Button {
                             id: buttonSaveEncoderSettings
-                            Layout.columnSpan: 2
                             Layout.fillWidth: true
                             text: qsTr("Zapisz ustawienia")
                             onPressed: settings.restore()
+                            visible: false
+                        }
+                    }
+                }
+
+                Item {
+                    id: movementSettingsBox
+                    Layout.fillHeight: true
+
+                    ColumnLayout {
+                        id: movementSettingsGrid
+                        anchors.fill: parent
+
+                        Text {
+                            text: qsTr("Stałe szybkości")
+                            font.bold: true
+                            font.pointSize: 14
                         }
                     }
                 }
@@ -234,3 +233,16 @@ Window {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+/*##^## Designer {
+    D{i:3;anchors_x:0}
+}
+ ##^##*/

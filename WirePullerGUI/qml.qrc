@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>AxisControl.qml</file>
+        <file>LabeledInput.qml</file>
     </qresource>
 </RCC>
