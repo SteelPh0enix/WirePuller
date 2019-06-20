@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import steelph0enix.serialportmanager 1.0
+import steelph0enix.settings 1.0
 
 Window {
     id: mainWindow
@@ -13,6 +15,14 @@ Window {
     maximumWidth: width
     minimumWidth: width
     title: qsTr("WirePuller Control Center")
+
+    SerialPortManager {
+        id: portManager
+    }
+
+    ProgramSettings {
+        id: programSettings
+    }
 
     TabBar {
         id: tabBar
@@ -91,6 +101,10 @@ Window {
                     Layout.fillHeight: false
                     Layout.fillWidth: true
                     Layout.preferredHeight: 30
+
+
+                    model: portManager.serialPortList
+                    Component.onCompleted: portManager.refreshPortList()
                 }
 
                 Button {
@@ -100,6 +114,8 @@ Window {
                     Layout.fillHeight: false
                     Layout.fillWidth: true
                     Layout.preferredHeight: 25
+
+                    onClicked: portManager.refreshPortList()
                 }
 
                 Button {
@@ -172,7 +188,7 @@ Window {
 
                         TextField {
                             id: inputXAxisTicksPerMillimeter
-                            text: qsTr("0")
+                            text: programSettings.xAxisData
                         }
 
                         Text {
