@@ -50,6 +50,7 @@ Window {
                 anchors.top: parent.top
                 anchors.left: parent.left
             }
+
             AxisControl {
                 id: breakerAxisControl
                 name: qsTr("Oś napinacza")
@@ -59,6 +60,7 @@ Window {
                 anchors.left: xAxisControl.right
                 endstopsEnabled: false
             }
+
             AxisControl {
                 id: wheelAxisControl
                 name: qsTr("Koło")
@@ -235,24 +237,3 @@ Window {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*##^## Designer {
-    D{i:3;anchors_x:0}
-}
- ##^##*/

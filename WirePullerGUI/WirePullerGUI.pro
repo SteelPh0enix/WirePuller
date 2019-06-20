@@ -14,6 +14,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+        serialcommunicator.cpp \
         serialportmanager.cpp \
         settings.cpp
 
@@ -31,5 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    axisdatamodel.h \
+    serialcommunicator.h \
     serialportmanager.h \
     settings.h

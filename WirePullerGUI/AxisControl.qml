@@ -15,6 +15,7 @@ Item {
     property real distance: 0.0
     property string speedUnit: qsTr("mm/s")
     property string distanceUnit: qsTr("mm")
+    property int controlMode: 0
 
     signal distanceReset()
 
@@ -121,25 +122,37 @@ Item {
 
         RadioButton {
             id: radioModeSpeed
-            height: 30
-            text: qsTr("Szybkosć")
+            text: qsTr("Szybkość")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
             padding: 1
             checked: true
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: parent.top
             anchors.topMargin: 0
+            onCheckedChanged: {
+                if (checked) {
+                    controlMode = 0;
+                }
+            }
         }
 
         RadioButton {
             id: radioModePower
-            height: 30
             text: qsTr("Moc")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
             padding: 1
             anchors.right: parent.right
             anchors.rightMargin: 0
             anchors.top: parent.top
             anchors.topMargin: 0
+            onCheckedChanged: {
+                if (checked) {
+                    controlMode = 1;
+                }
+            }
         }
     }
 
@@ -205,7 +218,11 @@ Item {
 
 
 
+
+
+
+
 /*##^## Designer {
-    D{i:9;anchors_x:11;anchors_y:0}D{i:8;anchors_width:200;anchors_x:10;anchors_y:183}
+    D{i:9;anchors_height:30;anchors_x:11;anchors_y:0}D{i:10;anchors_height:30}D{i:8;anchors_width:200;anchors_x:10;anchors_y:183}
 }
  ##^##*/
