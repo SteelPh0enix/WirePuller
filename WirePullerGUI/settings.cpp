@@ -2,48 +2,49 @@
 #include <QByteArray>
 #include <QFile>
 
-Settings::Settings(QObject *parent) : QObject(parent) {}
+Settings::Settings(QObject *parent)
+  : QObject(parent) {}
 
 void Settings::setPath(QString const& path) {
-    m_settingsPath = path;
+  m_settingsPath = path;
 }
 
 Settings::LoadingError Settings::load() {
-    if (m_settingsPath.isEmpty()) {
-        return LoadingError::InvalidPath;
-    }
+  if (m_settingsPath.isEmpty()) {
+    return LoadingError::InvalidPath;
+  }
 
-    QFile settingsFile(m_settingsPath);
-    if (!settingsFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return LoadingError::UnableToOpen;
-    }
+  QFile settingsFile(m_settingsPath);
+  if (!settingsFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    return LoadingError::UnableToOpen;
+  }
 
-    QByteArray settingsData{settingsFile.readAll()};
-    if (settingsData.isEmpty()) {
-        return LoadingError::EmptyFile;
-    }
+  QByteArray settingsData{settingsFile.readAll()};
+  if (settingsData.isEmpty()) {
+    return LoadingError::EmptyFile;
+  }
 
-    auto settingsJson{QJsonDocument::fromJson(settingsData)};
-    if (settingsJson.isEmpty()) {
-        return LoadingError::InvalidContent;
-    }
+  auto settingsJson{QJsonDocument::fromJson(settingsData)};
+  if (settingsJson.isEmpty()) {
+    return LoadingError::InvalidContent;
+  }
 
-    updateSettings(settingsJson);
+  updateSettings(settingsJson);
 
-    return LoadingError::OK;
+  return LoadingError::OK;
 }
 
 void Settings::updateSettings(const QJsonDocument &doc) {
-   m_settingsData = doc.toVariant().toMap();
-   emit settingsDataChanged();
+  m_settingsData = doc.toVariant().toMap();
+  emit settingsDataChanged();
 }
 
 QVariantMap Settings::settingsData() const {
-    return m_settingsData;
+  return m_settingsData;
 }
 
-Settings& Settings::operator=(const Settings &other) {
-   m_settingsData = other.m_settingsData;
-   m_settingsPath = other.m_settingsPath;
-   return *this;
+Settings &Settings::operator=(const Settings &other) {
+  m_settingsData = other.m_settingsData;
+  m_settingsPath = other.m_settingsPath;
+  return *this;
 }

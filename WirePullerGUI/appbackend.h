@@ -1,31 +1,30 @@
 #ifndef APPBACKEND_H
 #define APPBACKEND_H
 
-#include <QObject>
-#include <QMap>
-#include "settings.h"
 #include "axisdatamodel.h"
 #include "serialcommunicator.h"
+#include "settings.h"
+#include <QMap>
+#include <QObject>
 
-class AppBackend : public QObject
-{
-    Q_OBJECT
-public:
-    explicit AppBackend(Settings* settings, QObject *parent = nullptr);
+class AppBackend : public QObject {
+  Q_OBJECT
+ public:
+  explicit AppBackend(Settings *settings, QObject *parent = nullptr);
 
-    AxisDataModel& xAxisData();
-    AxisDataModel& wheelAxisData();
-    AxisDataModel& breakerAxisData();
+  AxisDataModel &xAxisData();
+  AxisDataModel &wheelAxisData();
+  AxisDataModel &breakerAxisData();
 
-signals:
+ signals:
 
-public slots:
-    void setSerialPortName(QString const& name);
+ public slots:
+  void setSerialPortName(QString const &name);
 
-private:
-    Settings* m_settings{nullptr};
-    QMap<QString, AxisDataModel*> m_dataModels;
-    SerialCommunicator m_communicator{this};
+ private:
+  Settings *m_settings{nullptr};
+  QMap<QString, AxisDataModel *> m_dataModels;
+  SerialCommunicator m_communicator{this};
 };
 
 #endif // APPBACKEND_H

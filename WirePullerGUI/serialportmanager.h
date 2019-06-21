@@ -4,24 +4,23 @@
 #include <QObject>
 #include <QStringList>
 
-class SerialPortManager : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QStringList serialPortList READ serialPortList NOTIFY serialPortListChanged)
-public:
-    explicit SerialPortManager(QObject* parent = nullptr);
-    virtual ~SerialPortManager() = default;
+class SerialPortManager : public QObject {
+  Q_OBJECT
+  Q_PROPERTY(QStringList serialPortList READ serialPortList NOTIFY serialPortListChanged)
+ public:
+  explicit SerialPortManager(QObject *parent = nullptr);
+  virtual ~SerialPortManager() = default;
 
-    QStringList serialPortList() const;
+  QStringList serialPortList() const;
 
-public slots:
-    void refreshPortList();
+ public slots:
+  void refreshPortList();
 
-signals:
-    void serialPortListChanged();
+ signals:
+  void serialPortListChanged();
 
-private:
-    QStringList m_serialPortList;
+ private:
+  QStringList m_serialPortList;
 };
 
 #endif // SERIALPORTMANAGER_H
