@@ -12,19 +12,10 @@ AppBackend::AppBackend(Settings* settings, QObject* parent)
 
 void AppBackend::setSerialPortName(QString const& portName) {
   m_communicator.setSerialPort(portName);
-  qDebug() << "Serial port name set to" << m_communicator.serialPortName();
 }
 
-AxisDataModel& AppBackend::xAxisData() {
-  return *m_dataModels["X"];
-}
-
-AxisDataModel& AppBackend::wheelAxisData() {
-  return *m_dataModels["Wheel"];
-}
-
-AxisDataModel& AppBackend::breakerAxisData() {
-  return *m_dataModels["Breaker"];
+AxisDataModel& AppBackend::axisData(QString const& key) {
+  return *m_dataModels[key];
 }
 
 bool AppBackend::running() const {

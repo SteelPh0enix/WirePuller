@@ -38,9 +38,9 @@ int main(int argc, char* argv[]) {
 
   engine.rootContext()->setContextProperty("programSettings", &programSettings);
   engine.rootContext()->setContextProperty("backend", &backend);
-  engine.rootContext()->setContextProperty("xAxisData", &backend.xAxisData());
-  engine.rootContext()->setContextProperty("wheelAxisData", &backend.wheelAxisData());
-  engine.rootContext()->setContextProperty("breakerAxisData", &backend.breakerAxisData());
+  engine.rootContext()->setContextProperty("xAxisData", &backend.axisData("X"));
+  engine.rootContext()->setContextProperty("wheelAxisData", &backend.axisData("Wheel"));
+  engine.rootContext()->setContextProperty("breakerAxisData", &backend.axisData("Breaker"));
 
   engine.load(url);
 

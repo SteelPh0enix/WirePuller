@@ -6,6 +6,7 @@
 #include "settings.h"
 #include <QMap>
 #include <QObject>
+#include <QString>
 
 class AppBackend : public QObject {
   Q_OBJECT
@@ -13,9 +14,7 @@ class AppBackend : public QObject {
  public:
   explicit AppBackend(Settings* settings, QObject* parent = nullptr);
 
-  AxisDataModel& xAxisData();
-  AxisDataModel& wheelAxisData();
-  AxisDataModel& breakerAxisData();
+  AxisDataModel& axisData(QString const& axis);
   bool running() const;
 
   Q_INVOKABLE void callibrate();
