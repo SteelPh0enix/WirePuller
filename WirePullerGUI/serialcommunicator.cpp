@@ -1,7 +1,7 @@
 #include "serialcommunicator.h"
 #include <QThread>
 
-SerialCommunicator::SerialCommunicator(QObject *parent)
+SerialCommunicator::SerialCommunicator(QObject* parent)
   : QObject(parent) {
   serialPort.setBaudRate(QSerialPort::Baud115200);
 

@@ -16,7 +16,7 @@ class AxisDataModel : public QObject {
   Q_PROPERTY(bool leftEndstopState READ leftEndstopState NOTIFY leftEndstopStateChanged)
   Q_PROPERTY(bool rightEndstopState READ rightEndstopState NOTIFY rightEndstopStateChanged)
  public:
-  AxisDataModel(QObject *parent = nullptr);
+  AxisDataModel(QObject* parent = nullptr);
 
   int controlValue() const;
   ControlMode controlMode() const;

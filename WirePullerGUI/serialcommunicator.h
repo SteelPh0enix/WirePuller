@@ -9,7 +9,7 @@
 class SerialCommunicator : public QObject {
   Q_OBJECT
  public:
-  explicit SerialCommunicator(QObject *parent = nullptr);
+  explicit SerialCommunicator(QObject* parent = nullptr);
 
   QString serialPortName() const;
 

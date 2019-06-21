@@ -2,7 +2,7 @@
 #include <QByteArray>
 #include <QFile>
 
-Settings::Settings(QObject *parent)
+Settings::Settings(QObject* parent)
   : QObject(parent) {}
 
 void Settings::setPath(QString const& path) {
@@ -34,7 +34,7 @@ Settings::LoadingError Settings::load() {
   return LoadingError::OK;
 }
 
-void Settings::updateSettings(const QJsonDocument &doc) {
+void Settings::updateSettings(const QJsonDocument& doc) {
   m_settingsData = doc.toVariant().toMap();
   emit settingsDataChanged();
 }
@@ -43,7 +43,7 @@ QVariantMap Settings::settingsData() const {
   return m_settingsData;
 }
 
-Settings &Settings::operator=(const Settings &other) {
+Settings& Settings::operator=(const Settings& other) {
   m_settingsData = other.m_settingsData;
   m_settingsPath = other.m_settingsPath;
   return *this;

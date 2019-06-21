@@ -20,6 +20,8 @@ Window {
         id: portManager
     }
 
+
+
     TabBar {
         id: tabBar
         width: parent.width
@@ -34,6 +36,7 @@ Window {
         TabButton {
             text: qsTr("Ustawienia")
         }
+
     }
 
     StackLayout {
@@ -139,23 +142,34 @@ Window {
             }
 
             Button {
-                property bool running: false
+                property bool running: backend.running
 
                 id: buttonStartStop
-                text: "Start"
-
-                onRunningChanged: {
+                text: {
                     if (running) {
-                        text: qsTr("Stop")
+                        return qsTr("Stop")
                     } else {
-                        text: qsTr("Start")
+                        return qsTr("Start")
                     }
                 }
 
                 height: 40
-                width: serialPortLayout.width
                 x: mainWindow.width - width - 10
                 y: mainWindow.height - height - 10
+
+                onClicked: backend.setRunning(!running)
+            }
+
+            Button {
+                id: buttonCallibrate
+                height: 40
+                text: qsTr("Kalibruj")
+                anchors.right: buttonStartStop.left
+                anchors.rightMargin: 5
+                anchors.bottom: buttonStartStop.bottom
+                anchors.bottomMargin: 0
+
+                onClicked: backend.callibrate()
             }
         }
 

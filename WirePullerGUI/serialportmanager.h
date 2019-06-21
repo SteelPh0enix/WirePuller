@@ -8,7 +8,7 @@ class SerialPortManager : public QObject {
   Q_OBJECT
   Q_PROPERTY(QStringList serialPortList READ serialPortList NOTIFY serialPortListChanged)
  public:
-  explicit SerialPortManager(QObject *parent = nullptr);
+  explicit SerialPortManager(QObject* parent = nullptr);
   virtual ~SerialPortManager() = default;
 
   QStringList serialPortList() const;

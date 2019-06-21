@@ -12,15 +12,15 @@ class Settings : public QObject {
   Q_ENUMS(LoadingError)
   Q_PROPERTY(QVariantMap settingsData READ settingsData NOTIFY settingsDataChanged)
  public:
-  explicit Settings(QObject *parent = nullptr);
-  Settings &operator=(Settings const &other);
+  explicit Settings(QObject* parent = nullptr);
+  Settings& operator=(Settings const& other);
 
   enum LoadingError { OK = 0, InvalidPath, UnableToOpen, EmptyFile, InvalidContent };
 
   QVariantMap settingsData() const;
 
  public slots:
-  void setPath(QString const &path);
+  void setPath(QString const& path);
   LoadingError load();
 
  signals:
@@ -30,8 +30,8 @@ class Settings : public QObject {
   QVariantMap m_settingsData{};
   QString m_settingsPath{};
 
-  void updateSettings(QJsonDocument const &doc);
-  QVariantMap getAxisSettings(QJsonObject const &settings);
+  void updateSettings(QJsonDocument const& doc);
+  QVariantMap getAxisSettings(QJsonObject const& settings);
 };
 
 Q_DECLARE_METATYPE(Settings::LoadingError)

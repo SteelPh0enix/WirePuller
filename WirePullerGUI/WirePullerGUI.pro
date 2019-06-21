@@ -13,6 +13,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        Requests/callibraterequest.cpp \
+        Requests/getdatarequest.cpp \
+        Requests/resetencodersrequest.cpp \
+        Requests/setmotorpowerrequest.cpp \
         appbackend.cpp \
         axisdatamodel.cpp \
         main.cpp \
@@ -34,6 +38,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Requests/callibraterequest.h \
+    Requests/getdatarequest.h \
+    Requests/request.h \
+    Requests/resetencodersrequest.h \
+    Requests/setmotorpowerrequest.h \
     appbackend.h \
     axisdatamodel.h \
     serialcommunicator.h \

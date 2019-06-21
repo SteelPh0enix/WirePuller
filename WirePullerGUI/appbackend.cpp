@@ -1,7 +1,7 @@
 #include "appbackend.h"
 #include <QtDebug>
 
-AppBackend::AppBackend(Settings *settings, QObject *parent)
+AppBackend::AppBackend(Settings* settings, QObject* parent)
   : QObject(parent)
   , m_settings(settings)
   , m_communicator(this) {
@@ -26,3 +26,15 @@ AxisDataModel& AppBackend::wheelAxisData() {
 AxisDataModel& AppBackend::breakerAxisData() {
   return *m_dataModels["Breaker"];
 }
+
+bool AppBackend::running() const {
+  return m_running;
+}
+
+void AppBackend::setRunning(bool newState) {
+  m_running = newState;
+
+  emit runningChanged(running());
+}
+
+void AppBackend::callibrate() {}
