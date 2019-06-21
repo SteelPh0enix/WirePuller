@@ -28,3 +28,7 @@ void SerialCommunicator::internalReceiveData() {
 QString SerialCommunicator::serialPortName() const {
   return serialPort.portName();
 }
+
+bool SerialCommunicator::isOpen() const {
+  return serialPort.isOpen();
+}

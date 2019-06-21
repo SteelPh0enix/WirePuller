@@ -32,9 +32,15 @@ bool AppBackend::running() const {
 }
 
 void AppBackend::setRunning(bool newState) {
-  m_running = newState;
-
-  emit runningChanged(running());
+  if (newState) {
+    if (m_communicator.isOpen()) {
+      m_running = true;
+      emit runningChanged(running());
+    }
+  } else {
+    m_running = false;
+    emit runningChanged(running());
+  }
 }
 
 void AppBackend::callibrate() {}

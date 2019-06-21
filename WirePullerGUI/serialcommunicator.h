@@ -12,6 +12,7 @@ class SerialCommunicator : public QObject {
   explicit SerialCommunicator(QObject* parent = nullptr);
 
   QString serialPortName() const;
+  bool isOpen() const;
 
  signals:
   void dataReceived(QByteArray data);
