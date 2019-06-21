@@ -49,6 +49,11 @@ Window {
                 anchors.leftMargin: 5
                 anchors.top: parent.top
                 anchors.left: parent.left
+
+                maxSpeed: 100
+                minSpeed: -100
+
+                dataModel: xAxisData
             }
 
             AxisControl {
@@ -59,6 +64,8 @@ Window {
                 anchors.top: parent.top
                 anchors.left: xAxisControl.right
                 endstopsEnabled: false
+
+                dataModel: breakerAxisData
             }
 
             AxisControl {
@@ -68,9 +75,10 @@ Window {
                 anchors.leftMargin: 5
                 anchors.top: parent.top
                 anchors.left: breakerAxisControl.right
-
                 leftEndstopEnabled: false
                 rightEndstopName: qsTr("Zakres")
+
+                dataModel: wheelAxisData
             }
 
             ColumnLayout {
@@ -125,8 +133,9 @@ Window {
                     Layout.fillHeight: false
                     Layout.fillWidth: true
                     Layout.preferredHeight: 25
-                }
 
+                    onClicked: backend.setSerialPortName(comboSerialPort.currentText)
+                }
             }
 
             Button {

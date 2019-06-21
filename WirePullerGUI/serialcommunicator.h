@@ -12,6 +12,8 @@ class SerialCommunicator : public QObject
 public:
     explicit SerialCommunicator(QObject *parent = nullptr);
 
+    QString serialPortName() const;
+
 signals:
     void dataReceived(QByteArray data);
 

@@ -41,3 +41,9 @@ void Settings::updateSettings(const QJsonDocument &doc) {
 QVariantMap Settings::settingsData() const {
     return m_settingsData;
 }
+
+Settings& Settings::operator=(const Settings &other) {
+   m_settingsData = other.m_settingsData;
+   m_settingsPath = other.m_settingsPath;
+   return *this;
+}

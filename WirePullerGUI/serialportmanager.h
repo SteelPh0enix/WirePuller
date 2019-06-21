@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QQmlEngine>
 
 class SerialPortManager : public QObject
 {

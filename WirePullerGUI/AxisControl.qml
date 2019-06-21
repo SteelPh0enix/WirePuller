@@ -1,7 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import steelph0enix.axisdatamodel 1.0
 
 Item {
+
     property alias name: labelAxisName.text
     property alias leftEndstopState: checkEndstopLeft.state
     property alias rightEndstopState: checkEndstopRight.state
@@ -11,13 +13,21 @@ Item {
     property alias leftEndstopName: checkEndstopLeft.text
     property alias rightEndstopName: checkEndstopRight.text
 
-    property real speed: 0.0
-    property real distance: 0.0
+    property alias speed: sliderSpeed.value
+    property real distance: dataModel.distance
     property string speedUnit: qsTr("mm/s")
     property string distanceUnit: qsTr("mm")
     property int controlMode: 0
 
+    property alias maxSpeed: sliderSpeed.to
+    property alias minSpeed: sliderSpeed.from
+
+    property AxisDataModel dataModel
+
     signal distanceReset()
+
+    onDistanceReset: dataModel.setDistance(0)
+    onControlModeChanged: dataModel.controlMode = controlMode
 
     id: axisControl
     width: 300
@@ -42,11 +52,15 @@ Item {
         from: -100
         to: 100
         value: 0
+
+        onValueChanged: {
+            dataModel.controlValue = value
+        }
     }
 
     Text {
         id: labelSpeed
-        text: qsTr("Szybkość: ") + speed + speedUnit
+        text: qsTr("Szybkość: ") + speed.toFixed(2) + speedUnit
         verticalAlignment: Text.AlignVCenter
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -78,6 +92,8 @@ Item {
             anchors.left: parent.left
             anchors.leftMargin: 0
             padding: 1
+
+            checked: dataModel.leftEndstopState
         }
 
         CheckDelegate {
@@ -94,12 +110,14 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 0
             padding: 1
+
+            checked: dataModel.rightEndstopState
         }
     }
 
     Text {
         id: labelDistance
-        text: qsTr("Przebyta odległość: ") + distance + distanceUnit
+        text: qsTr("Przebyta odległość: ") + distance.toFixed(2) + distanceUnit
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.FixedSize
         anchors.top: groupMode.bottom

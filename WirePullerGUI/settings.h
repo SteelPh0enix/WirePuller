@@ -14,6 +14,7 @@ class Settings : public QObject
     Q_PROPERTY(QVariantMap settingsData READ settingsData NOTIFY settingsDataChanged)
 public:
     explicit Settings(QObject *parent = nullptr);
+    Settings& operator=(Settings const& other);
 
     enum LoadingError {
         OK = 0,

@@ -14,9 +14,13 @@ void SerialCommunicator::sendData(QByteArray data) {
 void SerialCommunicator::setSerialPort(QString portName) {
     serialPort.setPortName(portName);
     serialPort.open(QIODevice::ReadWrite);
-    QThread::sleep(1000); // Wait for Arduino startup
+    QThread::sleep(1); // Wait for Arduino startup
 }
 
 void SerialCommunicator::internalReceiveData() {
     emit dataReceived(serialPort.readAll());
+}
+
+QString SerialCommunicator::serialPortName() const {
+    return serialPort.portName();
 }
