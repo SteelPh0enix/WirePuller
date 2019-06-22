@@ -2,7 +2,7 @@
 
 AxisDataModel::AxisDataModel(QObject* parent) : QObject(parent) {}
 
-int AxisDataModel::controlValue() const {
+double AxisDataModel::controlValue() const {
   return m_controlValue;
 }
 
@@ -26,16 +26,20 @@ double AxisDataModel::displayedSpeed() const {
   return m_displayedSpeed;
 }
 
-void AxisDataModel::setControlValue(int newValue) {
+QString AxisDataModel::name() const {
+  return m_name;
+}
+
+void AxisDataModel::setControlValue(double newValue) {
   m_controlValue = newValue;
   emit controlValueChanged(controlValue());
-  emit modelChanged(this, Changed::Value);
+  emit modelChanged(this);
 }
 
 void AxisDataModel::setControlMode(AxisDataModel::ControlMode newMode) {
   m_controlMode = newMode;
   emit controlModeChanged(controlMode());
-  emit modelChanged(this, Changed::Mode);
+  emit modelChanged(this);
 }
 
 void AxisDataModel::setDistance(double newDistance) {
@@ -56,4 +60,8 @@ void AxisDataModel::setRightEndstopState(bool newState) {
 void AxisDataModel::setDisplayedSpeed(double newSpeed) {
   m_displayedSpeed = newSpeed;
   emit displayedSpeedChanged(displayedSpeed());
+}
+
+void AxisDataModel::setName(QString const& newName) {
+  m_name = newName;
 }

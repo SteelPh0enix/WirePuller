@@ -5,6 +5,7 @@
 #include "axisdatamodel.h"
 #include "serialcommunicator.h"
 #include "settings.h"
+#include <utility>
 #include <QMap>
 #include <QObject>
 #include <QString>
@@ -29,7 +30,7 @@ class AppBackend : public QObject {
   void setSerialPortName(QString const& name);
   void setRunning(bool newState);
 
-  void onModelChanged(AxisDataModel* model, AxisDataModel::Changed what);
+  void onModelChanged(AxisDataModel* model);
 
  private:
   Settings* m_settings{nullptr};
@@ -42,8 +43,11 @@ class AppBackend : public QObject {
   QTimer m_timer{};
 
   SetMotorPowerRequest createSetMotorPowerRequest() const;
-  int translatePower(
-    int controlValue, int minPower, int maxPower, double minPowerSpeed, double maxPowerSpeed);
+  std::pair<int, double> translateControlValue(double controlValue,
+                                               double minPower,
+                                               double maxPower,
+                                               double minPowerSpeed,
+                                               double maxPowerSpeed);
 
   QStringList m_axisList{"X", "Wheel", "Breaker"};
 };

@@ -11,6 +11,7 @@ AppBackend::AppBackend(Settings* settings, QObject* parent)
 
   for (auto const& axis : m_axisList) {
     AxisDataModel* model = new AxisDataModel(this);
+    model->setName(axis);
     QObject::connect(model, &AxisDataModel::modelChanged, this, &AppBackend::onModelChanged);
     m_dataModels[axis] = model;
   }
@@ -42,7 +43,16 @@ void AppBackend::setRunning(bool newState) {
 
 void AppBackend::callibrate() {}
 
-void AppBackend::onModelChanged(AxisDataModel* model, AxisDataModel::Changed what) {}
+void AppBackend::onModelChanged(AxisDataModel* model) {
+  auto powerAndSpeed = translateControlValue(
+    model->controlValue(),
+    m_settings->settingsData()[model->name()].toMap()["minPower"].toDouble(),
+    m_settings->settingsData()[model->name()].toMap()["maxPower"].toDouble(),
+    m_settings->settingsData()[model->name()].toMap()["minPowerSpeed"].toDouble(),
+    m_settings->settingsData()[model->name()].toMap()["maxPowerSpeed"].toDouble());
+
+  model->setDisplayedSpeed(powerAndSpeed.second);
+}
 
 SetMotorPowerRequest AppBackend::createSetMotorPowerRequest() const {
   SetMotorPowerRequest request{};
@@ -53,5 +63,16 @@ SetMotorPowerRequest AppBackend::createSetMotorPowerRequest() const {
   return request;
 }
 
-int AppBackend::translatePower(
-  int controlValue, int minPower, int maxPower, double minPowerSpeed, double maxPowerSpeed) {}
+std::pair<int, double> AppBackend::translateControlValue(double controlValue,
+                                                         double minPower,
+                                                         double maxPower,
+                                                         double minPowerSpeed,
+                                                         double maxPowerSpeed) {
+  double absControlValue = std::fabs(controlValue);
+  double controlValueSign = sign(controlValue);
+
+  double absSpeed = linearApprox(absControlValue, 0., 100., minPowerSpeed, maxPowerSpeed);
+  double absPower = linearApprox(absSpeed, minPowerSpeed, maxPowerSpeed, minPower, maxPower);
+
+  return {static_cast<int>(absPower * controlValueSign), absSpeed * controlValueSign};
+}
