@@ -1,13 +1,19 @@
 #include "appbackend.h"
+#include "utils.h"
+#include <cmath>
 #include <QtDebug>
 
 AppBackend::AppBackend(Settings* settings, QObject* parent)
   : QObject(parent)
   , m_settings(settings)
   , m_communicator(this) {
-  m_dataModels.insert("X", new AxisDataModel(this));
-  m_dataModels.insert("Wheel", new AxisDataModel(this));
-  m_dataModels.insert("Breaker", new AxisDataModel(this));
+  m_timer.setInterval(100);
+
+  for (auto const& axis : m_axisList) {
+    AxisDataModel* model = new AxisDataModel(this);
+    QObject::connect(model, &AxisDataModel::modelChanged, this, &AppBackend::onModelChanged);
+    m_dataModels[axis] = model;
+  }
 }
 
 void AppBackend::setSerialPortName(QString const& portName) {
@@ -35,3 +41,17 @@ void AppBackend::setRunning(bool newState) {
 }
 
 void AppBackend::callibrate() {}
+
+void AppBackend::onModelChanged(AxisDataModel* model, AxisDataModel::Changed what) {}
+
+SetMotorPowerRequest AppBackend::createSetMotorPowerRequest() const {
+  SetMotorPowerRequest request{};
+
+  for (auto axis : m_axisList) {
+  }
+
+  return request;
+}
+
+int AppBackend::translatePower(
+  int controlValue, int minPower, int maxPower, double minPowerSpeed, double maxPowerSpeed) {}

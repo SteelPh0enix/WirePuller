@@ -47,4 +47,5 @@ HEADERS += \
     axisdatamodel.h \
     serialcommunicator.h \
     serialportmanager.h \
-    settings.h
+    settings.h \
+    utils.h

@@ -14,6 +14,7 @@ Item {
     property alias rightEndstopName: checkEndstopRight.text
 
     property alias speed: sliderSpeed.value
+    property int displayedSpeed: 0
     property real distance: dataModel.distance
     property string speedUnit: qsTr("mm/s")
     property string distanceUnit: qsTr("mm")
@@ -60,7 +61,7 @@ Item {
 
     Text {
         id: labelSpeed
-        text: qsTr("Szybkość: ") + speed.toFixed(2) + speedUnit
+        text: qsTr("Szybkość: ") + dataModel.displayedSpeed.toFixed(2) + speedUnit
         verticalAlignment: Text.AlignVCenter
         anchors.left: parent.left
         anchors.leftMargin: 10

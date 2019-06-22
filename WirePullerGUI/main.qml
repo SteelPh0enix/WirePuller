@@ -53,9 +53,6 @@ Window {
                 anchors.top: parent.top
                 anchors.left: parent.left
 
-                maxSpeed: 100
-                minSpeed: -100
-
                 dataModel: xAxisData
             }
 
