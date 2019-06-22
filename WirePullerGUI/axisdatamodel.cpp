@@ -30,6 +30,10 @@ QString AxisDataModel::name() const {
   return m_name;
 }
 
+QString AxisDataModel::controlValueUnit() const {
+  return m_controlValueUnit;
+}
+
 void AxisDataModel::setControlValue(double newValue) {
   m_controlValue = newValue;
   emit controlValueChanged(controlValue());
@@ -64,4 +68,9 @@ void AxisDataModel::setDisplayedSpeed(double newSpeed) {
 
 void AxisDataModel::setName(QString const& newName) {
   m_name = newName;
+}
+
+void AxisDataModel::setControlValueUnit(QString const& newUnit) {
+  m_controlValueUnit = newUnit;
+  emit controlValueUnitChanged(controlValueUnit());
 }

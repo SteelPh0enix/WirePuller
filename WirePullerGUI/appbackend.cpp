@@ -58,15 +58,34 @@ void AppBackend::setRunning(bool newState) {
 void AppBackend::callibrate() {}
 
 void AppBackend::onModelChanged(AxisDataModel* model) {
-  auto powerAndSpeed = translateControlValue(
-    model->controlValue(),
-    m_settings->settingsData()[model->name()].toMap()["minPower"].toDouble(),
-    m_settings->settingsData()[model->name()].toMap()["maxPower"].toDouble(),
-    m_settings->settingsData()[model->name()].toMap()["minPowerSpeed"].toDouble(),
-    m_settings->settingsData()[model->name()].toMap()["maxPowerSpeed"].toDouble());
+  switch (model->controlMode()) {
+  case AxisDataModel::ControlMode::SpeedControl: {
+    auto powerAndSpeed = translateControlValue(
+      model->controlValue(),
+      m_settings->settingsData()[model->name()].toMap()["minPower"].toDouble(),
+      m_settings->settingsData()[model->name()].toMap()["maxPower"].toDouble(),
+      m_settings->settingsData()[model->name()].toMap()["minPowerSpeed"].toDouble(),
+      m_settings->settingsData()[model->name()].toMap()["maxPowerSpeed"].toDouble());
 
-  model->setDisplayedSpeed(powerAndSpeed.second);
-  updateRequest(model->name(), powerAndSpeed.first);
+    model->setControlValueUnit(QString("mm/s"));
+    model->setDisplayedSpeed(powerAndSpeed.second);
+    updateRequest(model->name(), powerAndSpeed.first);
+    break;
+  }
+  case AxisDataModel::ControlMode::PowerControl: {
+    int controlValue = static_cast<int>(model->controlValue());
+    int controlValueSign = sign(controlValue);
+    int absControlValue = std::abs(controlValue);
+
+    int absRawPower = linearApprox(absControlValue, 0, 100, 0, 255);
+    int rawPower = absRawPower * controlValueSign;
+
+    model->setControlValueUnit(QString("%"));
+    model->setDisplayedSpeed(rawPower);
+    updateRequest(model->name(), rawPower);
+    break;
+  }
+  }
 }
 
 void AppBackend::updateRequest(const QString& axis, int power) {
