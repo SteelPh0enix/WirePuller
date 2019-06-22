@@ -15,6 +15,20 @@ AppBackend::AppBackend(Settings* settings, QObject* parent)
     QObject::connect(model, &AxisDataModel::modelChanged, this, &AppBackend::onModelChanged);
     m_dataModels[axis] = model;
   }
+
+  QObject::connect(&m_timer, &QTimer::timeout, this, &AppBackend::sendData);
+  QObject::connect(this, &AppBackend::runningChanged, [this]() {
+    if (this->running()) {
+      m_timer.start();
+    } else {
+      m_timer.stop();
+    }
+  });
+
+  QObject::connect(&m_communicator,
+                   &SerialCommunicator::dataReceived,
+                   this,
+                   &AppBackend::handleReceivedData);
 }
 
 void AppBackend::setSerialPortName(QString const& portName) {
@@ -52,22 +66,18 @@ void AppBackend::onModelChanged(AxisDataModel* model) {
     m_settings->settingsData()[model->name()].toMap()["maxPowerSpeed"].toDouble());
 
   model->setDisplayedSpeed(powerAndSpeed.second);
+  updateRequest(model->name(), powerAndSpeed.first);
 }
 
-SetMotorPowerRequest AppBackend::createSetMotorPowerRequest() const {
-  SetMotorPowerRequest request{};
-
-  for (auto axis : m_axisList) {
-  }
-
-  return request;
+void AppBackend::updateRequest(const QString& axis, int power) {
+  m_actualRequest.setAxisPower(axis, power);
 }
 
 std::pair<int, double> AppBackend::translateControlValue(double controlValue,
                                                          double minPower,
                                                          double maxPower,
                                                          double minPowerSpeed,
-                                                         double maxPowerSpeed) {
+                                                         double maxPowerSpeed) const {
   double absControlValue = std::fabs(controlValue);
   double controlValueSign = sign(controlValue);
 
@@ -75,4 +85,13 @@ std::pair<int, double> AppBackend::translateControlValue(double controlValue,
   double absPower = linearApprox(absSpeed, minPowerSpeed, maxPowerSpeed, minPower, maxPower);
 
   return {static_cast<int>(absPower * controlValueSign), absSpeed * controlValueSign};
+}
+
+void AppBackend::sendData() {
+  m_communicator.sendData(m_actualRequest.data());
+}
+
+void AppBackend::handleReceivedData(QByteArray data) {
+  qDebug() << "Received:" << data;
+  // TODO: Converting byte data to structure and refreshing UI state
 }

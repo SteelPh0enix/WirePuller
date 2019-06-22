@@ -32,6 +32,9 @@ class AppBackend : public QObject {
 
   void onModelChanged(AxisDataModel* model);
 
+  void sendData();
+  void handleReceivedData(QByteArray data);
+
  private:
   Settings* m_settings{nullptr};
   QMap<QString, AxisDataModel*> m_dataModels{};
@@ -39,15 +42,15 @@ class AppBackend : public QObject {
   bool m_running{false};
   bool m_callibrating{false};
 
-  QByteArray m_actualRequest{};
+  SetMotorPowerRequest m_actualRequest{};
   QTimer m_timer{};
 
-  SetMotorPowerRequest createSetMotorPowerRequest() const;
+  void updateRequest(QString const& axis, int power);
   std::pair<int, double> translateControlValue(double controlValue,
                                                double minPower,
                                                double maxPower,
                                                double minPowerSpeed,
-                                               double maxPowerSpeed);
+                                               double maxPowerSpeed) const;
 
   QStringList m_axisList{"X", "Wheel", "Breaker"};
 };
