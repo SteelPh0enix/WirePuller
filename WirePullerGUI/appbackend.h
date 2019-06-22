@@ -53,6 +53,9 @@ class AppBackend : public QObject {
                                                double maxPowerSpeed) const;
 
   QStringList m_axisList{"X", "Wheel", "Breaker"};
+
+  void updateDataModelsWithResponse(QJsonDocument const& response);
+  double calculateDistance(double distance, double ticksPerMm) const;
 };
 
 #endif // APPBACKEND_H

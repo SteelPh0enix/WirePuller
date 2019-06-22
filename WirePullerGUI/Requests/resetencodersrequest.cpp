@@ -22,5 +22,5 @@ QByteArray ResetEncodersRequest::data() const {
 
   obj["Data"] = requestData;
 
-  return QJsonDocument(obj).toJson();
+  return QJsonDocument(obj).toJson(QJsonDocument::Compact);
 }

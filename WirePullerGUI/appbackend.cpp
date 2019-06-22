@@ -92,6 +92,29 @@ void AppBackend::sendData() {
 }
 
 void AppBackend::handleReceivedData(QByteArray data) {
-  qDebug() << "Received:" << data;
-  // TODO: Converting byte data to structure and refreshing UI state
+  QJsonParseError parsingError{};
+  auto jsonResponse = QJsonDocument::fromJson(data, &parsingError);
+
+  if (parsingError.error == QJsonParseError::NoError) {
+    updateDataModelsWithResponse(jsonResponse);
+  } else {
+    qDebug() << "Response parsing error:" << parsingError.error;
+  }
+}
+
+void AppBackend::updateDataModelsWithResponse(QJsonDocument const& response) {
+  for (auto const& axis : m_axisList) {
+    auto axisResponse = response[axis].toObject();
+    auto* axisModel = m_dataModels[axis];
+
+    axisModel->setLeftEndstopState(axisResponse["EndstopLeft"].toBool());
+    axisModel->setRightEndstopState(axisResponse["EndstopRight"].toBool());
+    axisModel->setDistance(
+      calculateDistance(axisResponse["EncoderTicks"].toDouble(),
+                        m_settings->settingsData()[axis].toMap()["ticksPerMm"].toDouble()));
+  }
+}
+
+double AppBackend::calculateDistance(double distance, double ticksPerMm) const {
+  return distance / ticksPerMm;
 }

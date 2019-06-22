@@ -7,5 +7,5 @@ QByteArray CallibrateRequest::data() const {
   data["Request"] = "Callibrate";
   data["Data"] = QJsonObject();
 
-  return QJsonDocument(data).toJson();
+  return QJsonDocument(data).toJson(QJsonDocument::Compact);
 }

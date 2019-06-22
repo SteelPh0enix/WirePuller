@@ -7,5 +7,5 @@ QByteArray GetDataRequest::data() const {
   obj["Request"] = "GetData";
   obj["Data"] = QJsonObject();
 
-  return QJsonDocument(obj).toJson();
+  return QJsonDocument(obj).toJson(QJsonDocument::Compact);
 }
