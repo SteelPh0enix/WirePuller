@@ -21,7 +21,7 @@ class AppBackend : public QObject {
   AxisDataModel& axisData(QString const& axis);
   bool running() const;
 
-  Q_INVOKABLE void callibrate();
+  Q_INVOKABLE void reloadSettings();
 
  signals:
   void runningChanged(bool);

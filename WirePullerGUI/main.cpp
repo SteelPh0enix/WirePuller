@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
 
   qmlRegisterType<SerialPortManager>("steelph0enix.serialportmanager", 1, 0, "SerialPortManager");
-  qmlRegisterType<Settings>("steelph0enix.settings", 1, 0, "ProgramSettings");
   qmlRegisterType<AxisDataModel>("steelph0enix.axisdatamodel", 1, 0, "AxisDataModel");
 
   Settings programSettings;
@@ -36,7 +35,6 @@ int main(int argc, char* argv[]) {
                    },
                    Qt::QueuedConnection);
 
-  engine.rootContext()->setContextProperty("programSettings", &programSettings);
   engine.rootContext()->setContextProperty("backend", &backend);
   engine.rootContext()->setContextProperty("xAxisData", &backend.axisData("X"));
   engine.rootContext()->setContextProperty("wheelAxisData", &backend.axisData("Wheel"));

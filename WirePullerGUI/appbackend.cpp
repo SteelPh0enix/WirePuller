@@ -55,7 +55,9 @@ void AppBackend::setRunning(bool newState) {
   }
 }
 
-void AppBackend::callibrate() {}
+void AppBackend::reloadSettings() {
+  m_settings->load();
+}
 
 void AppBackend::onModelChanged(AxisDataModel* model) {
   switch (model->controlMode()) {

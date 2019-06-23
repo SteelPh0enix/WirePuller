@@ -23,6 +23,7 @@ Settings::LoadingError Settings::load() {
   if (settingsData.isEmpty()) {
     return LoadingError::EmptyFile;
   }
+  settingsFile.close();
 
   auto settingsJson{QJsonDocument::fromJson(settingsData)};
   if (settingsJson.isEmpty()) {
