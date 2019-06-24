@@ -32,6 +32,7 @@ Window {
             anchors.left: parent.left
 
             dataModel: xAxisData
+            resetDistanceButton.onClicked: backend.resetEncoders("X");
         }
 
         AxisControl {
@@ -44,6 +45,7 @@ Window {
             endstopsEnabled: false
 
             dataModel: breakerAxisData
+            resetDistanceButton.onClicked: backend.resetEncoders("Breaker");
         }
 
         AxisControl {
@@ -57,6 +59,7 @@ Window {
             rightEndstopName: qsTr("Zakres")
 
             dataModel: wheelAxisData
+            resetDistanceButton.onClicked: backend.resetEncoders("Wheel");
         }
 
         ColumnLayout {

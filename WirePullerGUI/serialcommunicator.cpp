@@ -13,6 +13,7 @@ SerialCommunicator::SerialCommunicator(QObject* parent) : QObject(parent) {
 
 void SerialCommunicator::sendData(QByteArray data) {
   data.append('\n');
+  qDebug() << "Sending: " << data;
   serialPort.write(data);
 }
 

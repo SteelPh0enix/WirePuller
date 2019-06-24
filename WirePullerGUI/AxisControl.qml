@@ -23,6 +23,8 @@ Item {
     property alias maxSpeed: sliderSpeed.to
     property alias minSpeed: sliderSpeed.from
 
+    property alias resetDistanceButton: buttonResetDistance
+
     property AxisDataModel dataModel
 
     signal distanceReset()
@@ -178,7 +180,7 @@ Item {
     Button {
         id: buttonResetSpeed
         height: 26
-        text: qsTr("Wyzeruj szybkość")
+        text: qsTr("Stop")
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.left: parent.left
@@ -199,9 +201,7 @@ Item {
         anchors.leftMargin: 10
         anchors.top: labelDistance.bottom
         anchors.topMargin: 5
-
-        onClicked: distanceReset()
-    }
+}
 
     Text {
         id: labelAxisName

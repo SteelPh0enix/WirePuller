@@ -1,6 +1,6 @@
 {
    "X": {
-        "ticksPerMm": 1000,
+        "ticksPerMm": 5600,
         "minPower": 60,
         "maxPower": 250,
         "minPowerSpeed": 0.3,
@@ -8,7 +8,7 @@
    },
 
    "Wheel": {
-        "ticksPerMm": 300,
+        "ticksPerMm": 266.666,
         "minPower": 60,
         "maxPower": 250,
         "minPowerSpeed": 0.1,
@@ -16,7 +16,7 @@
    },
 
    "Breaker": {
-        "ticksPerMm": 2500,
+        "ticksPerMm": 8400,
         "minPower": 60,
         "maxPower": 250,
         "minPowerSpeed": 0.2,

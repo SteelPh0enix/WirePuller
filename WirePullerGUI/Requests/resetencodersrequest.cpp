@@ -13,7 +13,7 @@ void ResetEncodersRequest::setAxisResetState(const QString& axis, bool state) {
 QByteArray ResetEncodersRequest::data() const {
   QJsonObject obj;
 
-  obj["Request"] = "GetReset";
+  obj["Request"] = "ResetEncoder";
   auto requestData = QJsonObject();
 
   for (auto it = m_resetStates.cbegin(); it != m_resetStates.cend(); it++) {

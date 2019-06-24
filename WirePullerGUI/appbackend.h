@@ -6,6 +6,7 @@
 #include <QString>
 #include <QStringList>
 #include <utility>
+#include "Requests/resetencodersrequest.h"
 #include "Requests/setmotorpowerrequest.h"
 #include "axisdatamodel.h"
 #include "serialcommunicator.h"
@@ -21,6 +22,7 @@ class AppBackend : public QObject {
   bool running() const;
 
   Q_INVOKABLE void reloadSettings();
+  Q_INVOKABLE void resetEncoders(QString axis);
 
  signals:
   void runningChanged(bool);

@@ -1,4 +1,5 @@
 #include "appbackend.h"
+#include <QThread>
 #include <QtDebug>
 #include <cmath>
 #include <iostream>
@@ -130,6 +131,7 @@ void AppBackend::handleReceivedData(QByteArray data) {
     std::cerr << "Response parsing error: "
               << parsingError.errorString().toStdString() << std::endl;
   }
+  qDebug() << jsonResponse;
   emit readyToSend();
 }
 
@@ -148,4 +150,13 @@ void AppBackend::updateDataModelsWithResponse(QJsonDocument const& response) {
 
 double AppBackend::calculateDistance(double distance, double ticksPerMm) const {
   return distance / ticksPerMm;
+}
+
+void AppBackend::resetEncoders(QString axis) {
+  m_running = false;
+  QThread::msleep(100);
+  ResetEncodersRequest request;
+  request.setAxisResetState(axis, true);
+  m_communicator.sendData(request.data());
+  m_running = true;
 }
