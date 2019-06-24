@@ -5,7 +5,7 @@
 
 ArduinoJson::StaticJsonDocument<Constant::Json::DocumentSize> jsonInputDoc{};
 ArduinoJson::StaticJsonDocument<Constant::Json::DocumentSize> jsonOutputDoc{};
-JsonAxisController controller{};
+JsonAxisController controller;
 
 void printParsingError(ArduinoJson::DeserializationError const& error,
                        ArduinoJson::JsonDocument& json) {
@@ -43,6 +43,8 @@ void loop() {
     if (inputDeserializationResult == ArduinoJson::DeserializationError::Ok) {
       controller.parseJsonInput(jsonInputDoc, jsonOutputDoc);
       ArduinoJson::serializeJson(jsonOutputDoc, Serial);
+      Serial.println();
+      Serial.flush();
     } else {
       printParsingError(inputDeserializationResult, jsonOutputDoc);
     }

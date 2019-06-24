@@ -35,6 +35,7 @@ void JsonAxisController::setPins() {
   axisWheel.setEndstopsInversion(true);
 
   axisX.invertMotorDirection(true);
+  axisBreaker.invertMotorDirection(true);
 
   // Additional check
   axisX.checkPinsInitialization();

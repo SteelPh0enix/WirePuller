@@ -14,17 +14,21 @@ def main():
         try:
             cmd = input("Query: ").split(' ')
             if (cmd[0] == "data"):
-                print(sendMessage(arduinoPort, '{"Request": "GetData", "Data":{ } }'))
+                print(sendMessage(arduinoPort,
+                                  '{"Request": "GetData", "Data":{ } }'))
             if (cmd[0] == "power"):
-               powerRequest(cmd, arduinoPort) 
+                powerRequest(cmd, arduinoPort)
             if (cmd[0] == "stop"):
-                print(sendMessage(arduinoPort, '{"Request": "SetPower", "Data": {"X": 0, "Wheel": 0, "Breaker": 0} }'))
+                print(sendMessage(
+                    arduinoPort, '{"Request": "SetPower", "Data": {"X": 0, "Wheel": 0, "Breaker": 0} }'))
         except KeyboardInterrupt:
             arduinoPort.close()
             exit(0)
 
+
 def powerRequest(command, arduinoPort):
-    actual_request = '{"Request": "SetPower", "Data":{"' + command[1] + '": ' + command[2] + ' } }'
+    actual_request = '{"Request": "SetPower", "Data":{"' + \
+        command[1] + '": ' + command[2] + ' } }'
 
     print("Message: " + actual_request)
 
@@ -48,7 +52,7 @@ def sendMessage(port, message):
     while(len(buffer) > 0):
         output += buffer
         buffer = str(port.readline().decode("ASCII"))
-    
+
     return output
 
 
