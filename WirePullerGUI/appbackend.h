@@ -1,16 +1,15 @@
 #ifndef APPBACKEND_H
 #define APPBACKEND_H
 
-#include "Requests/setmotorpowerrequest.h"
-#include "axisdatamodel.h"
-#include "serialcommunicator.h"
-#include "settings.h"
-#include <utility>
 #include <QMap>
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QTimer>
+#include <utility>
+#include "Requests/setmotorpowerrequest.h"
+#include "axisdatamodel.h"
+#include "serialcommunicator.h"
+#include "settings.h"
 
 class AppBackend : public QObject {
   Q_OBJECT
@@ -25,6 +24,7 @@ class AppBackend : public QObject {
 
  signals:
   void runningChanged(bool);
+  void readyToSend();
 
  public slots:
   void setSerialPortName(QString const& name);
@@ -43,7 +43,6 @@ class AppBackend : public QObject {
   bool m_callibrating{false};
 
   SetMotorPowerRequest m_actualRequest{};
-  QTimer m_timer{};
 
   void updateRequest(QString const& axis, int power);
   std::pair<int, double> translateControlValue(double controlValue,
@@ -58,4 +57,4 @@ class AppBackend : public QObject {
   double calculateDistance(double distance, double ticksPerMm) const;
 };
 
-#endif // APPBACKEND_H
+#endif  // APPBACKEND_H

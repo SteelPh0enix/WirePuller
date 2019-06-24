@@ -26,6 +26,7 @@ class SerialCommunicator : public QObject {
 
  private:
   QSerialPort serialPort;
+  QByteArray internalBuffer{};
 };
 
-#endif // SERIALCOMMUNICATOR_H
+#endif  // SERIALCOMMUNICATOR_H
