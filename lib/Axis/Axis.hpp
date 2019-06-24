@@ -65,14 +65,17 @@ class Axis : public Module {
 
   void checkPinsInitialization() { checkIfPinsAreSet(); }
 
+  bool leftEndstopHit() const { return endstopsState() == EndstopsState::Left; }
+  bool rightEndstopHit() const { return endstopsState() == EndstopsState::Right; }
+  bool bothEndstopsHit() const { return endstopsState() == EndstopsState::Both; }
+
   bool stopOnEndstopHit() {
     if (!endstopsEnabled() || !initialized()) {
       return false;
     }
 
-    if ((endstopsState() == EndstopsState::Left && motorPower() < 0) ||
-        (endstopsState() == EndstopsState::Right && motorPower() > 0) ||
-        endstopsState() == EndstopsState::Both) {
+    if ((leftEndstopHit() && motorPower() < 0) ||
+        (rightEndstopHit() && motorPower() > 0) || bothEndstopsHit()) {
       setMotorPower(0);
       return true;
     }
@@ -104,9 +107,7 @@ class Axis : public Module {
     }
   }
 
-  void invertMotorDirection(bool state) {
-    motor.invertDirection(state);
-  }
+  void invertMotorDirection(bool state) { motor.invertDirection(state); }
 
  private:
   Encoder encoder{EncoderPinA, EncoderPinB};

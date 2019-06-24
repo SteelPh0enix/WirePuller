@@ -43,6 +43,8 @@ void loop() {
     if (inputDeserializationResult == ArduinoJson::DeserializationError::Ok) {
       controller.parseJsonInput(jsonInputDoc, jsonOutputDoc);
       ArduinoJson::serializeJson(jsonOutputDoc, Serial);
+      Serial.println();
+      Serial.flush();
     } else {
       printParsingError(inputDeserializationResult, jsonOutputDoc);
     }

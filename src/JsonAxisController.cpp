@@ -99,13 +99,13 @@ void JsonAxisController::commandCallibrate(ArduinoJson::JsonObjectConst data,
 void JsonAxisController::commandSetPower(ArduinoJson::JsonObjectConst data,
                                          ArduinoJson::JsonDocument& output) {
   if (!data[JsonKey::AxisName::X].isNull()) {
-    axisX.setMotorPower(data[JsonKey::AxisName::X].as<int>());
+    setAxisPower(data[JsonKey::AxisName::X].as<int>(), axisX);
   }
   if (!data[JsonKey::AxisName::Wheel].isNull()) {
-    axisWheel.setMotorPower(data[JsonKey::AxisName::Wheel].as<int>());
+    setAxisPower(data[JsonKey::AxisName::Wheel].as<int>(), axisWheel);
   }
   if (!data[JsonKey::AxisName::Breaker].isNull()) {
-    axisBreaker.setMotorPower(data[JsonKey::AxisName::Breaker].as<int>());
+    setAxisPower(data[JsonKey::AxisName::Breaker].as<int>(), axisBreaker);
   }
 
   fillOutputWithAxisData(output);

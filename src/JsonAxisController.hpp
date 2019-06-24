@@ -36,6 +36,17 @@ class JsonAxisController {
   void fillOutputWithAxisData(ArduinoJson::JsonDocument& output);
 
   template <typename AxisT>
+  void setAxisPower(int power, AxisT& axis) {
+    if (axis.endstopsEnabled() &&
+        ((axis.leftEndstopHit() && power < 0) || (axis.rightEndstopHit() && power > 0) ||
+         axis.bothEndstopsHit())) {
+      return;
+    }
+
+    axis.setMotorPower(power);
+  }
+
+  template <typename AxisT>
   void fillJsonObjectWithAxisData(ArduinoJson::JsonObject object, AxisT& axis) {
     object[Constant::Json::Key::Motor::Power] = axis.motorPower();
     object[Constant::Json::Key::Motor::Current] = axis.motorCurrent();
@@ -43,10 +54,14 @@ class JsonAxisController {
     auto endstopsState = axis.endstopsState();
     object[Constant::Json::Key::EndstopLeft] =
         static_cast<uint8_t>(endstopsState) &
-        static_cast<uint8_t>(AxisT::EndstopsState::Left) ? true : false;
+                static_cast<uint8_t>(AxisT::EndstopsState::Left)
+            ? true
+            : false;
     object[Constant::Json::Key::EndstopRight] =
         static_cast<uint8_t>(endstopsState) &
-        static_cast<uint8_t>(AxisT::EndstopsState::Right) ? true : false;
+                static_cast<uint8_t>(AxisT::EndstopsState::Right)
+            ? true
+            : false;
     object[Constant::Json::Key::EncoderTicks] = axis.encoderValue();
   }
 };
