@@ -1,17 +1,18 @@
 #include "appbackend.h"
-#include <QThread>
-#include <QtDebug>
+#include "utils.h"
 #include <cmath>
 #include <iostream>
-#include "utils.h"
+#include <QThread>
+#include <QtDebug>
 
 AppBackend::AppBackend(Settings* settings, QObject* parent)
-    : QObject(parent), m_settings(settings), m_communicator(this) {
+  : QObject(parent)
+  , m_settings(settings)
+  , m_communicator(this) {
   for (auto const& axis : m_axisList) {
     AxisDataModel* model = new AxisDataModel(this);
     model->setName(axis);
-    QObject::connect(model, &AxisDataModel::modelChanged, this,
-                     &AppBackend::onModelChanged);
+    QObject::connect(model, &AxisDataModel::modelChanged, this, &AppBackend::onModelChanged);
     m_dataModels[axis] = model;
   }
 
@@ -63,7 +64,6 @@ void AppBackend::onModelChanged(AxisDataModel* model) {
         m_settings->settingsAxisData(model->name())["maxPower"].toDouble(),
         m_settings->settingsAxisData(model->name())["minPowerSpeed"].toDouble(),
         m_settings->settingsAxisData(model->name())["maxPowerSpeed"].toDouble());
-
       model->setControlValueUnit(QString("mm/s"));
       model->setDisplayedSpeed(powerAndSpeed.second);
       updateRequest(model->name(), powerAndSpeed.first);
@@ -123,7 +123,6 @@ void AppBackend::handleReceivedData(QByteArray data) {
     std::cerr << "Response parsing error: "
               << parsingError.errorString().toStdString() << std::endl;
   }
-  qDebug() << jsonResponse;
   emit readyToSend();
 }
 
@@ -134,14 +133,32 @@ void AppBackend::updateDataModelsWithResponse(QJsonDocument const& response) {
 
     axisModel->setLeftEndstopState(axisResponse["EndstopLeft"].toBool());
     axisModel->setRightEndstopState(axisResponse["EndstopRight"].toBool());
-    axisModel->setDistance(calculateDistance(
-        axisResponse["EncoderTicks"].toDouble(),
-        m_settings->settingsData()[axis].toMap()["ticksPerMm"].toDouble()));
+    axisModel->setDistance(
+      calculateDistance(axisResponse["EncoderTicks"].toDouble(),
+                        m_settings->settingsData()[axis].toMap()["ticksPerMm"].toDouble(),
+                        axisModel->distanceUnit()));
   }
 }
 
-double AppBackend::calculateDistance(double distance, double ticksPerMm) const {
-  return distance / ticksPerMm;
+double AppBackend::calculateDistance(double distance, double ticksPerMm, QString unit) const {
+  // Distance: ticks
+  // ticksPerMm: ticks per millimeter
+  double finalDistance = distance / ticksPerMm;
+  auto units = unit.split('/'); // 0 = distance, 1 = time
+
+  if (units[0] == "cm") {
+    finalDistance /= 10.;
+  } else if (units[0] == "m") {
+    finalDistance /= 1000.;
+  }
+
+  if (units[1] == "min") {
+    finalDistance *= 60;
+  } else if (units[1] == "h") {
+    finalDistance *= (60 * 60);
+  }
+
+  return finalDistance;
 }
 
 void AppBackend::resetEncoders(QString axis) {

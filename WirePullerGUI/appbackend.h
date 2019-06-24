@@ -1,16 +1,16 @@
 #ifndef APPBACKEND_H
 #define APPBACKEND_H
 
-#include <QMap>
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <utility>
 #include "Requests/resetencodersrequest.h"
 #include "Requests/setmotorpowerrequest.h"
 #include "axisdatamodel.h"
 #include "serialcommunicator.h"
 #include "settings.h"
+#include <utility>
+#include <QMap>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
 class AppBackend : public QObject {
   Q_OBJECT
@@ -56,7 +56,7 @@ class AppBackend : public QObject {
   QStringList m_axisList{"X", "Wheel", "Breaker"};
 
   void updateDataModelsWithResponse(QJsonDocument const& response);
-  double calculateDistance(double distance, double ticksPerMm) const;
+  double calculateDistance(double distance, double ticksPerMm, QString unit) const;
 };
 
 #endif  // APPBACKEND_H
