@@ -57,20 +57,12 @@ void AppBackend::reloadSettings() {
 void AppBackend::onModelChanged(AxisDataModel* model) {
   switch (model->controlMode()) {
     case AxisDataModel::ControlMode::SpeedControl: {
-      auto powerAndSpeed =
-          translateControlValue(model->controlValue(),
-                                m_settings->settingsData()[model->name()]
-                                    .toMap()["minPower"]
-                                    .toDouble(),
-                                m_settings->settingsData()[model->name()]
-                                    .toMap()["maxPower"]
-                                    .toDouble(),
-                                m_settings->settingsData()[model->name()]
-                                    .toMap()["minPowerSpeed"]
-                                    .toDouble(),
-                                m_settings->settingsData()[model->name()]
-                                    .toMap()["maxPowerSpeed"]
-                                    .toDouble());
+      auto powerAndSpeed = translateControlValue(
+        model->controlValue(),
+        m_settings->settingsAxisData(model->name())["minPower"].toDouble(),
+        m_settings->settingsAxisData(model->name())["maxPower"].toDouble(),
+        m_settings->settingsAxisData(model->name())["minPowerSpeed"].toDouble(),
+        m_settings->settingsAxisData(model->name())["maxPowerSpeed"].toDouble());
 
       model->setControlValueUnit(QString("mm/s"));
       model->setDisplayedSpeed(powerAndSpeed.second);

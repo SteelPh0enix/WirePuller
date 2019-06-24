@@ -34,6 +34,10 @@ QString AxisDataModel::controlValueUnit() const {
   return m_controlValueUnit;
 }
 
+QString AxisDataModel::distanceUnit() const {
+  return m_distanceUnit;
+}
+
 void AxisDataModel::setControlValue(double newValue) {
   m_controlValue = newValue;
   emit controlValueChanged(controlValue());
@@ -73,4 +77,9 @@ void AxisDataModel::setName(QString const& newName) {
 void AxisDataModel::setControlValueUnit(QString const& newUnit) {
   m_controlValueUnit = newUnit;
   emit controlValueUnitChanged(controlValueUnit());
+}
+
+void AxisDataModel::setDistanceUnit(QString newDistanceUnit) {
+  m_distanceUnit = newDistanceUnit;
+  emit distanceUnitChanged(distanceUnit());
 }

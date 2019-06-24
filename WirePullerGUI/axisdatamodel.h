@@ -18,6 +18,7 @@ class AxisDataModel : public QObject {
   Q_PROPERTY(bool rightEndstopState READ rightEndstopState NOTIFY rightEndstopStateChanged)
   Q_PROPERTY(double displayedSpeed READ displayedSpeed NOTIFY displayedSpeedChanged)
   Q_PROPERTY(QString controlValueUnit READ controlValueUnit NOTIFY controlValueUnitChanged)
+  Q_PROPERTY(QString distanceUnit READ distanceUnit WRITE setDistanceUnit NOTIFY distanceUnitChanged)
  public:
   AxisDataModel(QObject* parent = nullptr);
 
@@ -29,6 +30,7 @@ class AxisDataModel : public QObject {
   double displayedSpeed() const;
   QString name() const;
   QString controlValueUnit() const;
+  QString distanceUnit() const;
 
  public slots:
   void setControlValue(double newValue);
@@ -39,6 +41,7 @@ class AxisDataModel : public QObject {
   void setDisplayedSpeed(double newSpeed);
   void setName(QString const& newName);
   void setControlValueUnit(QString const& newUnit);
+  void setDistanceUnit(QString newDistanceUnit);
 
  signals:
   void controlValueChanged(double);
@@ -48,6 +51,7 @@ class AxisDataModel : public QObject {
   void rightEndstopStateChanged(bool);
   void displayedSpeedChanged(double);
   void controlValueUnitChanged(QString);
+  void distanceUnitChanged(QString);
 
   void modelChanged(AxisDataModel*);
 
@@ -59,8 +63,8 @@ class AxisDataModel : public QObject {
   bool m_rightEndstopState{false};
   double m_displayedSpeed{0};
   QString m_controlValueUnit{"mm/s"};
-
   QString m_name{};
+  QString m_distanceUnit{"mm"};
 };
 
 #endif // AXISDATAMODEL_H

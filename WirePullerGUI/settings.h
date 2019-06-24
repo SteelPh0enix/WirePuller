@@ -18,6 +18,7 @@ class Settings : public QObject {
   enum LoadingError { OK = 0, InvalidPath, UnableToOpen, EmptyFile, InvalidContent };
 
   QVariantMap settingsData() const;
+  QVariantMap settingsAxisData(QString axis) const;
 
  public slots:
   void setPath(QString const& path);

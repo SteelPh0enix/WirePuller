@@ -49,3 +49,7 @@ Settings& Settings::operator=(const Settings& other) {
   m_settingsPath = other.m_settingsPath;
   return *this;
 }
+
+QVariantMap Settings::settingsAxisData(QString axis) const {
+  return m_settingsData[axis].toMap();
+}

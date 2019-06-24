@@ -17,7 +17,7 @@ Item {
     property int displayedSpeed: 0
     property real distance: dataModel.distance
     property string speedUnit: dataModel.controlValueUnit
-    property string distanceUnit: qsTr("mm")
+    property string distanceUnit: dataModel.distanceUnit
     property int controlMode: 0
 
     property alias maxSpeed: sliderSpeed.to
