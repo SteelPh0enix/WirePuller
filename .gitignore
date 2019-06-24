@@ -8,3 +8,5 @@
 .vscode/ipch
 tmp/
 *.user
+build*
+WirePullerGUI
