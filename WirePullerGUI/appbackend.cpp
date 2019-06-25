@@ -5,6 +5,16 @@
 #include <QThread>
 #include <QtDebug>
 
+namespace {
+void updateModelWithSettingsData(QString axis, AxisDataModel& model, Settings const& settings) {
+  model.setTicksPerMm(settings.axisData(axis)["ticksPerMm"].toDouble());
+  model.setMinPWM(settings.axisData(axis)["minPower"].toDouble());
+  model.setMaxPWM(settings.axisData(axis)["maxPower"].toDouble());
+  model.setMinSpeed(settings.axisData(axis)["minPowerSpeed"].toDouble());
+  model.setMaxSpeed(settings.axisData(axis)["maxPowerSpeed"].toDouble());
+}
+} // namespace
+
 AppBackend::AppBackend(Settings* settings, QObject* parent)
   : QObject(parent)
   , m_settings(settings)
@@ -12,7 +22,10 @@ AppBackend::AppBackend(Settings* settings, QObject* parent)
   for (auto const& axis : m_axisList) {
     AxisDataModel* model = new AxisDataModel(this);
     model->setName(axis);
+    updateModelWithSettingsData(axis, *model, *m_settings);
+
     QObject::connect(model, &AxisDataModel::modelChanged, this, &AppBackend::onModelChanged);
+
     m_dataModels[axis] = model;
   }
 
@@ -53,58 +66,17 @@ void AppBackend::setRunning(bool newState) {
 
 void AppBackend::reloadSettings() {
   m_settings->load();
+  for (auto it = m_dataModels.begin(); it != m_dataModels.end(); it++) {
+    updateModelWithSettingsData(it.key(), *(it.value()), *m_settings);
+  }
 }
 
 void AppBackend::onModelChanged(AxisDataModel* model) {
-  switch (model->controlMode()) {
-    case AxisDataModel::ControlMode::SpeedControl: {
-      auto powerAndSpeed = translateControlValue(
-        model->controlValue(),
-        m_settings->settingsAxisData(model->name())["minPower"].toDouble(),
-        m_settings->settingsAxisData(model->name())["maxPower"].toDouble(),
-        m_settings->settingsAxisData(model->name())["minPowerSpeed"].toDouble(),
-        m_settings->settingsAxisData(model->name())["maxPowerSpeed"].toDouble());
-      model->setControlValueUnit(QString("mm/s"));
-      model->setDisplayedSpeed(powerAndSpeed.second);
-      updateRequest(model->name(), powerAndSpeed.first);
-      break;
-    }
-    case AxisDataModel::ControlMode::PowerControl: {
-      int controlValue = static_cast<int>(model->controlValue());
-      int controlValueSign = sign(controlValue);
-      int absControlValue = std::abs(controlValue);
-
-      int absRawPower = linearApprox(absControlValue, 0, 100, 0, 255);
-      int rawPower = absRawPower * controlValueSign;
-
-      model->setControlValueUnit(QString("%"));
-      model->setDisplayedSpeed(rawPower);
-      updateRequest(model->name(), rawPower);
-      break;
-    }
-  }
+  updateRequest(model->name(), static_cast<int>(model->power()));
 }
 
 void AppBackend::updateRequest(const QString& axis, int power) {
   m_actualRequest.setAxisPower(axis, power);
-}
-
-std::pair<int, double> AppBackend::translateControlValue(
-    double controlValue,
-    double minPower,
-    double maxPower,
-    double minPowerSpeed,
-    double maxPowerSpeed) const {
-  double absControlValue = std::fabs(controlValue);
-  double controlValueSign = sign(controlValue);
-
-  double absSpeed =
-      linearApprox(absControlValue, 0., 100., minPowerSpeed, maxPowerSpeed);
-  double absPower =
-      linearApprox(absSpeed, minPowerSpeed, maxPowerSpeed, minPower, maxPower);
-
-  return {static_cast<int>(absPower * controlValueSign),
-          absSpeed * controlValueSign};
 }
 
 void AppBackend::sendData() {
@@ -133,35 +105,15 @@ void AppBackend::updateDataModelsWithResponse(QJsonDocument const& response) {
 
     axisModel->setLeftEndstopState(axisResponse["EndstopLeft"].toBool());
     axisModel->setRightEndstopState(axisResponse["EndstopRight"].toBool());
-    axisModel->setDistance(
-      calculateDistance(axisResponse["EncoderTicks"].toDouble(),
-                        m_settings->settingsData()[axis].toMap()["ticksPerMm"].toDouble(),
-                        axisModel->distanceUnit()));
+    axisModel->setEncoderValue(axisResponse["EncoderTicks"].toDouble());
   }
-}
-
-double AppBackend::calculateDistance(double distance, double ticksPerMm, QString unit) const {
-  // Distance: ticks
-  // ticksPerMm: ticks per millimeter
-  double finalDistance = distance / ticksPerMm;
-  auto units = unit.split('/'); // 0 = distance, 1 = time
-
-  if (units[0] == "cm") {
-    finalDistance /= 10.;
-  } else if (units[0] == "m") {
-    finalDistance /= 1000.;
-  }
-
-  if (units[1] == "min") {
-    finalDistance *= 60;
-  } else if (units[1] == "h") {
-    finalDistance *= (60 * 60);
-  }
-
-  return finalDistance;
 }
 
 void AppBackend::resetEncoders(QString axis) {
+  if (!m_communicator.isOpen()) {
+    return;
+  }
+
   m_running = false;
   QThread::msleep(100);
   ResetEncodersRequest request;

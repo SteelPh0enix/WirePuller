@@ -50,6 +50,6 @@ Settings& Settings::operator=(const Settings& other) {
   return *this;
 }
 
-QVariantMap Settings::settingsAxisData(QString axis) const {
+QVariantMap Settings::axisData(QString axis) const {
   return m_settingsData[axis].toMap();
 }

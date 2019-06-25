@@ -55,7 +55,7 @@ Window {
             anchors.leftMargin: 5
             anchors.top: parent.top
             anchors.left: breakerAxisControl.right
-            leftEndstopEnabled: false
+            leftEndstopVisible: false
             rightEndstopName: qsTr("Zakres")
 
             dataModel: wheelAxisData

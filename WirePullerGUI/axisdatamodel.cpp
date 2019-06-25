@@ -1,17 +1,14 @@
 #include "axisdatamodel.h"
 
-AxisDataModel::AxisDataModel(QObject* parent) : QObject(parent) {}
+AxisDataModel::AxisDataModel(QObject* parent)
+  : QObject(parent) {}
 
-double AxisDataModel::controlValue() const {
-  return m_controlValue;
+double AxisDataModel::power() const {
+  return m_power;
 }
 
-AxisDataModel::ControlMode AxisDataModel::controlMode() const {
-  return m_controlMode;
-}
-
-double AxisDataModel::distance() const {
-  return m_distance;
+double AxisDataModel::encoderValue() const {
+  return m_encoderValue;
 }
 
 bool AxisDataModel::leftEndstopState() const {
@@ -22,37 +19,39 @@ bool AxisDataModel::rightEndstopState() const {
   return m_rightEndstopState;
 }
 
-double AxisDataModel::displayedSpeed() const {
-  return m_displayedSpeed;
-}
-
 QString AxisDataModel::name() const {
   return m_name;
 }
 
-QString AxisDataModel::controlValueUnit() const {
-  return m_controlValueUnit;
+double AxisDataModel::ticksPerMm() const {
+  return m_ticksPerMm;
 }
 
-QString AxisDataModel::distanceUnit() const {
-  return m_distanceUnit;
+double AxisDataModel::minPWM() const {
+  return m_minPWM;
 }
 
-void AxisDataModel::setControlValue(double newValue) {
-  m_controlValue = newValue;
-  emit controlValueChanged(controlValue());
+double AxisDataModel::maxPWM() const {
+  return m_maxPWM;
+}
+
+double AxisDataModel::minSpeed() const {
+  return m_minSpeed;
+}
+
+double AxisDataModel::maxSpeed() const {
+  return m_maxSpeed;
+}
+
+void AxisDataModel::setPower(double newValue) {
+  m_power = newValue;
+  emit powerChanged(power());
   emit modelChanged(this);
 }
 
-void AxisDataModel::setControlMode(AxisDataModel::ControlMode newMode) {
-  m_controlMode = newMode;
-  emit controlModeChanged(controlMode());
-  emit modelChanged(this);
-}
-
-void AxisDataModel::setDistance(double newDistance) {
-  m_distance = newDistance;
-  emit distanceChanged(distance());
+void AxisDataModel::setEncoderValue(double newDistance) {
+  m_encoderValue = newDistance;
+  emit encoderValueChanged(encoderValue());
 }
 
 void AxisDataModel::setLeftEndstopState(bool newState) {
@@ -65,21 +64,31 @@ void AxisDataModel::setRightEndstopState(bool newState) {
   emit rightEndstopStateChanged(rightEndstopState());
 }
 
-void AxisDataModel::setDisplayedSpeed(double newSpeed) {
-  m_displayedSpeed = newSpeed;
-  emit displayedSpeedChanged(displayedSpeed());
-}
-
 void AxisDataModel::setName(QString const& newName) {
   m_name = newName;
 }
 
-void AxisDataModel::setControlValueUnit(QString const& newUnit) {
-  m_controlValueUnit = newUnit;
-  emit controlValueUnitChanged(controlValueUnit());
+void AxisDataModel::setTicksPerMm(double ticks) {
+  m_ticksPerMm = ticks;
+  emit ticksPerMmChanged(ticksPerMm());
 }
 
-void AxisDataModel::setDistanceUnit(QString newDistanceUnit) {
-  m_distanceUnit = newDistanceUnit;
-  emit distanceUnitChanged(distanceUnit());
+void AxisDataModel::setMinPWM(double pwm) {
+  m_minPWM = pwm;
+  emit minPWMChanged(minPWM());
+}
+
+void AxisDataModel::setMaxPWM(double pwm) {
+  m_maxPWM = pwm;
+  emit maxPWMChanged(maxPWM());
+}
+
+void AxisDataModel::setMinSpeed(double speed) {
+  m_minSpeed = speed;
+  emit minSpeedChanged(minSpeed());
+}
+
+void AxisDataModel::setMaxSpeed(double speed) {
+  m_maxSpeed = speed;
+  emit maxSpeedChanged(maxSpeed());
 }

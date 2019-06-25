@@ -5,38 +5,121 @@ import steelph0enix.axisdatamodel 1.0
 Item {
 
     property alias name: labelAxisName.text
+
+    property alias endstopsEnabled: groupEndstops.visible
+
     property alias leftEndstopState: checkEndstopLeft.state
     property alias rightEndstopState: checkEndstopRight.state
-    property alias endstopsEnabled: groupEndstops.visible
-    property alias leftEndstopEnabled: checkEndstopLeft.visible
-    property alias rightEndstopEnabled: checkEndstopRight.visible
+
+    property alias leftEndstopVisible: checkEndstopLeft.visible
+    property alias rightEndstopVisible: checkEndstopRight.visible
+
     property alias leftEndstopName: checkEndstopLeft.text
     property alias rightEndstopName: checkEndstopRight.text
 
-    property alias speed: sliderSpeed.value
-    property int displayedSpeed: 0
-    property real distance: dataModel.distance
-    property string speedUnit: dataModel.controlValueUnit
-    property string distanceUnit: dataModel.distanceUnit
     property int controlMode: 0
-
-    property alias maxSpeed: sliderSpeed.to
-    property alias minSpeed: sliderSpeed.from
 
     property alias resetDistanceButton: buttonResetDistance
 
     property AxisDataModel dataModel
+    property double maxSpeed: getMaxSpeed()
 
     signal distanceReset()
 
-    onDistanceReset: dataModel.setDistance(0)
-    onControlModeChanged: dataModel.controlMode = controlMode
-
     id: axisControl
     width: 300
-    height: 310
+    height: 350
+
+    function linearApprox(value, xMin, xMax, yMin, yMax) {
+        return ((yMax - yMin) * (value - xMin) / (xMax - xMin)) + yMin;
+    }
+
+    function convertSpeedToMMPS(speed, unit) {
+        let units = unit.split('/')
+
+        if (units[0] === 'cm') {
+            speed *= 10.;
+        } else if (units[0] === 'm') {
+            speed *= 1000.;
+        }
+
+        if (units[1] === 'min') {
+            speed /= 60.;
+        } else if (units[1] === 'h') {
+            speed /= (60. * 60.);
+        }
+
+        return speed
+    }
+
+    function convertSpeedFromMMPS(speed, unit) {
+        let units = unit.split('/')
+
+        if (units[0] === 'cm') {
+            speed /= 10.;
+        } else if (units[0] === 'm') {
+            speed /= 1000.;
+        }
+
+        if (units[1] === 'min') {
+            speed *= 60.;
+        } else if (units[1] === 'h') {
+            speed *= (60. * 60.);
+        }
+
+        return speed
+    }
+
+    function convertPercentageToSpeed(percentage) {
+        let percentageSign = Math.sign(percentage)
+        let percentageAbs = Math.abs(percentage)
+        return linearApprox(percentageAbs, 0, 100, dataModel.minSpeed, dataModel.maxSpeed) * percentageSign
+    }
+
+    function convertSpeedToPower(speed) {
+        let speedSign = Math.sign(speed)
+        let speedAbs = Math.abs(speed)
+        return linearApprox(speedAbs, dataModel.minSpeed, dataModel.maxSpeed, dataModel.minPWM, dataModel.maxPWM) * speedSign
+    }
+
+    function normalizeDistanceUnit(distance) {
+        if (distanceSelector.currentText == "cm") {
+            return distance / 10;
+        }
+
+        return distance;
+    }
+
+    function calculateDistance() {
+        return normalizeDistanceUnit(dataModel.encoderValue / dataModel.ticksPerMm);
+    }
+
+    function normalizeSpeed(value) {
+        if (Number.isNaN(value)) { return; }
+
+        let limit = maxSpeed
+        if (value < -limit) {
+            value = -limit
+        } else if (value > limit) {
+            value = limit
+        }
+
+        return value
+    }
+
+    function convertSpeedToPercentage(speed) {
+        let speedSign = Math.sign(speed)
+        let speedAbs = Math.abs(speed)
+        return linearApprox(speedAbs, dataModel.minSpeed, dataModel.maxSpeed, 0, 100) * speedSign
+    }
+
+    function getMaxSpeed() {
+        return convertSpeedFromMMPS(dataModel.maxSpeed, comboSpeedUnit.currentText)
+    }
+
 
     Rectangle {
+        height: 310
         anchors.fill: parent
         border.width: 1
         border.color: "black"
@@ -50,26 +133,97 @@ Item {
         antialiasing: true
         anchors.left: parent.left
         anchors.leftMargin: 10
-        anchors.top: labelSpeed.bottom
+        anchors.top: labelMaxSpeed.bottom
         anchors.topMargin: 5
         from: -100
         to: 100
         value: 0
 
         onValueChanged: {
-            dataModel.controlValue = value
+            let speed = convertPercentageToSpeed(value)
+            let displayedSpeed = convertSpeedFromMMPS(speed, comboSpeedUnit.currentText)
+            let power = convertSpeedToPower(speed)
+
+            inputSpeed.text = displayedSpeed.toFixed(3)
+            dataModel.setPower(power)
         }
     }
 
     Text {
         id: labelSpeed
-        text: qsTr("Szybkość: ") + dataModel.displayedSpeed.toFixed(2) + speedUnit
+        text: qsTr("Szybkość:")
+        anchors.verticalCenter: inputSpeed.verticalCenter
         verticalAlignment: Text.AlignVCenter
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.top: labelAxisName.bottom
         anchors.topMargin: 5
         font.pixelSize: 12
+    }
+
+    Text {
+        id: labelMaxSpeed
+        text: qsTr("Max: ±") + maxSpeed.toFixed(3)
+        anchors.left: labelSpeed.left
+        anchors.leftMargin: 0
+        anchors.top: inputSpeed.bottom
+        anchors.topMargin: 3
+    }
+
+    TextField {
+        id: inputSpeed
+        text: "0"
+        anchors.verticalCenter: comboSpeedUnit.verticalCenter
+        anchors.left: labelSpeed.right
+        anchors.leftMargin: 5
+        anchors.top: labelAxisName.bottom
+        anchors.topMargin: 5
+        height: 25
+        width: 100
+
+        onAccepted: {
+            let normalizedSpeed = normalizeSpeed(parseFloat(text))
+            text = normalizedSpeed.toFixed(3)
+
+            let speedMMPS = convertSpeedToMMPS(normalizedSpeed, comboSpeedUnit.currentText)
+            let speedPercentage = convertSpeedToPercentage(speedMMPS)
+            let power = convertSpeedToPower(speedMMPS)
+
+            sliderSpeed.value = speedPercentage
+            dataModel.setPower(power)
+        }
+    }
+
+    ComboBox {
+        id: comboSpeedUnit
+        anchors.left: inputSpeed.right
+        anchors.leftMargin: 5
+        anchors.top: labelAxisName.bottom
+        anchors.topMargin: 5
+        width: 100
+        height: 30
+
+        property string lastUnit: currentText
+
+        model: ListModel {
+            ListElement { key: "mm/s" }
+            ListElement { key: "mm/min" }
+            ListElement { key: "mm/h" }
+            ListElement { key: "cm/s" }
+            ListElement { key: "cm/min" }
+            ListElement { key: "cm/h" }
+            ListElement { key: "m/s" }
+            ListElement { key: "m/min" }
+            ListElement { key: "m/h" }
+        }
+
+        onCurrentTextChanged: {
+            let previousSpeed = convertSpeedToMMPS(parseFloat(inputSpeed.text), lastUnit)
+            let newSpeed = convertSpeedFromMMPS(previousSpeed, currentText)
+            inputSpeed.text = newSpeed.toFixed(3)
+
+            lastUnit = currentText
+        }
     }
 
     GroupBox {
@@ -120,7 +274,8 @@ Item {
 
     Text {
         id: labelDistance
-        text: qsTr("Przebyta odległość: ") + distance.toFixed(2) + distanceUnit
+        text: qsTr("Przebyta odległość: ") + calculateDistance().toFixed(3)
+        anchors.verticalCenter: distanceSelector.verticalCenter
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.FixedSize
         anchors.top: groupMode.bottom
@@ -130,7 +285,23 @@ Item {
         font.pixelSize: 14
     }
 
+    ComboBox {
+        id: distanceSelector
+        anchors.leftMargin: 5
+        anchors.top: groupMode.bottom
+        anchors.topMargin: 5
+        width: 100
+        height: 30
+        anchors.left: labelDistance.right
+
+        model: ListModel {
+            ListElement { key: "mm" }
+            ListElement { key: "cm" }
+        }
+    }
+
     GroupBox {
+        visible: false
         id: groupMode
         height: 65
         anchors.right: parent.right
@@ -199,9 +370,9 @@ Item {
         anchors.rightMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10
-        anchors.top: labelDistance.bottom
+        anchors.top: distanceSelector.bottom
         anchors.topMargin: 5
-}
+    }
 
     Text {
         id: labelAxisName
@@ -217,31 +388,4 @@ Item {
         anchors.topMargin: 5
         font.pixelSize: 16
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*##^## Designer {
-    D{i:9;anchors_height:30;anchors_x:11;anchors_y:0}D{i:10;anchors_height:30}D{i:8;anchors_width:200;anchors_x:10;anchors_y:183}
-}
- ##^##*/

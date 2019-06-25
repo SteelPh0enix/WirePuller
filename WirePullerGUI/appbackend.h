@@ -47,16 +47,10 @@ class AppBackend : public QObject {
   SetMotorPowerRequest m_actualRequest{};
 
   void updateRequest(QString const& axis, int power);
-  std::pair<int, double> translateControlValue(double controlValue,
-                                               double minPower,
-                                               double maxPower,
-                                               double minPowerSpeed,
-                                               double maxPowerSpeed) const;
 
   QStringList m_axisList{"X", "Wheel", "Breaker"};
 
   void updateDataModelsWithResponse(QJsonDocument const& response);
-  double calculateDistance(double distance, double ticksPerMm, QString unit) const;
 };
 
 #endif  // APPBACKEND_H
