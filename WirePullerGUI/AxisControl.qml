@@ -21,13 +21,15 @@ Item {
 
     property alias resetDistanceButton: buttonResetDistance
 
+    property bool reverseDistance: false
+
     property AxisDataModel dataModel
     property double maxSpeed: getMaxSpeed()
 
     signal distanceReset()
 
     id: axisControl
-    width: 300
+    width: 310
     height: 350
 
     function linearApprox(value, xMin, xMax, yMin, yMax) {
@@ -91,7 +93,11 @@ Item {
     }
 
     function calculateDistance() {
-        return normalizeDistanceUnit(dataModel.encoderValue / dataModel.ticksPerMm);
+        let distance = normalizeDistanceUnit(dataModel.encoderValue / dataModel.ticksPerMm);
+        if (reverseDistance) {
+            return -distance
+        }
+        return distance
     }
 
     function normalizeSpeed(value) {

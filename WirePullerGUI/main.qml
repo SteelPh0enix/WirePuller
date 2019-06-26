@@ -7,7 +7,7 @@ import steelph0enix.serialportmanager 1.0
 Window {
     id: mainWindow
     visible: true
-    width: 920
+    width: 950
     height: 500
     maximumHeight: height
     minimumHeight: height
@@ -33,6 +33,7 @@ Window {
 
             dataModel: xAxisData
             resetDistanceButton.onClicked: backend.resetEncoders("X");
+            reverseDistance: true
         }
 
         AxisControl {
@@ -46,6 +47,7 @@ Window {
 
             dataModel: breakerAxisData
             resetDistanceButton.onClicked: backend.resetEncoders("Breaker");
+            reverseDistance: true
         }
 
         AxisControl {
